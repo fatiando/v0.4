@@ -1,0 +1,605 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Climate change signal in well temperature logs (fatiando.geothermal.climsig) &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Geothermal heat (fatiando.geothermal)" href="geothermal.html" />
+    <link rel="next" title="Meshing (fatiando.mesher)" href="mesher.html" />
+    <link rel="prev" title="Geothermal heat (fatiando.geothermal)" href="geothermal.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../install.html">Installing</a></li>
+                <li><a href="../docs.html">Documentation</a></li>
+                <li><a href="../cookbook.html">Cookbook</a></li>
+                <li><a href="../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="module-fatiando.geothermal.climsig">
+<span id="climate-change-signal-in-well-temperature-logs-fatiando-geothermal-climsig"></span><span id="fatiando-geothermal-climsig"></span><h1>Climate change signal in well temperature logs (<code class="docutils literal"><span class="pre">fatiando.geothermal.climsig</span></code>)<a class="headerlink" href="#module-fatiando.geothermal.climsig" title="Permalink to this headline">¶</a></h1>
+<p>Modeling and inversion of temperature residuals measured in wells due to
+temperature perturbations in the surface.</p>
+<p>Perturbations can be of two kinds: <strong>abrupt</strong> or <strong>linear</strong>.</p>
+<p>Forward modeling of these types of changes is done with functions:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.geothermal.climsig.abrupt" title="fatiando.geothermal.climsig.abrupt"><code class="xref py py-func docutils literal"><span class="pre">abrupt</span></code></a></li>
+<li><a class="reference internal" href="#fatiando.geothermal.climsig.linear" title="fatiando.geothermal.climsig.linear"><code class="xref py py-func docutils literal"><span class="pre">linear</span></code></a></li>
+</ul>
+<p>Assumeing that the temperature perturbation was abrupt. The residual
+temperature at a depth <span class="math">\(z_i\)</span> in the well at a time <span class="math">\(t\)</span> after the
+perturbation is given by</p>
+<div class="math">
+\[T_i(z_i) = A \left[1 - \mathrm{erf}\left(
+\frac{z_i}{\sqrt{4\lambda t}}\right)\right]\]</div>
+<p>where <span class="math">\(A\)</span> is the amplitude of the perturbation, <span class="math">\(\lambda\)</span> is the
+thermal diffusivity of the medium, and <span class="math">\(\mathrm{erf}\)</span> is the error
+function.</p>
+<p>For the case of a linear change, the temperature is</p>
+<div class="math">
+\[T_i(z_i) = A \left[
+\left(1 + 2\frac{z_i^2}{4\lambda t}\right)
+\mathrm{erfc}\left(\frac{z_i}{\sqrt{4\lambda t}}\right) -
+\frac{2}{\sqrt{\pi}}\left(\frac{z_i}{\sqrt{4\lambda t}}\right)
+\mathrm{exp}\left(-\frac{z_i^2}{4\lambda t}\right)
+\right]\]</div>
+<p>Given the temperature measured at different depths, we can <strong>invert</strong> for the
+amplitude and age of the change. The available inversion solvers are:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.geothermal.climsig.SingleChange" title="fatiando.geothermal.climsig.SingleChange"><code class="xref py py-class docutils literal"><span class="pre">SingleChange</span></code></a>: inverts for the
+parameters of a single temperature change. Can use both abrupt and linear
+models.</li>
+</ul>
+<hr class="docutils" />
+<dl class="class">
+<dt id="fatiando.geothermal.climsig.SingleChange">
+<em class="property">class </em><code class="descclassname">fatiando.geothermal.climsig.</code><code class="descname">SingleChange</code><span class="sig-paren">(</span><em>temp</em>, <em>zp</em>, <em>mode</em>, <em>diffus=31.5576</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/geothermal/climsig.html#SingleChange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.geothermal.climsig.SingleChange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="inversion.misfit.html#fatiando.inversion.misfit.Misfit" title="fatiando.inversion.misfit.Misfit"><code class="xref py py-class docutils literal"><span class="pre">fatiando.inversion.misfit.Misfit</span></code></a></p>
+<p>Invert the well temperature data for a single change in temperature.</p>
+<p>The parameters of the change are its amplitude and age.</p>
+<p>See the docstring of <a class="reference internal" href="#module-fatiando.geothermal.climsig" title="fatiando.geothermal.climsig"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.geothermal.climsig</span></code></a> for more
+information and examples.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>temp <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The temperature profile</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>zp <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">Depths along the profile</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>mode <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The type of change: <code class="docutils literal"><span class="pre">'abrupt'</span></code> for an abrupt change, <code class="docutils literal"><span class="pre">'linear'</span></code> for
+a linear change.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>diffus <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Thermal diffusivity of the medium (in m^2/year)</p>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The recommended solver for this inverse problem is the
+Levemberg-Marquardt method. Since this is a non-linear problem, set the
+desired method and initial solution using the
+<code class="xref py py-meth docutils literal"><span class="pre">config</span></code> method.
+See the example bellow.</p>
+</div>
+<p>Example with synthetic data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># For an ABRUPT change</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amp</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">age</span> <span class="o">=</span> <span class="mi">100</span> <span class="c"># Uses years to avoid overflows</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">temp</span> <span class="o">=</span> <span class="n">abrupt</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">zp</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Run the inversion for the amplitude and time</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># This is a non-linear problem, so use the Levemberg-Marquardt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># algorithm with an initial estimate</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span> <span class="o">=</span> <span class="n">SingleChange</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;abrupt&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s">&#39;levmarq&#39;</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amp_</span><span class="p">,</span> <span class="n">age_</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">estimate_</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&quot;amp: {:.2f}  age: {:.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">amp_</span><span class="p">,</span> <span class="n">age_</span><span class="p">))</span>
+<span class="go">amp: 2.00  age: 100.00</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># For a LINEAR change</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amp</span> <span class="o">=</span> <span class="mf">3.45</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">age</span> <span class="o">=</span> <span class="mf">52.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">temp</span> <span class="o">=</span> <span class="n">linear</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">zp</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span> <span class="o">=</span> <span class="n">SingleChange</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;linear&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s">&#39;levmarq&#39;</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amp_</span><span class="p">,</span> <span class="n">age_</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">estimate_</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&quot;amp: {:.2f}  age: {:.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">amp_</span><span class="p">,</span> <span class="n">age_</span><span class="p">))</span>
+<span class="go">amp: 3.45  age: 52.50</span>
+</pre></div>
+</div>
+<p>Notes:</p>
+<p>For <strong>abrupt</strong> changes, derivatives with respect to the amplitude and age
+are calculated using the formula</p>
+<div class="math">
+\[\frac{\partial T_i}{\partial A} = 1 - \mathrm{erf}\left(
+\frac{z_i}{\sqrt{4\lambda t}}\right)\]</div>
+<p>and</p>
+<div class="math">
+\[\frac{\partial T_i}{\partial t} = \frac{A}{t\sqrt{\pi}}
+\left(\frac{z_i}{\sqrt{4\lambda t}}\right)
+\exp\left[-\left(\frac{z_i}{\sqrt{4\lambda t}}\right)^2\right]\]</div>
+<p>respectively.</p>
+<p>For <strong>linear</strong> changes, derivatives with respect to the age are calculated
+using a 2-point finite difference approximation. Derivatives with respect
+to amplitude are calculate using the formula</p>
+<div class="math">
+\[\frac{\partial T_i}{\partial A} =
+\left(1 + 2\frac{z_i^2}{4\lambda t}\right)
+\mathrm{erfc}\left(\frac{z_i}{\sqrt{4\lambda t}}\right) -
+\frac{2}{\sqrt{\pi}}\left(\frac{z_i}{\sqrt{4\lambda t}}\right)
+\mathrm{exp}\left(-\frac{z_i^2}{4\lambda t}\right)\]</div>
+<dl class="method">
+<dt id="fatiando.geothermal.climsig.SingleChange.config">
+<code class="descname">config</code><span class="sig-paren">(</span><em>method</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.geothermal.climsig.SingleChange.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the optimization method and its parameters.</p>
+<p>This sets the method used by
+<code class="xref py py-meth docutils literal"><span class="pre">fit</span></code> and the keyword
+arguments that are passed to it.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The optimization method. One of: <code class="docutils literal"><span class="pre">'linear'</span></code>, <code class="docutils literal"><span class="pre">'newton'</span></code>,
+<code class="docutils literal"><span class="pre">'levmarq'</span></code>, <code class="docutils literal"><span class="pre">'steepest'</span></code>, <code class="docutils literal"><span class="pre">'acor'</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Other keyword arguments that can be passed are the ones allowed by each
+method.</p>
+<p>Some methods have required arguments:</p>
+<ul class="simple">
+<li><em>newton</em>, <em>levmarq</em> and <em>steepest</em> require the <code class="docutils literal"><span class="pre">initial</span></code> argument
+(an initial estimate for the gradient descent)</li>
+<li><em>acor</em> requires the <code class="docutils literal"><span class="pre">bounds</span></code> argument (min/max values for the
+search space)</li>
+</ul>
+<p>See the corresponding docstrings for more information:</p>
+<ul class="simple">
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.linear" title="fatiando.inversion.optimization.linear"><code class="xref py py-meth docutils literal"><span class="pre">linear</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.newton" title="fatiando.inversion.optimization.newton"><code class="xref py py-meth docutils literal"><span class="pre">newton</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.levmarq" title="fatiando.inversion.optimization.levmarq"><code class="xref py py-meth docutils literal"><span class="pre">levmarq</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.steepest" title="fatiando.inversion.optimization.steepest"><code class="xref py py-meth docutils literal"><span class="pre">steepest</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.acor" title="fatiando.inversion.optimization.acor"><code class="xref py py-meth docutils literal"><span class="pre">acor</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.geothermal.climsig.SingleChange.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><em>deep=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.geothermal.climsig.SingleChange.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a copy of me together with all the cached methods.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.geothermal.climsig.SingleChange.estimate_">
+<code class="descname">estimate_</code><a class="headerlink" href="#fatiando.geothermal.climsig.SingleChange.estimate_" title="Permalink to this definition">¶</a></dt>
+<dd><p>A nicely formatted version of the estimate.</p>
+<p>If the class implements a <cite>fmt_estimate</cite> method, this will its results.
+This can be used to convert the parameter vector to a more useful form,
+like a <a class="reference internal" href="mesher.html#module-fatiando.mesher" title="fatiando.mesher"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.mesher</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.geothermal.climsig.SingleChange.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.geothermal.climsig.SingleChange.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve for the parameter vector that minimizes this objective function.</p>
+<p>Uses the optimization method and parameters defined using the
+<a class="reference internal" href="inversion.base.html#fatiando.inversion.base.OptimizerMixin.config" title="fatiando.inversion.base.OptimizerMixin.config"><code class="xref py py-meth docutils literal"><span class="pre">config</span></code></a> method.</p>
+<p>The estimated parameter vector can be accessed through the
+<code class="docutils literal"><span class="pre">p_</span></code> attribute. A (possibly) formatted version (converted to a more
+manageable type) of the estimate can be accessed through the property
+<code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.geothermal.climsig.SingleChange.fmt_estimate">
+<code class="descname">fmt_estimate</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.geothermal.climsig.SingleChange.fmt_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when accessing the property <code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+<p>Use this to convert the parameter vector (p) to a more useful form,
+like a geometric object, etc.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>formatted</dt>
+<dd><p class="first last">Pretty much anything you want.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.geothermal.climsig.SingleChange.gradient">
+<code class="descname">gradient</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.geothermal.climsig.SingleChange.gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The gradient vector of the misfit function.</p>
+<div class="math">
+\[\bar{g} = -2\bar{\bar{J}}^T\bar{r}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix and <span class="math">\(\bar{r}\)</span>
+is the residual vector.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the gradient is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>gradient <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The gradient vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.geothermal.climsig.SingleChange.hessian">
+<code class="descname">hessian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.geothermal.climsig.SingleChange.hessian" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Hessian of the misfit function with respect to the parameters.</p>
+<p>Calculated using the Gauss approximation:</p>
+<div class="math">
+\[\bar{\bar{H}} \approx 2\bar{\bar{J}}^T\bar{\bar{J}}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix.</p>
+<p>For linear problems, the Hessian matrix is cached in memory, so calling
+this method again will not trigger a re-calculation.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the Hessian is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>hessian <span class="classifier-delimiter">:</span> <span class="classifier">2d-array</span></dt>
+<dd><p class="first last">The Hessian matrix</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.geothermal.climsig.SingleChange.regul_param">
+<code class="descname">regul_param</code><a class="headerlink" href="#fatiando.geothermal.climsig.SingleChange.regul_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>The regularization parameter (scale factor) for the objetive function.</p>
+<p>Defaults to 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.geothermal.climsig.SingleChange.residuals">
+<code class="descname">residuals</code><span class="sig-paren">(</span><em>p=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.geothermal.climsig.SingleChange.residuals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the residuals vector (observed - predicted data).</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector used to calculate the residuals. If None, will
+use the current estimate stored in <code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>residuals <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or list of 1d-arrays</span></dt>
+<dd><p class="first last">The residual vector. If this is the sum of 1 or more Misfit
+instances, will return the residual vector from each of the summed
+misfits in the order of the sum.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.geothermal.climsig.SingleChange.set_weights">
+<code class="descname">set_weights</code><span class="sig-paren">(</span><em>weights</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.geothermal.climsig.SingleChange.set_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the data weights.</p>
+<p>Using weights for the data, the least-squares data-misfit function
+becomes:</p>
+<div class="math">
+\[\phi = \bar{r}^T \bar{\bar{W}}\bar{r}\]</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>weights <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or 2d-array or None</span></dt>
+<dd><p class="first last">Weights for the data vector.
+If None, will remove any weights that have been set before.
+If it is a 2d-array, it will be interpreted as the weight matrix
+<span class="math">\(\bar{\bar{W}}\)</span>.
+If it is a 1d-array, it will be interpreted as the diagonal of the
+weight matrix (all off-diagonal elements will default to zero).
+The weight matrix can be a sparse array from <code class="docutils literal"><span class="pre">scipy.sparse</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.geothermal.climsig.SingleChange.value">
+<code class="descname">value</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.geothermal.climsig.SingleChange.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the value of the misfit for a given parameter vector.</p>
+<p>The value is given by:</p>
+<div class="math">
+\[\phi(\bar{p}) = \bar{r}^T\bar{\bar{W}}\bar{r}\]</div>
+<p>where <span class="math">\(\bar{r}\)</span> is the residual vector and <span class="math">\(bar{\bar{W}}\)</span>
+are optional data weights.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>value <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The value of the misfit function.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.geothermal.climsig.abrupt">
+<code class="descclassname">fatiando.geothermal.climsig.</code><code class="descname">abrupt</code><span class="sig-paren">(</span><em>amp</em>, <em>age</em>, <em>zp</em>, <em>diffus=31.5576</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/geothermal/climsig.html#abrupt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.geothermal.climsig.abrupt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the residual temperature profile in depth due to an abrupt
+temperature perturbation.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>amp <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Amplitude of the perturbation (in C)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>age <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Time since the perturbation occured (in years)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>zp <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">Arry with the depths of computation points along the well (in meters)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>diffus <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Thermal diffusivity of the medium (in m^2/year)</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>See the default values for the thermal diffusivity in
+<a class="reference internal" href="constants.html#module-fatiando.constants" title="fatiando.constants"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.constants</span></code></a>.</p>
+<p>Returns</p>
+<ul>
+<li><dl class="first docutils">
+<dt>temp <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The residual temperatures measured along the well</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.geothermal.climsig.linear">
+<code class="descclassname">fatiando.geothermal.climsig.</code><code class="descname">linear</code><span class="sig-paren">(</span><em>amp</em>, <em>age</em>, <em>zp</em>, <em>diffus=31.5576</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/geothermal/climsig.html#linear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.geothermal.climsig.linear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the residual temperature profile in depth due to a linear
+temperature perturbation.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>amp <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Amplitude of the perturbation (in C)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>age <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Time since the perturbation occured (in years)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>zp <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The depths of computation points along the well (in meters)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>diffus <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Thermal diffusivity of the medium (in m^2/year)</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>See the default values for the thermal diffusivity in
+<a class="reference internal" href="constants.html#module-fatiando.constants" title="fatiando.constants"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.constants</span></code></a>.</p>
+<p>Returns</p>
+<ul>
+<li><dl class="first docutils">
+<dt>temp <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The residual temperatures measured along the well</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="../_sources/api/geothermal.climsig.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

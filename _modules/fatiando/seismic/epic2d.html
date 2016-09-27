@@ -1,0 +1,272 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fatiando.seismic.epic2d &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><img src="../../../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../install.html">Installing</a></li>
+                <li><a href="../../../docs.html">Documentation</a></li>
+                <li><a href="../../../cookbook.html">Cookbook</a></li>
+                <li><a href="../../../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for fatiando.seismic.epic2d</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Epicenter determination in 2D, i.e., assuming a flat Earth.</span>
+
+<span class="sd">There are solvers for the following approximations.</span>
+
+<span class="sd">**Homogeneous Earth**</span>
+
+<span class="sd">Estimates the (x, y) cartesian coordinates of the epicenter based on</span>
+<span class="sd">travel-time residuals between S and P waves, assuming a homogeneous velocity</span>
+<span class="sd">distribution.</span>
+
+<span class="sd">* :func:`~fatiando.seismic.epic2d.Homogeneous`</span>
+
+<span class="sd">----</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">future.builtins</span> <span class="kn">import</span> <span class="nb">super</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">..inversion</span> <span class="kn">import</span> <span class="n">Misfit</span>
+
+
+<div class="viewcode-block" id="Homogeneous"><a class="viewcode-back" href="../../../api/seismic.epic2d.html#fatiando.seismic.epic2d.Homogeneous">[docs]</a><span class="k">class</span> <span class="nc">Homogeneous</span><span class="p">(</span><span class="n">Misfit</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Estimate the epicenter assuming a homogeneous Earth.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * ttres : array</span>
+<span class="sd">        Travel-time residuals between S and P waves</span>
+<span class="sd">    * recs : list of lists</span>
+<span class="sd">        List with the (x, y) coordinates of the receivers</span>
+<span class="sd">    * vp : float</span>
+<span class="sd">        Assumed velocity of P waves</span>
+<span class="sd">    * vs : float</span>
+<span class="sd">        Assumed velocity of S waves</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The recommended solver for this inverse problem is the</span>
+<span class="sd">        Levemberg-Marquardt method. Since this is a non-linear problem, set the</span>
+<span class="sd">        desired method and initial solution using the</span>
+<span class="sd">        :meth:`~fatiando.inversion.base.OptimizerMixin.config` method.</span>
+<span class="sd">        See the example bellow.</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">    Using synthetic data.</span>
+
+<span class="sd">        &gt;&gt;&gt; from fatiando.mesher import Square</span>
+<span class="sd">        &gt;&gt;&gt; from fatiando.seismic import ttime2d</span>
+<span class="sd">        &gt;&gt;&gt; # Generate synthetic travel-time residuals</span>
+<span class="sd">        &gt;&gt;&gt; area = (0, 10, 0, 10)</span>
+<span class="sd">        &gt;&gt;&gt; vp = 2</span>
+<span class="sd">        &gt;&gt;&gt; vs = 1</span>
+<span class="sd">        &gt;&gt;&gt; model = [Square(area, props={&#39;vp&#39;:vp, &#39;vs&#39;:vs})]</span>
+<span class="sd">        &gt;&gt;&gt; # The true source (epicenter)</span>
+<span class="sd">        &gt;&gt;&gt; src = (5, 5)</span>
+<span class="sd">        &gt;&gt;&gt; recs = [(5, 0), (5, 10), (10, 0)]</span>
+<span class="sd">        &gt;&gt;&gt; srcs = [src, src, src]</span>
+<span class="sd">        &gt;&gt;&gt; #The travel-time residual between P and S waves</span>
+<span class="sd">        &gt;&gt;&gt; ptime = ttime2d.straight(model, &#39;vp&#39;, srcs, recs)</span>
+<span class="sd">        &gt;&gt;&gt; stime = ttime2d.straight(model, &#39;vs&#39;, srcs, recs)</span>
+<span class="sd">        &gt;&gt;&gt; ttres = stime - ptime</span>
+<span class="sd">        &gt;&gt;&gt; # Pass the data to the solver class</span>
+<span class="sd">        &gt;&gt;&gt; solver = Homogeneous(ttres, recs, vp, vs).config(&#39;levmarq&#39;,</span>
+<span class="sd">        ...                                                  initial=[1, 1])</span>
+<span class="sd">        &gt;&gt;&gt; # Estimate the epicenter</span>
+<span class="sd">        &gt;&gt;&gt; x, y = solver.fit().estimate_</span>
+<span class="sd">        &gt;&gt;&gt; print &quot;(%.4f, %.4f)&quot; % (x, y)</span>
+<span class="sd">        (5.0000, 5.0000)</span>
+
+<span class="sd">    Notes:</span>
+
+<span class="sd">    The travel-time residual measured by the ith receiver is a function of the</span>
+<span class="sd">    (x, y) coordinates of the epicenter:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        t_{S_i} - t_{P_i} = \Delta t_i (x, y) =</span>
+<span class="sd">        \left(\frac{1}{V_S} - \frac{1}{V_P} \right)</span>
+<span class="sd">        \sqrt{(x_i - x)^2 + (y_i - y)^2}</span>
+
+<span class="sd">    The elements :math:`G_{i1}` and :math:`G_{i2}` of the Jacobian matrix for</span>
+<span class="sd">    this data type are</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        G_{i1}(x, y) = -\left(\frac{1}{V_S} - \frac{1}{V_P} \right)</span>
+<span class="sd">        \frac{x_i - x}{\sqrt{(x_i - x)^2 + (y_i - y)^2}}</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        G_{i2}(x, y) = -\left(\frac{1}{V_S} - \frac{1}{V_P} \right)</span>
+<span class="sd">        \frac{y_i - y}{\sqrt{(x_i - x)^2 + (y_i - y)^2}}</span>
+
+<span class="sd">    The Hessian matrix is approximated by</span>
+<span class="sd">    :math:`2\bar{\bar{G}}^T\bar{\bar{G}}` (Gauss-Newton method).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ttres</span><span class="p">,</span> <span class="n">recs</span><span class="p">,</span> <span class="n">vp</span><span class="p">,</span> <span class="n">vs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">ttres</span><span class="p">,</span> <span class="n">nparams</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">islinear</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">recs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vp</span> <span class="o">=</span> <span class="n">vp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vs</span> <span class="o">=</span> <span class="n">vs</span>
+
+<div class="viewcode-block" id="Homogeneous.predicted"><a class="viewcode-back" href="../../../api/seismic.epic2d.html#fatiando.seismic.epic2d.Homogeneous.predicted">[docs]</a>    <span class="k">def</span> <span class="nf">predicted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="s">&quot;Calculate the predicted travel time data given a parameter vector.&quot;</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">vs</span> <span class="o">-</span> <span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">vp</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="n">alpha</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">recs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
+                             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">recs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pred</span>
+</div>
+<div class="viewcode-block" id="Homogeneous.jacobian"><a class="viewcode-back" href="../../../api/seismic.epic2d.html#fatiando.seismic.epic2d.Homogeneous.jacobian">[docs]</a>    <span class="k">def</span> <span class="nf">jacobian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="s">&quot;Calculate the Jacobian matrix for the inversion.&quot;</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">vs</span> <span class="o">-</span> <span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">vp</span>
+        <span class="n">sqrt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">recs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
+                       <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">recs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">jac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">ndata</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nparams</span><span class="p">))</span>
+        <span class="n">jac</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">alpha</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">recs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="n">sqrt</span>
+        <span class="n">jac</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">alpha</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">recs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="n">sqrt</span>
+        <span class="k">return</span> <span class="n">jac</span></div></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

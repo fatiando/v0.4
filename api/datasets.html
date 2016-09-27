@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Fetch data from the internet (fatiando.datasets) &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../index.html" />
+    <link rel="up" title="The fatiando package" href="fatiando.html" />
+    <link rel="next" title="Miscellaneous Utilities (fatiando.utils)" href="utils.html" />
+    <link rel="prev" title="Plot 3D objects in Mayavi2 (fatiando.vis.myv)" href="vis.myv.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../install.html">Installing</a></li>
+                <li><a href="../docs.html">Documentation</a></li>
+                <li><a href="../cookbook.html">Cookbook</a></li>
+                <li><a href="../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="module-fatiando.datasets">
+<span id="fetch-data-from-the-internet-fatiando-datasets"></span><span id="fatiando-io"></span><span id="fatiando-datasets"></span><h1>Fetch data from the internet (<code class="docutils literal"><span class="pre">fatiando.datasets</span></code>)<a class="headerlink" href="#module-fatiando.datasets" title="Permalink to this headline">¶</a></h1>
+<p>Load datasets from the internet.</p>
+<p><strong>CRUST2.0</strong></p>
+<p>Load and convert the <a class="reference external" href="http://igppweb.ucsd.edu/~gabi/rem.html">CRUST2.0 global crustal model</a> (Bassin et al., 2000).</p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.datasets.fetch_crust2" title="fatiando.datasets.fetch_crust2"><code class="xref py py-func docutils literal"><span class="pre">fetch_crust2</span></code></a>: Download the .tar.gz archive with
+the model from the website</li>
+<li><a class="reference internal" href="#fatiando.datasets.crust2_to_tesseroids" title="fatiando.datasets.crust2_to_tesseroids"><code class="xref py py-func docutils literal"><span class="pre">crust2_to_tesseroids</span></code></a>: Convert the CRUST2.0 model
+to tesseroids</li>
+</ul>
+<p><strong>Sample data</strong></p>
+<p>Download a <a class="reference external" href="https://gist.github.com/leouieda/6023922">Bouguer anomaly map of Alps (EGM 2008 model)</a> in Surfer ASCII grid file format.</p>
+<ul class="simple">
+<li><code class="xref py py-func docutils literal"><span class="pre">fetch_bouguer_alps_egm</span></code>: Download the .grd archive with
+the Bouguer anomaly of Alps (EGM 2008 model) from the website</li>
+</ul>
+<p><strong>References</strong></p>
+<p>Bassin, C., Laske, G. and Masters, G., The Current Limits of Resolution for
+Surface Wave Tomography in North America, EOS Trans AGU, 81, F897, 2000.</p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="fatiando.datasets.crust2_to_tesseroids">
+<code class="descclassname">fatiando.datasets.</code><code class="descname">crust2_to_tesseroids</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/datasets.html#crust2_to_tesseroids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.datasets.crust2_to_tesseroids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the CRUST2.0 model to tesseroids.</p>
+<p>Opens the .tar.gz archive and converts the model to
+<a class="reference internal" href="mesher.html#fatiando.mesher.Tesseroid" title="fatiando.mesher.Tesseroid"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Tesseroid</span></code></a>.
+Each tesseroid will have its <code class="docutils literal"><span class="pre">props</span></code> set to the apropriate Vp, Vs and
+density.</p>
+<p>The CRUST2.0 model includes 7 layers: ice, water, soft sediments, hard
+sediments, upper crust, middle curst and lower crust. It also includes the
+mantle below the Moho. The mantle portion is not included in this
+conversion because there is no way to place a bottom on it.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>fname <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">Name of the model .tar.gz archive (see
+<code class="xref py py-func docutils literal"><span class="pre">fetch_crust2</span></code>)</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>model <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Tesseroid" title="fatiando.mesher.Tesseroid"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Tesseroid</span></code></a></span></dt>
+<dd><p class="first last">The converted model</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.datasets.fetch_bouguer_alps_egm">
+<code class="descclassname">fatiando.datasets.</code><code class="descname">fetch_bouguer_alps_egm</code><span class="sig-paren">(</span><em>fname='bouguer_alps_egm08.grd'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/datasets.html#fetch_bouguer_alps_egm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.datasets.fetch_bouguer_alps_egm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download the Bouguer anomaly of Alps (EGM 2008 model) in Surfer ASCII grid
+file format from <a class="reference external" href="https://gist.github.com/leouieda/6023922">https://gist.github.com/leouieda/6023922</a></p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>fname <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">The name that the archive file will be saved when downloaded</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>fname <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">The downloaded file name</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.datasets.fetch_crust2">
+<code class="descclassname">fatiando.datasets.</code><code class="descname">fetch_crust2</code><span class="sig-paren">(</span><em>fname='crust2.tar.gz'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/datasets.html#fetch_crust2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.datasets.fetch_crust2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download the CRUST2.0 model from <a class="reference external" href="http://igppweb.ucsd.edu/~gabi/crust2.html">http://igppweb.ucsd.edu/~gabi/crust2.html</a></p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>fname <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">The name that the archive file will be saved when downloaded</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>fname <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">The downloaded file name</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="../_sources/api/datasets.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

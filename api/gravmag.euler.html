@@ -1,0 +1,579 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3D Euler deconvolution methods (fatiando.gravmag.euler) &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Gravity and magnetics (fatiando.gravmag)" href="gravmag.html" />
+    <link rel="next" title="Potential field transformations (fatiando.gravmag.transform)" href="gravmag.transform.html" />
+    <link rel="prev" title="Utilities for operating on the gradient tensor (fatiando.gravmag.tensor)" href="gravmag.tensor.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../install.html">Installing</a></li>
+                <li><a href="../docs.html">Documentation</a></li>
+                <li><a href="../cookbook.html">Cookbook</a></li>
+                <li><a href="../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="module-fatiando.gravmag.euler">
+<span id="d-euler-deconvolution-methods-fatiando-gravmag-euler"></span><span id="fatiando-gravmag-euler"></span><h1>3D Euler deconvolution methods (<code class="docutils literal"><span class="pre">fatiando.gravmag.euler</span></code>)<a class="headerlink" href="#module-fatiando.gravmag.euler" title="Permalink to this headline">¶</a></h1>
+<p>Euler deconvolution methods for potential fields.</p>
+<p><strong>Implementations</strong></p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.gravmag.euler.Classic" title="fatiando.gravmag.euler.Classic"><code class="xref py py-class docutils literal"><span class="pre">Classic</span></code></a>: The classic 3D solution to Euler&#8217;s
+equation for potential fields (Reid et al., 1990). Runs on the whole dataset.</li>
+</ul>
+<p><strong>Solution selection procedures</strong></p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.gravmag.euler.ExpandingWindow" title="fatiando.gravmag.euler.ExpandingWindow"><code class="xref py py-class docutils literal"><span class="pre">ExpandingWindow</span></code></a>: Run a given Euler
+deconvolution on an expanding window and keep the best estimate.</li>
+<li><a class="reference internal" href="#fatiando.gravmag.euler.MovingWindow" title="fatiando.gravmag.euler.MovingWindow"><code class="xref py py-class docutils literal"><span class="pre">MovingWindow</span></code></a>: Run a given Euler
+deconvolution on a moving window to produce a set of estimates.</li>
+</ul>
+<p><strong>References</strong></p>
+<p>Reid, A. B., J. M. Allsop, H. Granser, A. J. Millett, and I. W. Somerton
+(1990), Magnetic interpretation in three dimensions using Euler deconvolution,
+Geophysics, 55(1), 80-91, doi:10.1190/1.1442774.</p>
+<hr class="docutils" />
+<dl class="class">
+<dt id="fatiando.gravmag.euler.Classic">
+<em class="property">class </em><code class="descclassname">fatiando.gravmag.euler.</code><code class="descname">Classic</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em>, <em>field</em>, <em>xderiv</em>, <em>yderiv</em>, <em>zderiv</em>, <em>structural_index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/euler.html#Classic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.euler.Classic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="inversion.misfit.html#fatiando.inversion.misfit.Misfit" title="fatiando.inversion.misfit.Misfit"><code class="xref py py-class docutils literal"><span class="pre">fatiando.inversion.misfit.Misfit</span></code></a></p>
+<p>Classic 3D Euler deconvolution of potential field data.</p>
+<p>Follows the formulation of Reid et al. (1990). Performs the deconvolution
+on the whole data set. For windowed approaches, use
+<a class="reference internal" href="#fatiando.gravmag.euler.ExpandingWindow" title="fatiando.gravmag.euler.ExpandingWindow"><code class="xref py py-class docutils literal"><span class="pre">ExpandingWindow</span></code></a>.</p>
+<p>Works on any potential field that satisfies Euler&#8217;s homogeneity equation.</p>
+<p>Estimated coordinates are stored in <code class="docutils literal"><span class="pre">estimate_</span></code> attribute and the
+estimated base level is stored in <code class="docutils literal"><span class="pre">baselevel_</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The data does <strong>not</strong> need to be gridded for this! So long as you
+can calculate the derivatives of non-gridded data (using an Equivalent
+Layer, for example).</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">x is North, y is East, and z is down.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Units of the input data (x, y, z, field, derivatives) must be in SI
+units! Otherwise, the results will be in strange units. Use functions
+in <a class="reference internal" href="utils.html#module-fatiando.utils" title="fatiando.utils"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.utils</span></code></a> to convert between units.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, y, z <span class="classifier-delimiter">:</span> <span class="classifier">1d-arrays</span></dt>
+<dd><p class="first last">The x, y, and z coordinates of the observation points</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>field <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The potential field measured at the observation points</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>xderiv, yderiv, zderiv <span class="classifier-delimiter">:</span> <span class="classifier">1d-arrays</span></dt>
+<dd><p class="first last">The x-, y-, and z-derivatives of the potential field (measured or
+calculated) at the observation points</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>index <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The structural index of the source</p>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="method">
+<dt id="fatiando.gravmag.euler.Classic.config">
+<code class="descname">config</code><span class="sig-paren">(</span><em>method</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.euler.Classic.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the optimization method and its parameters.</p>
+<p>This sets the method used by
+<code class="xref py py-meth docutils literal"><span class="pre">fit</span></code> and the keyword
+arguments that are passed to it.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The optimization method. One of: <code class="docutils literal"><span class="pre">'linear'</span></code>, <code class="docutils literal"><span class="pre">'newton'</span></code>,
+<code class="docutils literal"><span class="pre">'levmarq'</span></code>, <code class="docutils literal"><span class="pre">'steepest'</span></code>, <code class="docutils literal"><span class="pre">'acor'</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Other keyword arguments that can be passed are the ones allowed by each
+method.</p>
+<p>Some methods have required arguments:</p>
+<ul class="simple">
+<li><em>newton</em>, <em>levmarq</em> and <em>steepest</em> require the <code class="docutils literal"><span class="pre">initial</span></code> argument
+(an initial estimate for the gradient descent)</li>
+<li><em>acor</em> requires the <code class="docutils literal"><span class="pre">bounds</span></code> argument (min/max values for the
+search space)</li>
+</ul>
+<p>See the corresponding docstrings for more information:</p>
+<ul class="simple">
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.linear" title="fatiando.inversion.optimization.linear"><code class="xref py py-meth docutils literal"><span class="pre">linear</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.newton" title="fatiando.inversion.optimization.newton"><code class="xref py py-meth docutils literal"><span class="pre">newton</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.levmarq" title="fatiando.inversion.optimization.levmarq"><code class="xref py py-meth docutils literal"><span class="pre">levmarq</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.steepest" title="fatiando.inversion.optimization.steepest"><code class="xref py py-meth docutils literal"><span class="pre">steepest</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.acor" title="fatiando.inversion.optimization.acor"><code class="xref py py-meth docutils literal"><span class="pre">acor</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.euler.Classic.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><em>deep=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.euler.Classic.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a copy of me together with all the cached methods.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.euler.Classic.cut_window">
+<code class="descname">cut_window</code><span class="sig-paren">(</span><em>area</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/euler.html#Classic.cut_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.euler.Classic.cut_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy of self with only data that falls inside the given area</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>area <span class="classifier-delimiter">:</span> <span class="classifier">list = (x1, x2, y1, y2)</span></dt>
+<dd><p class="first last">The limiting coordinates of the area</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>subset</dt>
+<dd><p class="first last">An instance of this class.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.euler.Classic.estimate_">
+<code class="descname">estimate_</code><a class="headerlink" href="#fatiando.gravmag.euler.Classic.estimate_" title="Permalink to this definition">¶</a></dt>
+<dd><p>A nicely formatted version of the estimate.</p>
+<p>If the class implements a <cite>fmt_estimate</cite> method, this will its results.
+This can be used to convert the parameter vector to a more useful form,
+like a <a class="reference internal" href="mesher.html#module-fatiando.mesher" title="fatiando.mesher"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.mesher</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.euler.Classic.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.euler.Classic.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve for the parameter vector that minimizes this objective function.</p>
+<p>Uses the optimization method and parameters defined using the
+<a class="reference internal" href="inversion.base.html#fatiando.inversion.base.OptimizerMixin.config" title="fatiando.inversion.base.OptimizerMixin.config"><code class="xref py py-meth docutils literal"><span class="pre">config</span></code></a> method.</p>
+<p>The estimated parameter vector can be accessed through the
+<code class="docutils literal"><span class="pre">p_</span></code> attribute. A (possibly) formatted version (converted to a more
+manageable type) of the estimate can be accessed through the property
+<code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.euler.Classic.fmt_estimate">
+<code class="descname">fmt_estimate</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/euler.html#Classic.fmt_estimate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.euler.Classic.fmt_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Separate the (x, y, z) point coordinates from the baselevel.</p>
+<p>Coordinates are stored in <code class="docutils literal"><span class="pre">estimate_</span></code> and a base level is stored in
+<code class="docutils literal"><span class="pre">baselevel_</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.euler.Classic.gradient">
+<code class="descname">gradient</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.euler.Classic.gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The gradient vector of the misfit function.</p>
+<div class="math">
+\[\bar{g} = -2\bar{\bar{J}}^T\bar{r}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix and <span class="math">\(\bar{r}\)</span>
+is the residual vector.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the gradient is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>gradient <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The gradient vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.euler.Classic.hessian">
+<code class="descname">hessian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.euler.Classic.hessian" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Hessian of the misfit function with respect to the parameters.</p>
+<p>Calculated using the Gauss approximation:</p>
+<div class="math">
+\[\bar{\bar{H}} \approx 2\bar{\bar{J}}^T\bar{\bar{J}}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix.</p>
+<p>For linear problems, the Hessian matrix is cached in memory, so calling
+this method again will not trigger a re-calculation.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the Hessian is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>hessian <span class="classifier-delimiter">:</span> <span class="classifier">2d-array</span></dt>
+<dd><p class="first last">The Hessian matrix</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.euler.Classic.regul_param">
+<code class="descname">regul_param</code><a class="headerlink" href="#fatiando.gravmag.euler.Classic.regul_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>The regularization parameter (scale factor) for the objetive function.</p>
+<p>Defaults to 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.euler.Classic.residuals">
+<code class="descname">residuals</code><span class="sig-paren">(</span><em>p=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.euler.Classic.residuals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the residuals vector (observed - predicted data).</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector used to calculate the residuals. If None, will
+use the current estimate stored in <code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>residuals <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or list of 1d-arrays</span></dt>
+<dd><p class="first last">The residual vector. If this is the sum of 1 or more Misfit
+instances, will return the residual vector from each of the summed
+misfits in the order of the sum.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.euler.Classic.set_weights">
+<code class="descname">set_weights</code><span class="sig-paren">(</span><em>weights</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.euler.Classic.set_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the data weights.</p>
+<p>Using weights for the data, the least-squares data-misfit function
+becomes:</p>
+<div class="math">
+\[\phi = \bar{r}^T \bar{\bar{W}}\bar{r}\]</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>weights <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or 2d-array or None</span></dt>
+<dd><p class="first last">Weights for the data vector.
+If None, will remove any weights that have been set before.
+If it is a 2d-array, it will be interpreted as the weight matrix
+<span class="math">\(\bar{\bar{W}}\)</span>.
+If it is a 1d-array, it will be interpreted as the diagonal of the
+weight matrix (all off-diagonal elements will default to zero).
+The weight matrix can be a sparse array from <code class="docutils literal"><span class="pre">scipy.sparse</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.euler.Classic.value">
+<code class="descname">value</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.euler.Classic.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the value of the misfit for a given parameter vector.</p>
+<p>The value is given by:</p>
+<div class="math">
+\[\phi(\bar{p}) = \bar{r}^T\bar{\bar{W}}\bar{r}\]</div>
+<p>where <span class="math">\(\bar{r}\)</span> is the residual vector and <span class="math">\(bar{\bar{W}}\)</span>
+are optional data weights.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>value <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The value of the misfit function.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatiando.gravmag.euler.ExpandingWindow">
+<em class="property">class </em><code class="descclassname">fatiando.gravmag.euler.</code><code class="descname">ExpandingWindow</code><span class="sig-paren">(</span><em>euler</em>, <em>center</em>, <em>sizes</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/euler.html#ExpandingWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.euler.ExpandingWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Solve an Euler deconvolution problem using an expanding window scheme.</p>
+<p>Uses data inside a window of growing size to perform the Euler
+deconvolution. Keeps the best result, judged by the estimated error.</p>
+<p>Like any other Euler solver, use the
+<a class="reference internal" href="#fatiando.gravmag.euler.ExpandingWindow.fit" title="fatiando.gravmag.euler.ExpandingWindow.fit"><code class="xref py py-meth docutils literal"><span class="pre">fit</span></code></a> method to produce an
+estimate. The estimated point is stored in <code class="docutils literal"><span class="pre">estimate_</span></code>, the base level in
+<code class="docutils literal"><span class="pre">baselevel_</span></code>.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>euler <span class="classifier-delimiter">:</span> <span class="classifier">Euler solver</span></dt>
+<dd><p class="first last">An instance of an Euler deconvolution solver, like
+<a class="reference internal" href="#fatiando.gravmag.euler.Classic" title="fatiando.gravmag.euler.Classic"><code class="xref py py-class docutils literal"><span class="pre">Classic</span></code></a>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>center <span class="classifier-delimiter">:</span> <span class="classifier">[x, y]</span></dt>
+<dd><p class="first last">The x, y coordinates of the center of the expanding windows.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>sizes <span class="classifier-delimiter">:</span> <span class="classifier">list or 1d-array</span></dt>
+<dd><p class="first last">The sizes of the windows.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="method">
+<dt id="fatiando.gravmag.euler.ExpandingWindow.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/euler.html#ExpandingWindow.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.euler.ExpandingWindow.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform the Euler deconvolution with expanding windows.</p>
+<p>The estimated point is stored in <code class="docutils literal"><span class="pre">estimate_</span></code>, the base level in
+<code class="docutils literal"><span class="pre">baselevel_</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatiando.gravmag.euler.MovingWindow">
+<em class="property">class </em><code class="descclassname">fatiando.gravmag.euler.</code><code class="descname">MovingWindow</code><span class="sig-paren">(</span><em>euler</em>, <em>windows</em>, <em>size</em>, <em>keep=0.2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/euler.html#MovingWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.euler.MovingWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Solve an Euler deconvolution problem using a moving window scheme.</p>
+<p>Uses data inside a window moving to perform the Euler deconvolution. Keeps
+the estimate from all windows.</p>
+<p>Like any other Euler solver, use the
+<a class="reference internal" href="#fatiando.gravmag.euler.MovingWindow.fit" title="fatiando.gravmag.euler.MovingWindow.fit"><code class="xref py py-meth docutils literal"><span class="pre">fit</span></code></a> method to produce an
+estimate. The estimated points are stored in <code class="docutils literal"><span class="pre">estimate_</span></code>, the base levels
+in <code class="docutils literal"><span class="pre">baselevel_</span></code>.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>euler <span class="classifier-delimiter">:</span> <span class="classifier">Euler solver</span></dt>
+<dd><p class="first last">An instance of an Euler deconvolution solver, like
+<a class="reference internal" href="#fatiando.gravmag.euler.Classic" title="fatiando.gravmag.euler.Classic"><code class="xref py py-class docutils literal"><span class="pre">Classic</span></code></a>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>windows <span class="classifier-delimiter">:</span> <span class="classifier">(ny, nx)</span></dt>
+<dd><p class="first last">The number of windows in the y and x directions</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>size <span class="classifier-delimiter">:</span> <span class="classifier">(dy, dx)</span></dt>
+<dd><p class="first last">The size of the windows in the y and x directions</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>keep <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Decimal percentage of solutions to keep. Will rank the solutions by
+increasing error and keep only the first <em>keep</em> percent.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="method">
+<dt id="fatiando.gravmag.euler.MovingWindow.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/euler.html#MovingWindow.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.euler.MovingWindow.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform the Euler deconvolution on a moving window.</p>
+<p>The estimated points are stored in <code class="docutils literal"><span class="pre">estimate_</span></code>, the base levels in
+<code class="docutils literal"><span class="pre">baselevel_</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.euler.MovingWindow.get_window_centers">
+<code class="descname">get_window_centers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/euler.html#MovingWindow.get_window_centers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.euler.MovingWindow.get_window_centers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the center coordinates of the windows.</p>
+<p>Based on the data stored in the given Euler Deconvolution solver.</p>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>centers <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">List of [x, y] coordinate pairs for the center of each window.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="../_sources/api/gravmag.euler.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

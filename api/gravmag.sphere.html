@@ -1,0 +1,978 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Forward modeling with spheres (fatiando.gravmag.sphere) &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Gravity and magnetics (fatiando.gravmag)" href="gravmag.html" />
+    <link rel="next" title="Forward modeling with tesseroids (fatiando.gravmag.tesseroid)" href="gravmag.tesseroid.html" />
+    <link rel="prev" title="Forward modeling with 3D polygonal prisms (fatiando.gravmag.polyprism)" href="gravmag.polyprism.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../install.html">Installing</a></li>
+                <li><a href="../docs.html">Documentation</a></li>
+                <li><a href="../cookbook.html">Cookbook</a></li>
+                <li><a href="../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="module-fatiando.gravmag.sphere">
+<span id="forward-modeling-with-spheres-fatiando-gravmag-sphere"></span><span id="fatiando-gravmag-sphere"></span><h1>Forward modeling with spheres (<code class="docutils literal"><span class="pre">fatiando.gravmag.sphere</span></code>)<a class="headerlink" href="#module-fatiando.gravmag.sphere" title="Permalink to this headline">¶</a></h1>
+<p>Calculate the potential fields of a homogeneous sphere.</p>
+<p><strong>Magnetic</strong></p>
+<p>Calculates the magnetic effect produced by an sphere. The functions are
+based on Blakely (1995).</p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.gravmag.sphere.tf" title="fatiando.gravmag.sphere.tf"><code class="xref py py-func docutils literal"><span class="pre">tf</span></code></a>: calculates the total-field anomaly</li>
+<li><a class="reference internal" href="#fatiando.gravmag.sphere.bx" title="fatiando.gravmag.sphere.bx"><code class="xref py py-func docutils literal"><span class="pre">bx</span></code></a>: calculates the x component of the
+induction</li>
+<li><a class="reference internal" href="#fatiando.gravmag.sphere.by" title="fatiando.gravmag.sphere.by"><code class="xref py py-func docutils literal"><span class="pre">by</span></code></a>: calculates the y component of the
+induction</li>
+<li><a class="reference internal" href="#fatiando.gravmag.sphere.bz" title="fatiando.gravmag.sphere.bz"><code class="xref py py-func docutils literal"><span class="pre">bz</span></code></a>: calculates the z component of the
+induction</li>
+</ul>
+<p>Remember that:</p>
+<p>The magnetization <span class="math">\(\mathbf{M}\)</span> and the dipole moment <span class="math">\(\mathbf{m}\)</span>
+are related with the volume V:</p>
+<div class="math">
+\[\mathbf{M} = \dfrac{\mathbf{m}}{V}.\]</div>
+<p>The total-field anomaly is:</p>
+<div class="math">
+\[\Delta T = |\mathbf{T}| - |\mathbf{F}|,\]</div>
+<p>where <span class="math">\(\mathbf{T}\)</span> is the measured field and <span class="math">\(\mathbf{F}\)</span> is a
+reference (regional) field. The forward modeling functions
+<a class="reference internal" href="#fatiando.gravmag.sphere.bx" title="fatiando.gravmag.sphere.bx"><code class="xref py py-func docutils literal"><span class="pre">bx</span></code></a>, <a class="reference internal" href="#fatiando.gravmag.sphere.by" title="fatiando.gravmag.sphere.by"><code class="xref py py-func docutils literal"><span class="pre">by</span></code></a>,
+and <a class="reference internal" href="#fatiando.gravmag.sphere.bz" title="fatiando.gravmag.sphere.bz"><code class="xref py py-func docutils literal"><span class="pre">bz</span></code></a> calculate the 3 components of the
+field perturbation <span class="math">\(\Delta\mathbf{F}\)</span></p>
+<div class="math">
+\[\Delta\mathbf{F} = \mathbf{T} - \mathbf{F}.\]</div>
+<p>Then the total-field anomaly caused by the sphere is</p>
+<div class="math">
+\[\Delta T \approx \hat{\mathbf{F}}\cdot\Delta\mathbf{F}.\]</div>
+<p><strong>Gravity</strong></p>
+<p>Calculates the gravitational acceleration and gravity gradient tensor
+components.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.gravmag.sphere.gz" title="fatiando.gravmag.sphere.gz"><code class="xref py py-func docutils literal"><span class="pre">gz</span></code></a></li>
+<li><a class="reference internal" href="#fatiando.gravmag.sphere.gxx" title="fatiando.gravmag.sphere.gxx"><code class="xref py py-func docutils literal"><span class="pre">gxx</span></code></a></li>
+<li><a class="reference internal" href="#fatiando.gravmag.sphere.gxy" title="fatiando.gravmag.sphere.gxy"><code class="xref py py-func docutils literal"><span class="pre">gxy</span></code></a></li>
+<li><a class="reference internal" href="#fatiando.gravmag.sphere.gxz" title="fatiando.gravmag.sphere.gxz"><code class="xref py py-func docutils literal"><span class="pre">gxz</span></code></a></li>
+<li><a class="reference internal" href="#fatiando.gravmag.sphere.gyy" title="fatiando.gravmag.sphere.gyy"><code class="xref py py-func docutils literal"><span class="pre">gyy</span></code></a></li>
+<li><a class="reference internal" href="#fatiando.gravmag.sphere.gyz" title="fatiando.gravmag.sphere.gyz"><code class="xref py py-func docutils literal"><span class="pre">gyz</span></code></a></li>
+<li><a class="reference internal" href="#fatiando.gravmag.sphere.gzz" title="fatiando.gravmag.sphere.gzz"><code class="xref py py-func docutils literal"><span class="pre">gzz</span></code></a></li>
+</ul>
+<p><strong>Auxiliary Functions</strong></p>
+<p>Calculates the second derivatives of the function</p>
+<div class="math">
+\[\phi(x,y,z) = \frac{4}{3} \pi R^3 \frac{1}{r}\]</div>
+<p>with respect to the variables <span class="math">\(x\)</span>, <span class="math">\(y\)</span>, and <span class="math">\(z\)</span>. In
+this equation,</p>
+<div class="math">
+\[r = \sqrt{(x - \nu)^2 + (y - \eta)^2 + (z - \zeta)^2},\]</div>
+<p>and <span class="math">\(R\)</span> is the radius of a sphere with centre at the Cartesian
+coordinates <span class="math">\(\nu\)</span>, <span class="math">\(\eta\)</span> and <span class="math">\(\zeta\)</span>.</p>
+<p>These second derivatives are used to calculate the total field magnetic anomaly
+and the gravity gradient tensor components.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.gravmag.sphere.kernelxx" title="fatiando.gravmag.sphere.kernelxx"><code class="xref py py-func docutils literal"><span class="pre">kernelxx</span></code></a></li>
+<li><a class="reference internal" href="#fatiando.gravmag.sphere.kernelxy" title="fatiando.gravmag.sphere.kernelxy"><code class="xref py py-func docutils literal"><span class="pre">kernelxy</span></code></a></li>
+<li><a class="reference internal" href="#fatiando.gravmag.sphere.kernelxz" title="fatiando.gravmag.sphere.kernelxz"><code class="xref py py-func docutils literal"><span class="pre">kernelxz</span></code></a></li>
+<li><a class="reference internal" href="#fatiando.gravmag.sphere.kernelyy" title="fatiando.gravmag.sphere.kernelyy"><code class="xref py py-func docutils literal"><span class="pre">kernelyy</span></code></a></li>
+<li><a class="reference internal" href="#fatiando.gravmag.sphere.kernelyz" title="fatiando.gravmag.sphere.kernelyz"><code class="xref py py-func docutils literal"><span class="pre">kernelyz</span></code></a></li>
+<li><a class="reference internal" href="#fatiando.gravmag.sphere.kernelzz" title="fatiando.gravmag.sphere.kernelzz"><code class="xref py py-func docutils literal"><span class="pre">kernelzz</span></code></a></li>
+</ul>
+<p><strong>References</strong></p>
+<p>Blakely, R. J. (1995), Potential Theory in Gravity and Magnetic Applications,
+Cambridge University Press.</p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="fatiando.gravmag.sphere.bx">
+<code class="descclassname">fatiando.gravmag.sphere.</code><code class="descname">bx</code><span class="sig-paren">(</span><em>xp</em>, <em>yp</em>, <em>zp</em>, <em>spheres</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/sphere.html#bx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.sphere.bx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the x component of the magnetic induction produced by spheres.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Input units are SI. Output is in nT</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>xp, yp, zp <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">The x, y, and z coordinates where the anomaly will be calculated</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>spheres <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Sphere" title="fatiando.mesher.Sphere"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Sphere</span></code></a></span></dt>
+<dd><p class="first last">The spheres. Spheres must have the physical property
+<code class="docutils literal"><span class="pre">'magnetization'</span></code>. Spheres without <code class="docutils literal"><span class="pre">'magnetization'</span></code> will be
+ignored. The <code class="docutils literal"><span class="pre">'magnetization'</span></code> must be a vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>bx: array</dt>
+<dd><p class="first last">The x component of the magnetic induction</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.sphere.by">
+<code class="descclassname">fatiando.gravmag.sphere.</code><code class="descname">by</code><span class="sig-paren">(</span><em>xp</em>, <em>yp</em>, <em>zp</em>, <em>spheres</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/sphere.html#by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.sphere.by" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the y component of the magnetic induction produced by spheres.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Input units are SI. Output is in nT</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>xp, yp, zp <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">The x, y, and z coordinates where the anomaly will be calculated</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>spheres <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Sphere" title="fatiando.mesher.Sphere"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Sphere</span></code></a></span></dt>
+<dd><p class="first last">The spheres. Spheres must have the physical property
+<code class="docutils literal"><span class="pre">'magnetization'</span></code>. Spheres without <code class="docutils literal"><span class="pre">'magnetization'</span></code> will be
+ignored. The <code class="docutils literal"><span class="pre">'magnetization'</span></code> must be a vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>by: array</dt>
+<dd><p class="first last">The y component of the magnetic induction</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.sphere.bz">
+<code class="descclassname">fatiando.gravmag.sphere.</code><code class="descname">bz</code><span class="sig-paren">(</span><em>xp</em>, <em>yp</em>, <em>zp</em>, <em>spheres</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/sphere.html#bz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.sphere.bz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the z component of the magnetic induction produced by spheres.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Input units are SI. Output is in nT</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>xp, yp, zp <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">The x, y, and z coordinates where the anomaly will be calculated</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>spheres <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Sphere" title="fatiando.mesher.Sphere"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Sphere</span></code></a></span></dt>
+<dd><p class="first last">The spheres. Spheres must have the physical property
+<code class="docutils literal"><span class="pre">'magnetization'</span></code>. Spheres without <code class="docutils literal"><span class="pre">'magnetization'</span></code> will be
+ignored. The <code class="docutils literal"><span class="pre">'magnetization'</span></code> must be a vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>bz: array</dt>
+<dd><p class="first last">The z component of the magnetic induction</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.sphere.gxx">
+<code class="descclassname">fatiando.gravmag.sphere.</code><code class="descname">gxx</code><span class="sig-paren">(</span><em>xp</em>, <em>yp</em>, <em>zp</em>, <em>spheres</em>, <em>dens=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/sphere.html#gxx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.sphere.gxx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the <span class="math">\(g_{xx}\)</span> gravity gradient component.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The coordinate system of the input parameters is to be
+x -&gt; North, y -&gt; East and z -&gt; Down.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All input values in SI and output in Eotvos!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>xp, yp, zp <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">The x, y, and z coordinates where the field will be calculated</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>spheres <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Sphere" title="fatiando.mesher.Sphere"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Sphere</span></code></a></span></dt>
+<dd><p class="first last">The spheres. Spheres must have the property <code class="docutils literal"><span class="pre">'density'</span></code>. Those
+without will be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">If not None, will use this value instead of the <code class="docutils literal"><span class="pre">'density'</span></code> property
+of the spheres. Use this, e.g., for sensitivity matrix building.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The field calculated on xp, yp, zp</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.sphere.gxy">
+<code class="descclassname">fatiando.gravmag.sphere.</code><code class="descname">gxy</code><span class="sig-paren">(</span><em>xp</em>, <em>yp</em>, <em>zp</em>, <em>spheres</em>, <em>dens=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/sphere.html#gxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.sphere.gxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the <span class="math">\(g_{xy}\)</span> gravity gradient component.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The coordinate system of the input parameters is to be
+x -&gt; North, y -&gt; East and z -&gt; Down.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All input values in SI and output in Eotvos!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>xp, yp, zp <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">The x, y, and z coordinates where the field will be calculated</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>spheres <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Sphere" title="fatiando.mesher.Sphere"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Sphere</span></code></a></span></dt>
+<dd><p class="first last">The spheres. Spheres must have the property <code class="docutils literal"><span class="pre">'density'</span></code>. Those
+without will be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">If not None, will use this value instead of the <code class="docutils literal"><span class="pre">'density'</span></code> property
+of the spheres. Use this, e.g., for sensitivity matrix building.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The field calculated on xp, yp, zp</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.sphere.gxz">
+<code class="descclassname">fatiando.gravmag.sphere.</code><code class="descname">gxz</code><span class="sig-paren">(</span><em>xp</em>, <em>yp</em>, <em>zp</em>, <em>spheres</em>, <em>dens=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/sphere.html#gxz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.sphere.gxz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the <span class="math">\(g_{xz}\)</span> gravity gradient component.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The coordinate system of the input parameters is to be
+x -&gt; North, y -&gt; East and z -&gt; Down.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All input values in SI and output in Eotvos!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>xp, yp, zp <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">The x, y, and z coordinates where the field will be calculated</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>spheres <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Sphere" title="fatiando.mesher.Sphere"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Sphere</span></code></a></span></dt>
+<dd><p class="first last">The spheres. Spheres must have the property <code class="docutils literal"><span class="pre">'density'</span></code>. Those
+without will be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">If not None, will use this value instead of the <code class="docutils literal"><span class="pre">'density'</span></code> property
+of the spheres. Use this, e.g., for sensitivity matrix building.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The field calculated on xp, yp, zp</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.sphere.gyy">
+<code class="descclassname">fatiando.gravmag.sphere.</code><code class="descname">gyy</code><span class="sig-paren">(</span><em>xp</em>, <em>yp</em>, <em>zp</em>, <em>spheres</em>, <em>dens=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/sphere.html#gyy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.sphere.gyy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the <span class="math">\(g_{yy}\)</span> gravity gradient component.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The coordinate system of the input parameters is to be
+x -&gt; North, y -&gt; East and z -&gt; Down.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All input values in SI and output in Eotvos!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>xp, yp, zp <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">The x, y, and z coordinates where the field will be calculated</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>spheres <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Sphere" title="fatiando.mesher.Sphere"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Sphere</span></code></a></span></dt>
+<dd><p class="first last">The spheres. Spheres must have the property <code class="docutils literal"><span class="pre">'density'</span></code>. Those
+without will be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">If not None, will use this value instead of the <code class="docutils literal"><span class="pre">'density'</span></code> property
+of the spheres. Use this, e.g., for sensitivity matrix building.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The field calculated on xp, yp, zp</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.sphere.gyz">
+<code class="descclassname">fatiando.gravmag.sphere.</code><code class="descname">gyz</code><span class="sig-paren">(</span><em>xp</em>, <em>yp</em>, <em>zp</em>, <em>spheres</em>, <em>dens=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/sphere.html#gyz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.sphere.gyz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the <span class="math">\(g_{yz}\)</span> gravity gradient component.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The coordinate system of the input parameters is to be
+x -&gt; North, y -&gt; East and z -&gt; Down.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All input values in SI and output in Eotvos!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>xp, yp, zp <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">The x, y, and z coordinates where the field will be calculated</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>spheres <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Sphere" title="fatiando.mesher.Sphere"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Sphere</span></code></a></span></dt>
+<dd><p class="first last">The spheres. Spheres must have the property <code class="docutils literal"><span class="pre">'density'</span></code>. Those
+without will be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">If not None, will use this value instead of the <code class="docutils literal"><span class="pre">'density'</span></code> property
+of the spheres. Use this, e.g., for sensitivity matrix building.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The field calculated on xp, yp, zp</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.sphere.gz">
+<code class="descclassname">fatiando.gravmag.sphere.</code><code class="descname">gz</code><span class="sig-paren">(</span><em>xp</em>, <em>yp</em>, <em>zp</em>, <em>spheres</em>, <em>dens=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/sphere.html#gz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.sphere.gz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the <span class="math">\(g_z\)</span> gravity acceleration component.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The coordinate system of the input parameters is to be
+x -&gt; North, y -&gt; East and z -&gt; Down.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All input values in SI and output in mGal!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>xp, yp, zp <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">The x, y, and z coordinates where the field will be calculated</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>spheres <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Sphere" title="fatiando.mesher.Sphere"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Sphere</span></code></a></span></dt>
+<dd><p class="first last">The spheres. Spheres must have the property <code class="docutils literal"><span class="pre">'density'</span></code>. Those
+without will be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">If not None, will use this value instead of the <code class="docutils literal"><span class="pre">'density'</span></code> property
+of the spheres. Use this, e.g., for sensitivity matrix building.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The field calculated on xp, yp, zp</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.sphere.gzz">
+<code class="descclassname">fatiando.gravmag.sphere.</code><code class="descname">gzz</code><span class="sig-paren">(</span><em>xp</em>, <em>yp</em>, <em>zp</em>, <em>spheres</em>, <em>dens=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/sphere.html#gzz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.sphere.gzz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the <span class="math">\(g_{zz}\)</span> gravity gradient component.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The coordinate system of the input parameters is to be
+x -&gt; North, y -&gt; East and z -&gt; Down.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All input values in SI and output in Eotvos!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>xp, yp, zp <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">The x, y, and z coordinates where the field will be calculated</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>spheres <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Sphere" title="fatiando.mesher.Sphere"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Sphere</span></code></a></span></dt>
+<dd><p class="first last">The spheres. Spheres must have the property <code class="docutils literal"><span class="pre">'density'</span></code>. Those
+without will be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">If not None, will use this value instead of the <code class="docutils literal"><span class="pre">'density'</span></code> property
+of the spheres. Use this, e.g., for sensitivity matrix building.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The field calculated on xp, yp, zp</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.sphere.kernelxx">
+<code class="descclassname">fatiando.gravmag.sphere.</code><code class="descname">kernelxx</code><span class="sig-paren">(</span><em>xp</em>, <em>yp</em>, <em>zp</em>, <em>sphere</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/sphere.html#kernelxx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.sphere.kernelxx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the function</p>
+<div class="math">
+\[\frac{\partial^2 \phi(x,y,z)}{\partial x^2},\]</div>
+<p>where</p>
+<div class="math">
+\[\phi(x,y,z) = \frac{4}{3} \pi R^3 \frac{1}{r}\]</div>
+<p>and</p>
+<div class="math">
+\[r = \sqrt{(x - \nu)^2 + (y - \eta)^2 + (z - \zeta)^2}.\]</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The coordinate system of the input parameters is to be
+x -&gt; North, y -&gt; East and z -&gt; Down.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All input and output values in SI!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>xp, yp, zp <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">The x, y, and z coordinates where the function will be
+calculated</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">sphere : object of <a class="reference internal" href="mesher.html#fatiando.mesher.Sphere" title="fatiando.mesher.Sphere"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Sphere</span></code></a></p>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The function calculated on xp, yp, zp</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.sphere.kernelxy">
+<code class="descclassname">fatiando.gravmag.sphere.</code><code class="descname">kernelxy</code><span class="sig-paren">(</span><em>xp</em>, <em>yp</em>, <em>zp</em>, <em>sphere</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/sphere.html#kernelxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.sphere.kernelxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the function</p>
+<div class="math">
+\[\frac{\partial^2 \phi(x,y,z)}{\partial x \partial y},\]</div>
+<p>where</p>
+<div class="math">
+\[\phi(x,y,z) = \frac{4}{3} \pi R^3 \frac{1}{r}\]</div>
+<p>and</p>
+<div class="math">
+\[r = \sqrt{(x - \nu)^2 + (y - \eta)^2 + (z - \zeta)^2}.\]</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The coordinate system of the input parameters is to be
+x -&gt; North, y -&gt; East and z -&gt; Down.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All input and output values in SI!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>xp, yp, zp <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">The x, y, and z coordinates where the function will be
+calculated</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">sphere : object of <a class="reference internal" href="mesher.html#fatiando.mesher.Sphere" title="fatiando.mesher.Sphere"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Sphere</span></code></a></p>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The function calculated on xp, yp, zp</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.sphere.kernelxz">
+<code class="descclassname">fatiando.gravmag.sphere.</code><code class="descname">kernelxz</code><span class="sig-paren">(</span><em>xp</em>, <em>yp</em>, <em>zp</em>, <em>sphere</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/sphere.html#kernelxz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.sphere.kernelxz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the function</p>
+<div class="math">
+\[\frac{\partial^2 \phi(x,y,z)}{\partial x \partial z},\]</div>
+<p>where</p>
+<div class="math">
+\[\phi(x,y,z) = \frac{4}{3} \pi R^3 \frac{1}{r}\]</div>
+<p>and</p>
+<div class="math">
+\[r = \sqrt{(x - \nu)^2 + (y - \eta)^2 + (z - \zeta)^2}.\]</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The coordinate system of the input parameters is to be
+x -&gt; North, y -&gt; East and z -&gt; Down.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All input and output values in SI!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>xp, yp, zp <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">The x, y, and z coordinates where the function will be
+calculated</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">sphere : object of <a class="reference internal" href="mesher.html#fatiando.mesher.Sphere" title="fatiando.mesher.Sphere"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Sphere</span></code></a></p>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The function calculated on xp, yp, zp</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.sphere.kernelyy">
+<code class="descclassname">fatiando.gravmag.sphere.</code><code class="descname">kernelyy</code><span class="sig-paren">(</span><em>xp</em>, <em>yp</em>, <em>zp</em>, <em>sphere</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/sphere.html#kernelyy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.sphere.kernelyy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the function</p>
+<div class="math">
+\[\frac{\partial^2 \phi(x,y,z)}{\partial y^2},\]</div>
+<p>where</p>
+<div class="math">
+\[\phi(x,y,z) = \frac{4}{3} \pi R^3 \frac{1}{r}\]</div>
+<p>and</p>
+<div class="math">
+\[r = \sqrt{(x - \nu)^2 + (y - \eta)^2 + (z - \zeta)^2}.\]</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The coordinate system of the input parameters is to be
+x -&gt; North, y -&gt; East and z -&gt; Down.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All input and output values in SI!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>xp, yp, zp <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">The x, y, and z coordinates where the function will be
+calculated</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">sphere : object of <a class="reference internal" href="mesher.html#fatiando.mesher.Sphere" title="fatiando.mesher.Sphere"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Sphere</span></code></a></p>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The function calculated on xp, yp, zp</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.sphere.kernelyz">
+<code class="descclassname">fatiando.gravmag.sphere.</code><code class="descname">kernelyz</code><span class="sig-paren">(</span><em>xp</em>, <em>yp</em>, <em>zp</em>, <em>sphere</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/sphere.html#kernelyz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.sphere.kernelyz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the function</p>
+<div class="math">
+\[\frac{\partial^2 \phi(x,y,z)}{\partial y \partial z},\]</div>
+<p>where</p>
+<div class="math">
+\[\phi(x,y,z) = \frac{4}{3} \pi R^3 \frac{1}{r}\]</div>
+<p>and</p>
+<div class="math">
+\[r = \sqrt{(x - \nu)^2 + (y - \eta)^2 + (z - \zeta)^2}.\]</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The coordinate system of the input parameters is to be
+x -&gt; North, y -&gt; East and z -&gt; Down.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All input and output values in SI!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>xp, yp, zp <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">The x, y, and z coordinates where the function will be
+calculated</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">sphere : object of <a class="reference internal" href="mesher.html#fatiando.mesher.Sphere" title="fatiando.mesher.Sphere"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Sphere</span></code></a></p>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The function calculated on xp, yp, zp</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.sphere.kernelzz">
+<code class="descclassname">fatiando.gravmag.sphere.</code><code class="descname">kernelzz</code><span class="sig-paren">(</span><em>xp</em>, <em>yp</em>, <em>zp</em>, <em>sphere</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/sphere.html#kernelzz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.sphere.kernelzz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the function</p>
+<div class="math">
+\[\frac{\partial^2 \phi(x,y,z)}{\partial z^2},\]</div>
+<p>where</p>
+<div class="math">
+\[\phi(x,y,z) = \frac{4}{3} \pi R^3 \frac{1}{r}\]</div>
+<p>and</p>
+<div class="math">
+\[r = \sqrt{(x - \nu)^2 + (y - \eta)^2 + (z - \zeta)^2}.\]</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The coordinate system of the input parameters is to be
+x -&gt; North, y -&gt; East and z -&gt; Down.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All input and output values in SI!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>xp, yp, zp <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">The x, y, and z coordinates where the function will be
+calculated</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">sphere : object of <a class="reference internal" href="mesher.html#fatiando.mesher.Sphere" title="fatiando.mesher.Sphere"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Sphere</span></code></a></p>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The function calculated on xp, yp, zp</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.sphere.tf">
+<code class="descclassname">fatiando.gravmag.sphere.</code><code class="descname">tf</code><span class="sig-paren">(</span><em>xp</em>, <em>yp</em>, <em>zp</em>, <em>spheres</em>, <em>inc</em>, <em>dec</em>, <em>pmag=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/sphere.html#tf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.sphere.tf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the total-field anomaly of spheres.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Input units are SI. Output is in nT</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>xp, yp, zp <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">The x, y, and z coordinates where the anomaly will be calculated</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>spheres <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Sphere" title="fatiando.mesher.Sphere"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Sphere</span></code></a></span></dt>
+<dd><p class="first last">The spheres. Spheres must have the physical property
+<code class="docutils literal"><span class="pre">'magnetization'</span></code>. Spheres without <code class="docutils literal"><span class="pre">'magnetization'</span></code> will be
+ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>inc <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The inclination of the regional field (in degrees)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dec <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The declination of the regional field (in degrees)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>pmag <span class="classifier-delimiter">:</span> <span class="classifier">[mx, my, mz] or None</span></dt>
+<dd><p class="first last">A magnetization vector. If not None, will use this value instead of the
+<code class="docutils literal"><span class="pre">'magnetization'</span></code> property of the spheres. Use this, e.g., for
+sensitivity matrix building.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>tf <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The total-field anomaly</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="../_sources/api/gravmag.sphere.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

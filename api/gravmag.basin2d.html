@@ -1,0 +1,1222 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Inversion for the relief of 2D basins (fatiando.gravmag.basin2d) &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Gravity and magnetics (fatiando.gravmag)" href="gravmag.html" />
+    <link rel="next" title="Imaging methods for potential fields (fatiando.gravmag.imaging)" href="gravmag.imaging.html" />
+    <link rel="prev" title="Forward modeling with 2D polygons (fatiando.gravmag.talwani)" href="gravmag.talwani.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../install.html">Installing</a></li>
+                <li><a href="../docs.html">Documentation</a></li>
+                <li><a href="../cookbook.html">Cookbook</a></li>
+                <li><a href="../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="module-fatiando.gravmag.basin2d">
+<span id="inversion-for-the-relief-of-2d-basins-fatiando-gravmag-basin2d"></span><span id="fatiando-gravmag-basin2d"></span><h1>Inversion for the relief of 2D basins  (<code class="docutils literal"><span class="pre">fatiando.gravmag.basin2d</span></code>)<a class="headerlink" href="#module-fatiando.gravmag.basin2d" title="Permalink to this headline">¶</a></h1>
+<p>2D inversion for the basement relief of sedimentary basins.</p>
+<p>There are different parametrizations available.</p>
+<p>The simplest are meant more as an exercise and initiation in inverse problems:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.gravmag.basin2d.Triangular" title="fatiando.gravmag.basin2d.Triangular"><code class="xref py py-func docutils literal"><span class="pre">Triangular</span></code></a>: assumes a basin with a
+triangular cross-section (think &#8220;foreland&#8221;).</li>
+<li><a class="reference internal" href="#fatiando.gravmag.basin2d.Trapezoidal" title="fatiando.gravmag.basin2d.Trapezoidal"><code class="xref py py-func docutils literal"><span class="pre">Trapezoidal</span></code></a>: assumes a basin with a
+trapezoidal cross-section (think &#8220;grabben&#8221;).</li>
+</ul>
+<p>More complex parametrizations are:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.gravmag.basin2d.PolygonalBasinGravity" title="fatiando.gravmag.basin2d.PolygonalBasinGravity"><code class="xref py py-func docutils literal"><span class="pre">PolygonalBasinGravity</span></code></a>: approximate the
+basin by a polygon.</li>
+</ul>
+<hr class="docutils" />
+<dl class="class">
+<dt id="fatiando.gravmag.basin2d.PolygonalBasinGravity">
+<em class="property">class </em><code class="descclassname">fatiando.gravmag.basin2d.</code><code class="descname">PolygonalBasinGravity</code><span class="sig-paren">(</span><em>x</em>, <em>z</em>, <em>data</em>, <em>npoints</em>, <em>props</em>, <em>top=0</em>, <em>xlim=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/basin2d.html#PolygonalBasinGravity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.basin2d.PolygonalBasinGravity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="inversion.misfit.html#fatiando.inversion.misfit.Misfit" title="fatiando.inversion.misfit.Misfit"><code class="xref py py-class docutils literal"><span class="pre">fatiando.inversion.misfit.Misfit</span></code></a></p>
+<p>Estimate the relief of a sedimentary basin approximating by a polygon.</p>
+<p>Currently only works with gravity data.</p>
+<p>The top of the basin is straight and fixed at a given height. Polygon
+vertices are distributed evenly in the x-direction.  The inversion
+estimates the depths of each vertex.</p>
+<p>This is a non-linear inversion. Therefore you must configure it before
+running to choose a solver method and set the initial estimate.
+Use the <code class="docutils literal"><span class="pre">config</span></code> method for this.</p>
+<p>Recommended configuration: Levemberg-Marquardt algorithm (<code class="docutils literal"><span class="pre">'levmarq'</span></code>)
+with initial estimate to the average expected depth of the basin.</p>
+<p>Typical regularization to use with this class are:
+<a class="reference internal" href="inversion.regularization.html#fatiando.inversion.regularization.Damping" title="fatiando.inversion.regularization.Damping"><code class="xref py py-class docutils literal"><span class="pre">Damping</span></code></a>,
+<a class="reference internal" href="inversion.regularization.html#fatiando.inversion.regularization.Smoothness1D" title="fatiando.inversion.regularization.Smoothness1D"><code class="xref py py-class docutils literal"><span class="pre">Smoothness1D</span></code></a>,
+<a class="reference internal" href="inversion.regularization.html#fatiando.inversion.regularization.TotalVariation1D" title="fatiando.inversion.regularization.TotalVariation1D"><code class="xref py py-class docutils literal"><span class="pre">TotalVariation1D</span></code></a>.</p>
+<p>The forward modeling is done using <a class="reference internal" href="gravmag.talwani.html#module-fatiando.gravmag.talwani" title="fatiando.gravmag.talwani"><code class="xref py py-mod docutils literal"><span class="pre">talwani</span></code></a>.
+Derivatives are calculated using a 2-point finite difference approximation.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Use the <code class="docutils literal"><span class="pre">estimate_</span></code> attribute to get a
+<a class="reference internal" href="mesher.html#fatiando.mesher.Polygon" title="fatiando.mesher.Polygon"><code class="xref py py-class docutils literal"><span class="pre">Polygon</span></code></a> version of the estimated parameters
+(attribute <code class="docutils literal"><span class="pre">p_</span></code>).</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, z <span class="classifier-delimiter">:</span> <span class="classifier">1d-arrays</span></dt>
+<dd><p class="first last">The x and z coordinates of the observations. In meters.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The observed data.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>npoints <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of points to use</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>props <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">The physical properties dictionary that will be assigned to the
+basin <a class="reference internal" href="mesher.html#fatiando.mesher.Polygon" title="fatiando.mesher.Polygon"><code class="xref py py-class docutils literal"><span class="pre">Polygon</span></code></a>. Ex: to give the basin a
+density contrast of 500 kg/m3 <code class="docutils literal"><span class="pre">props={'density':</span> <span class="pre">500}</span></code>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>top <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The value of the z-coordinate where the top of the basin will be fixed.
+In meters. Default: 0.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>xlim <span class="classifier-delimiter">:</span> <span class="classifier">None or list = [xmin, xmax]</span></dt>
+<dd><p class="first last">The horizontal limits of the model. If not given, will use the limits
+of the data (i.e., <code class="docutils literal"><span class="pre">[x.min(),</span> <span class="pre">x.max()]</span></code>).</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Examples:</p>
+<p>Lets run an inversion on synthetic data from a simple model of a trapezoid
+basin (a polygon with 4 vertices). We&#8217;ll assume that the horizontal limits
+of the basin are the same as the limits of the data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.mesher</span> <span class="kn">import</span> <span class="n">Polygon</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.gravmag</span> <span class="kn">import</span> <span class="n">talwani</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Make some synthetic data from a simple basin</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">props</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;density&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">500</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="p">[</span><span class="n">Polygon</span><span class="p">([[</span><span class="mi">3000</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">800</span><span class="p">],</span> <span class="p">[</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span>
+<span class="gp">... </span>                 <span class="n">props</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c"># Put data at 1m height</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">talwani</span><span class="o">.</span><span class="n">gz</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Make the solver, configure, and invert.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Will use only 2 points because the two in the corners are</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># considered fixed in the inversion (at &#39;top&#39;).</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">misfit</span> <span class="o">=</span> <span class="n">PolygonalBasinGravity</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">misfit</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s">&#39;levmarq&#39;</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">misfit</span><span class="o">.</span><span class="n">nparams</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">misfit</span><span class="o">.</span><span class="n">p_</span>
+<span class="go">array([ 800.,  500.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">misfit</span><span class="o">.</span><span class="n">estimate_</span><span class="p">)</span>
+<span class="go">&lt;class &#39;fatiando.mesher.Polygon&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">misfit</span><span class="o">.</span><span class="n">estimate_</span><span class="o">.</span><span class="n">vertices</span>
+<span class="go">array([[ 3000.,     0.],</span>
+<span class="go">       [ 2000.,   800.],</span>
+<span class="go">       [ 1000.,   500.],</span>
+<span class="go">       [    0.,     0.]])</span>
+</pre></div>
+</div>
+<p>If the x range of the data points is larger than the basin, you can specify
+a horizontal range for the basin model. When this is not specified, it is
+deduced from the data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">500</span><span class="p">,</span> <span class="mi">3500</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">talwani</span><span class="o">.</span><span class="n">gz</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Specify that the model used for inversion should be within</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># x =&gt; [0, 3000]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">misfit</span> <span class="o">=</span> <span class="n">PolygonalBasinGravity</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>                               <span class="n">xlim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3000</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">misfit</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s">&#39;levmarq&#39;</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">misfit</span><span class="o">.</span><span class="n">nparams</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">misfit</span><span class="o">.</span><span class="n">p_</span>
+<span class="go">array([ 800.,  500.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">misfit</span><span class="o">.</span><span class="n">estimate_</span><span class="o">.</span><span class="n">vertices</span>
+<span class="go">array([[ 3000.,     0.],</span>
+<span class="go">       [ 2000.,   800.],</span>
+<span class="go">       [ 1000.,   500.],</span>
+<span class="go">       [    0.,     0.]])</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.PolygonalBasinGravity.config">
+<code class="descname">config</code><span class="sig-paren">(</span><em>method</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.PolygonalBasinGravity.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the optimization method and its parameters.</p>
+<p>This sets the method used by
+<code class="xref py py-meth docutils literal"><span class="pre">fit</span></code> and the keyword
+arguments that are passed to it.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The optimization method. One of: <code class="docutils literal"><span class="pre">'linear'</span></code>, <code class="docutils literal"><span class="pre">'newton'</span></code>,
+<code class="docutils literal"><span class="pre">'levmarq'</span></code>, <code class="docutils literal"><span class="pre">'steepest'</span></code>, <code class="docutils literal"><span class="pre">'acor'</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Other keyword arguments that can be passed are the ones allowed by each
+method.</p>
+<p>Some methods have required arguments:</p>
+<ul class="simple">
+<li><em>newton</em>, <em>levmarq</em> and <em>steepest</em> require the <code class="docutils literal"><span class="pre">initial</span></code> argument
+(an initial estimate for the gradient descent)</li>
+<li><em>acor</em> requires the <code class="docutils literal"><span class="pre">bounds</span></code> argument (min/max values for the
+search space)</li>
+</ul>
+<p>See the corresponding docstrings for more information:</p>
+<ul class="simple">
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.linear" title="fatiando.inversion.optimization.linear"><code class="xref py py-meth docutils literal"><span class="pre">linear</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.newton" title="fatiando.inversion.optimization.newton"><code class="xref py py-meth docutils literal"><span class="pre">newton</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.levmarq" title="fatiando.inversion.optimization.levmarq"><code class="xref py py-meth docutils literal"><span class="pre">levmarq</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.steepest" title="fatiando.inversion.optimization.steepest"><code class="xref py py-meth docutils literal"><span class="pre">steepest</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.acor" title="fatiando.inversion.optimization.acor"><code class="xref py py-meth docutils literal"><span class="pre">acor</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.PolygonalBasinGravity.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><em>deep=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.PolygonalBasinGravity.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a copy of me together with all the cached methods.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.basin2d.PolygonalBasinGravity.estimate_">
+<code class="descname">estimate_</code><a class="headerlink" href="#fatiando.gravmag.basin2d.PolygonalBasinGravity.estimate_" title="Permalink to this definition">¶</a></dt>
+<dd><p>A nicely formatted version of the estimate.</p>
+<p>If the class implements a <cite>fmt_estimate</cite> method, this will its results.
+This can be used to convert the parameter vector to a more useful form,
+like a <a class="reference internal" href="mesher.html#module-fatiando.mesher" title="fatiando.mesher"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.mesher</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.PolygonalBasinGravity.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.PolygonalBasinGravity.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve for the parameter vector that minimizes this objective function.</p>
+<p>Uses the optimization method and parameters defined using the
+<a class="reference internal" href="inversion.base.html#fatiando.inversion.base.OptimizerMixin.config" title="fatiando.inversion.base.OptimizerMixin.config"><code class="xref py py-meth docutils literal"><span class="pre">config</span></code></a> method.</p>
+<p>The estimated parameter vector can be accessed through the
+<code class="docutils literal"><span class="pre">p_</span></code> attribute. A (possibly) formatted version (converted to a more
+manageable type) of the estimate can be accessed through the property
+<code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.PolygonalBasinGravity.fmt_estimate">
+<code class="descname">fmt_estimate</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/basin2d.html#PolygonalBasinGravity.fmt_estimate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.basin2d.PolygonalBasinGravity.fmt_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the parameter vector to a  <a class="reference internal" href="mesher.html#fatiando.mesher.Polygon" title="fatiando.mesher.Polygon"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Polygon</span></code></a> so
+that it can be used for plotting and forward modeling.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Make some arrays to create the estimator clas</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">z</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">misfit</span> <span class="o">=</span> <span class="n">PolygonalBasinGravity</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">{},</span> <span class="n">top</span><span class="o">=-</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poly</span> <span class="o">=</span> <span class="n">misfit</span><span class="o">.</span><span class="n">fmt_estimate</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
+<span class="go">&lt;class &#39;fatiando.mesher.Polygon&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poly</span><span class="o">.</span><span class="n">vertices</span>
+<span class="go">array([[ 300., -100.],</span>
+<span class="go">       [ 200.,    1.],</span>
+<span class="go">       [ 100.,    2.],</span>
+<span class="go">       [   0.,    3.],</span>
+<span class="go">       [-100., -100.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.PolygonalBasinGravity.gradient">
+<code class="descname">gradient</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.PolygonalBasinGravity.gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The gradient vector of the misfit function.</p>
+<div class="math">
+\[\bar{g} = -2\bar{\bar{J}}^T\bar{r}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix and <span class="math">\(\bar{r}\)</span>
+is the residual vector.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the gradient is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>gradient <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The gradient vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.PolygonalBasinGravity.hessian">
+<code class="descname">hessian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.PolygonalBasinGravity.hessian" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Hessian of the misfit function with respect to the parameters.</p>
+<p>Calculated using the Gauss approximation:</p>
+<div class="math">
+\[\bar{\bar{H}} \approx 2\bar{\bar{J}}^T\bar{\bar{J}}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix.</p>
+<p>For linear problems, the Hessian matrix is cached in memory, so calling
+this method again will not trigger a re-calculation.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the Hessian is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>hessian <span class="classifier-delimiter">:</span> <span class="classifier">2d-array</span></dt>
+<dd><p class="first last">The Hessian matrix</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.PolygonalBasinGravity.jacobian">
+<code class="descname">jacobian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/basin2d.html#PolygonalBasinGravity.jacobian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.basin2d.PolygonalBasinGravity.jacobian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Jacobian (sensitivity) matrix for a parameter vector.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.PolygonalBasinGravity.p2vertices">
+<code class="descname">p2vertices</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/basin2d.html#PolygonalBasinGravity.p2vertices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.basin2d.PolygonalBasinGravity.p2vertices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a parameter vector into vertices a Polygon.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector with the depth of the polygon vertices</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>vertices <span class="classifier-delimiter">:</span> <span class="classifier">2d-array</span></dt>
+<dd><p class="first last">Like a list of [x, z] coordinates of each vertex</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Make some arrays to create the estimator clas</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">z</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">misfit</span> <span class="o">=</span> <span class="n">PolygonalBasinGravity</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">{},</span> <span class="n">top</span><span class="o">=-</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">misfit</span><span class="o">.</span><span class="n">p2vertices</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="go">array([[ 300., -100.],</span>
+<span class="go">       [ 200.,    1.],</span>
+<span class="go">       [ 100.,    2.],</span>
+<span class="go">       [   0.,    3.],</span>
+<span class="go">       [-100., -100.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.PolygonalBasinGravity.predicted">
+<code class="descname">predicted</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/basin2d.html#PolygonalBasinGravity.predicted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.basin2d.PolygonalBasinGravity.predicted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the predicted data for a parameter vector.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.basin2d.PolygonalBasinGravity.regul_param">
+<code class="descname">regul_param</code><a class="headerlink" href="#fatiando.gravmag.basin2d.PolygonalBasinGravity.regul_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>The regularization parameter (scale factor) for the objetive function.</p>
+<p>Defaults to 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.PolygonalBasinGravity.residuals">
+<code class="descname">residuals</code><span class="sig-paren">(</span><em>p=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.PolygonalBasinGravity.residuals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the residuals vector (observed - predicted data).</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector used to calculate the residuals. If None, will
+use the current estimate stored in <code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>residuals <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or list of 1d-arrays</span></dt>
+<dd><p class="first last">The residual vector. If this is the sum of 1 or more Misfit
+instances, will return the residual vector from each of the summed
+misfits in the order of the sum.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.PolygonalBasinGravity.set_weights">
+<code class="descname">set_weights</code><span class="sig-paren">(</span><em>weights</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.PolygonalBasinGravity.set_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the data weights.</p>
+<p>Using weights for the data, the least-squares data-misfit function
+becomes:</p>
+<div class="math">
+\[\phi = \bar{r}^T \bar{\bar{W}}\bar{r}\]</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>weights <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or 2d-array or None</span></dt>
+<dd><p class="first last">Weights for the data vector.
+If None, will remove any weights that have been set before.
+If it is a 2d-array, it will be interpreted as the weight matrix
+<span class="math">\(\bar{\bar{W}}\)</span>.
+If it is a 1d-array, it will be interpreted as the diagonal of the
+weight matrix (all off-diagonal elements will default to zero).
+The weight matrix can be a sparse array from <code class="docutils literal"><span class="pre">scipy.sparse</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.PolygonalBasinGravity.value">
+<code class="descname">value</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.PolygonalBasinGravity.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the value of the misfit for a given parameter vector.</p>
+<p>The value is given by:</p>
+<div class="math">
+\[\phi(\bar{p}) = \bar{r}^T\bar{\bar{W}}\bar{r}\]</div>
+<p>where <span class="math">\(\bar{r}\)</span> is the residual vector and <span class="math">\(bar{\bar{W}}\)</span>
+are optional data weights.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>value <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The value of the misfit function.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatiando.gravmag.basin2d.Trapezoidal">
+<em class="property">class </em><code class="descclassname">fatiando.gravmag.basin2d.</code><code class="descname">Trapezoidal</code><span class="sig-paren">(</span><em>x</em>, <em>z</em>, <em>gz</em>, <em>verts</em>, <em>density</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/basin2d.html#Trapezoidal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.basin2d.Trapezoidal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="inversion.misfit.html#fatiando.inversion.misfit.Misfit" title="fatiando.inversion.misfit.Misfit"><code class="xref py py-class docutils literal"><span class="pre">fatiando.inversion.misfit.Misfit</span></code></a></p>
+<p>Estimate the relief of a trapezoidal basin.</p>
+<p>Use when the basin can be approximated by a 2D body with <strong>trapezoidal</strong>
+vertical cross-section, like in rifts.</p>
+<p>The trapezoid is assumed to have 2 known vertices at the surface
+(the edges of the basin) and two unknown vertices in the subsurface.
+We assume that the x coordinates of the unknown vertices are the same as
+the x coordinates of the known vertices (i.e., the unknown vertices are
+directly under the known vertices).
+The inversion will then estimate the z coordinates of the unknown vertices.</p>
+<p>The forward modeling is done using <a class="reference internal" href="gravmag.talwani.html#module-fatiando.gravmag.talwani" title="fatiando.gravmag.talwani"><code class="xref py py-mod docutils literal"><span class="pre">talwani</span></code></a>.
+Derivatives are calculated using a 2-point finite difference approximation.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Use the <code class="docutils literal"><span class="pre">estimate_</span></code> attribute to produce a polygon from the
+estimated parameter vector (<code class="docutils literal"><span class="pre">p_</span></code>).</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, z <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">Arrays with the x and z coordinates of the profile data points</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>gz <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The profile gravity anomaly data</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>verts <span class="classifier-delimiter">:</span> <span class="classifier">list of lists</span></dt>
+<dd><p class="first"><code class="docutils literal"><span class="pre">[[x1,</span> <span class="pre">z1],</span> <span class="pre">[x2,</span> <span class="pre">z2]]</span></code> List of the [x, z] coordinates of the left and
+right know vertices, respectively.</p>
+<div class="last admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Very important that the vertices in the list be ordered from left
+to right! Otherwise the forward model will give results with an
+inverted sign and terrible things may happen!</p>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>density <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Density contrast of the basin</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>delta <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Interval used to calculate the approximate derivatives</p>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The recommended solver for this inverse problem is the
+Levemberg-Marquardt method. Since this is a non-linear problem, set the
+desired method and initial solution using the <code class="docutils literal"><span class="pre">config</span></code> method.
+See the example bellow.</p>
+</div>
+<p>Example with synthetic data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.mesher</span> <span class="kn">import</span> <span class="n">Polygon</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.gravmag</span> <span class="kn">import</span> <span class="n">talwani</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Make a trapezoidal basin model (will estimate the z coordinates</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># of the last two points)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">verts</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">90000</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">90000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">],</span> <span class="p">[</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">verts</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;density&#39;</span><span class="p">:</span><span class="mi">500</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Generate the synthetic gz profile</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100000</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gz</span> <span class="o">=</span> <span class="n">talwani</span><span class="o">.</span><span class="n">gz</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="p">[</span><span class="n">model</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Make a solver and fit it to the data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span> <span class="o">=</span> <span class="n">Trapezoidal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">gz</span><span class="p">,</span> <span class="n">verts</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="mi">500</span><span class="p">)</span><span class="o">.</span><span class="n">config</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s">&#39;levmarq&#39;</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="p">[</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">500</span><span class="p">])</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># p_ is the estimated parameter vector (z1 and z2 in this case)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">p_</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39;{:.1f}, {:.1f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">))</span>
+<span class="go">5000.0, 3000.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># The parameter vector is not that useful so use estimate_ to get a</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Polygon object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poly</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">estimate_</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poly</span><span class="o">.</span><span class="n">vertices</span>
+<span class="go">array([[  1.00000000e+04,   1.00000000e+00],</span>
+<span class="go">       [  9.00000000e+04,   1.00000000e+00],</span>
+<span class="go">       [  9.00000000e+04,   5.00000000e+03],</span>
+<span class="go">       [  1.00000000e+04,   3.00000000e+03]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poly</span><span class="o">.</span><span class="n">props</span>
+<span class="go">{&#39;density&#39;: 500}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Check is the residuals are all small</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">solver</span><span class="o">.</span><span class="n">residuals</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**-</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Trapezoidal.config">
+<code class="descname">config</code><span class="sig-paren">(</span><em>method</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.Trapezoidal.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the optimization method and its parameters.</p>
+<p>This sets the method used by
+<code class="xref py py-meth docutils literal"><span class="pre">fit</span></code> and the keyword
+arguments that are passed to it.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The optimization method. One of: <code class="docutils literal"><span class="pre">'linear'</span></code>, <code class="docutils literal"><span class="pre">'newton'</span></code>,
+<code class="docutils literal"><span class="pre">'levmarq'</span></code>, <code class="docutils literal"><span class="pre">'steepest'</span></code>, <code class="docutils literal"><span class="pre">'acor'</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Other keyword arguments that can be passed are the ones allowed by each
+method.</p>
+<p>Some methods have required arguments:</p>
+<ul class="simple">
+<li><em>newton</em>, <em>levmarq</em> and <em>steepest</em> require the <code class="docutils literal"><span class="pre">initial</span></code> argument
+(an initial estimate for the gradient descent)</li>
+<li><em>acor</em> requires the <code class="docutils literal"><span class="pre">bounds</span></code> argument (min/max values for the
+search space)</li>
+</ul>
+<p>See the corresponding docstrings for more information:</p>
+<ul class="simple">
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.linear" title="fatiando.inversion.optimization.linear"><code class="xref py py-meth docutils literal"><span class="pre">linear</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.newton" title="fatiando.inversion.optimization.newton"><code class="xref py py-meth docutils literal"><span class="pre">newton</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.levmarq" title="fatiando.inversion.optimization.levmarq"><code class="xref py py-meth docutils literal"><span class="pre">levmarq</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.steepest" title="fatiando.inversion.optimization.steepest"><code class="xref py py-meth docutils literal"><span class="pre">steepest</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.acor" title="fatiando.inversion.optimization.acor"><code class="xref py py-meth docutils literal"><span class="pre">acor</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Trapezoidal.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><em>deep=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.Trapezoidal.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a copy of me together with all the cached methods.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.basin2d.Trapezoidal.estimate_">
+<code class="descname">estimate_</code><a class="headerlink" href="#fatiando.gravmag.basin2d.Trapezoidal.estimate_" title="Permalink to this definition">¶</a></dt>
+<dd><p>A nicely formatted version of the estimate.</p>
+<p>If the class implements a <cite>fmt_estimate</cite> method, this will its results.
+This can be used to convert the parameter vector to a more useful form,
+like a <a class="reference internal" href="mesher.html#module-fatiando.mesher" title="fatiando.mesher"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.mesher</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Trapezoidal.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.Trapezoidal.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve for the parameter vector that minimizes this objective function.</p>
+<p>Uses the optimization method and parameters defined using the
+<a class="reference internal" href="inversion.base.html#fatiando.inversion.base.OptimizerMixin.config" title="fatiando.inversion.base.OptimizerMixin.config"><code class="xref py py-meth docutils literal"><span class="pre">config</span></code></a> method.</p>
+<p>The estimated parameter vector can be accessed through the
+<code class="docutils literal"><span class="pre">p_</span></code> attribute. A (possibly) formatted version (converted to a more
+manageable type) of the estimate can be accessed through the property
+<code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Trapezoidal.fmt_estimate">
+<code class="descname">fmt_estimate</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/basin2d.html#Trapezoidal.fmt_estimate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.basin2d.Trapezoidal.fmt_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the parameter vector to a  <a class="reference internal" href="mesher.html#fatiando.mesher.Polygon" title="fatiando.mesher.Polygon"><code class="xref py py-class docutils literal"><span class="pre">fatiando.mesher.Polygon</span></code></a> so
+that it can be used for plotting and forward modeling.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Trapezoidal.gradient">
+<code class="descname">gradient</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.Trapezoidal.gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The gradient vector of the misfit function.</p>
+<div class="math">
+\[\bar{g} = -2\bar{\bar{J}}^T\bar{r}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix and <span class="math">\(\bar{r}\)</span>
+is the residual vector.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the gradient is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>gradient <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The gradient vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Trapezoidal.hessian">
+<code class="descname">hessian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.Trapezoidal.hessian" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Hessian of the misfit function with respect to the parameters.</p>
+<p>Calculated using the Gauss approximation:</p>
+<div class="math">
+\[\bar{\bar{H}} \approx 2\bar{\bar{J}}^T\bar{\bar{J}}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix.</p>
+<p>For linear problems, the Hessian matrix is cached in memory, so calling
+this method again will not trigger a re-calculation.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the Hessian is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>hessian <span class="classifier-delimiter">:</span> <span class="classifier">2d-array</span></dt>
+<dd><p class="first last">The Hessian matrix</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.basin2d.Trapezoidal.regul_param">
+<code class="descname">regul_param</code><a class="headerlink" href="#fatiando.gravmag.basin2d.Trapezoidal.regul_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>The regularization parameter (scale factor) for the objetive function.</p>
+<p>Defaults to 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Trapezoidal.residuals">
+<code class="descname">residuals</code><span class="sig-paren">(</span><em>p=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.Trapezoidal.residuals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the residuals vector (observed - predicted data).</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector used to calculate the residuals. If None, will
+use the current estimate stored in <code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>residuals <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or list of 1d-arrays</span></dt>
+<dd><p class="first last">The residual vector. If this is the sum of 1 or more Misfit
+instances, will return the residual vector from each of the summed
+misfits in the order of the sum.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Trapezoidal.set_weights">
+<code class="descname">set_weights</code><span class="sig-paren">(</span><em>weights</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.Trapezoidal.set_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the data weights.</p>
+<p>Using weights for the data, the least-squares data-misfit function
+becomes:</p>
+<div class="math">
+\[\phi = \bar{r}^T \bar{\bar{W}}\bar{r}\]</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>weights <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or 2d-array or None</span></dt>
+<dd><p class="first last">Weights for the data vector.
+If None, will remove any weights that have been set before.
+If it is a 2d-array, it will be interpreted as the weight matrix
+<span class="math">\(\bar{\bar{W}}\)</span>.
+If it is a 1d-array, it will be interpreted as the diagonal of the
+weight matrix (all off-diagonal elements will default to zero).
+The weight matrix can be a sparse array from <code class="docutils literal"><span class="pre">scipy.sparse</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Trapezoidal.value">
+<code class="descname">value</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.Trapezoidal.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the value of the misfit for a given parameter vector.</p>
+<p>The value is given by:</p>
+<div class="math">
+\[\phi(\bar{p}) = \bar{r}^T\bar{\bar{W}}\bar{r}\]</div>
+<p>where <span class="math">\(\bar{r}\)</span> is the residual vector and <span class="math">\(bar{\bar{W}}\)</span>
+are optional data weights.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>value <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The value of the misfit function.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatiando.gravmag.basin2d.Triangular">
+<em class="property">class </em><code class="descclassname">fatiando.gravmag.basin2d.</code><code class="descname">Triangular</code><span class="sig-paren">(</span><em>x</em>, <em>z</em>, <em>gz</em>, <em>verts</em>, <em>density</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/basin2d.html#Triangular"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.basin2d.Triangular" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="inversion.misfit.html#fatiando.inversion.misfit.Misfit" title="fatiando.inversion.misfit.Misfit"><code class="xref py py-class docutils literal"><span class="pre">fatiando.inversion.misfit.Misfit</span></code></a></p>
+<p>Estimate the relief of a triangular basin.</p>
+<p>Use when the basin can be approximated by a 2D body with <strong>triangular</strong>
+vertical cross-section, like foreland basins.</p>
+<p>The triangle is assumed to have 2 known vertices at the surface (the edges
+of the basin) and one unknown vertex in the subsurface.
+The inversion will estimate the (x, z) coordinates of the unknown vertex.</p>
+<p>The forward modeling is done using <a class="reference internal" href="gravmag.talwani.html#module-fatiando.gravmag.talwani" title="fatiando.gravmag.talwani"><code class="xref py py-mod docutils literal"><span class="pre">talwani</span></code></a>.
+Derivatives are calculated using a 2-point finite difference approximation.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Use the <code class="docutils literal"><span class="pre">estimate_</span></code> attribute to produce a polygon from the
+estimated parameter vector (<code class="docutils literal"><span class="pre">p_</span></code>).</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, z <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">Arrays with the x and z coordinates of the profile data points</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>gz <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The profile gravity anomaly data</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>verts <span class="classifier-delimiter">:</span> <span class="classifier">list of lists</span></dt>
+<dd><p class="first"><code class="docutils literal"><span class="pre">[[x1,</span> <span class="pre">z1],</span> <span class="pre">[x2,</span> <span class="pre">z2]]</span></code> List of the [x, z] coordinates of the left and
+right know vertices, respectively.</p>
+<div class="last admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Very important that the vertices in the list be ordered from left
+to right! Otherwise the forward model will give results with an
+inverted sign and terrible things may happen!</p>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>density <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Density contrast of the basin</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>delta <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Interval used to calculate the approximate derivatives</p>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The recommended solver for this inverse problem is the
+Levemberg-Marquardt method. Since this is a non-linear problem, set the
+desired method and initial solution using the <code class="docutils literal"><span class="pre">config</span></code> method of
+this class. See the example bellow.</p>
+</div>
+<p>Example using synthetic data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.mesher</span> <span class="kn">import</span> <span class="n">Polygon</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.gravmag</span> <span class="kn">import</span> <span class="n">talwani</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Make a triangular basin model (will estimate the last point)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">verts</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">90000</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">50000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">left</span><span class="p">,</span> <span class="n">middle</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">verts</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">verts</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;density&#39;</span><span class="p">:</span><span class="mi">500</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Generate the synthetic gz profile</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100000</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gz</span> <span class="o">=</span> <span class="n">talwani</span><span class="o">.</span><span class="n">gz</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="p">[</span><span class="n">model</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Make a solver and fit it to the data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span> <span class="o">=</span> <span class="n">Triangular</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">gz</span><span class="p">,</span> <span class="p">[</span><span class="n">left</span><span class="p">,</span> <span class="n">middle</span><span class="p">],</span> <span class="mi">500</span><span class="p">)</span><span class="o">.</span><span class="n">config</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s">&#39;levmarq&#39;</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="p">[</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">])</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># p_ is the estimated parameter vector (x and z in this case)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">p_</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39;{:.1f}, {:.1f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">))</span>
+<span class="go">50000.0, 5000.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># The parameter vector is not that useful so use estimate_ to get a</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Polygon object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poly</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">estimate_</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poly</span><span class="o">.</span><span class="n">vertices</span>
+<span class="go">array([[  1.00000000e+04,   1.00000000e+00],</span>
+<span class="go">       [  9.00000000e+04,   1.00000000e+00],</span>
+<span class="go">       [  5.00000000e+04,   5.00000000e+03]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poly</span><span class="o">.</span><span class="n">props</span>
+<span class="go">{&#39;density&#39;: 500}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Check is the residuals are all small</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">solver</span><span class="o">.</span><span class="n">residuals</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**-</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Triangular.config">
+<code class="descname">config</code><span class="sig-paren">(</span><em>method</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.Triangular.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the optimization method and its parameters.</p>
+<p>This sets the method used by
+<code class="xref py py-meth docutils literal"><span class="pre">fit</span></code> and the keyword
+arguments that are passed to it.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The optimization method. One of: <code class="docutils literal"><span class="pre">'linear'</span></code>, <code class="docutils literal"><span class="pre">'newton'</span></code>,
+<code class="docutils literal"><span class="pre">'levmarq'</span></code>, <code class="docutils literal"><span class="pre">'steepest'</span></code>, <code class="docutils literal"><span class="pre">'acor'</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Other keyword arguments that can be passed are the ones allowed by each
+method.</p>
+<p>Some methods have required arguments:</p>
+<ul class="simple">
+<li><em>newton</em>, <em>levmarq</em> and <em>steepest</em> require the <code class="docutils literal"><span class="pre">initial</span></code> argument
+(an initial estimate for the gradient descent)</li>
+<li><em>acor</em> requires the <code class="docutils literal"><span class="pre">bounds</span></code> argument (min/max values for the
+search space)</li>
+</ul>
+<p>See the corresponding docstrings for more information:</p>
+<ul class="simple">
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.linear" title="fatiando.inversion.optimization.linear"><code class="xref py py-meth docutils literal"><span class="pre">linear</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.newton" title="fatiando.inversion.optimization.newton"><code class="xref py py-meth docutils literal"><span class="pre">newton</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.levmarq" title="fatiando.inversion.optimization.levmarq"><code class="xref py py-meth docutils literal"><span class="pre">levmarq</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.steepest" title="fatiando.inversion.optimization.steepest"><code class="xref py py-meth docutils literal"><span class="pre">steepest</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.acor" title="fatiando.inversion.optimization.acor"><code class="xref py py-meth docutils literal"><span class="pre">acor</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Triangular.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><em>deep=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.Triangular.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a copy of me together with all the cached methods.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.basin2d.Triangular.estimate_">
+<code class="descname">estimate_</code><a class="headerlink" href="#fatiando.gravmag.basin2d.Triangular.estimate_" title="Permalink to this definition">¶</a></dt>
+<dd><p>A nicely formatted version of the estimate.</p>
+<p>If the class implements a <cite>fmt_estimate</cite> method, this will its results.
+This can be used to convert the parameter vector to a more useful form,
+like a <a class="reference internal" href="mesher.html#module-fatiando.mesher" title="fatiando.mesher"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.mesher</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Triangular.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.Triangular.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve for the parameter vector that minimizes this objective function.</p>
+<p>Uses the optimization method and parameters defined using the
+<a class="reference internal" href="inversion.base.html#fatiando.inversion.base.OptimizerMixin.config" title="fatiando.inversion.base.OptimizerMixin.config"><code class="xref py py-meth docutils literal"><span class="pre">config</span></code></a> method.</p>
+<p>The estimated parameter vector can be accessed through the
+<code class="docutils literal"><span class="pre">p_</span></code> attribute. A (possibly) formatted version (converted to a more
+manageable type) of the estimate can be accessed through the property
+<code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Triangular.fmt_estimate">
+<code class="descname">fmt_estimate</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/basin2d.html#Triangular.fmt_estimate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.basin2d.Triangular.fmt_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the parameter vector to a  <a class="reference internal" href="mesher.html#fatiando.mesher.Polygon" title="fatiando.mesher.Polygon"><code class="xref py py-class docutils literal"><span class="pre">Polygon</span></code></a> so
+that it can be used for plotting and forward modeling.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Triangular.gradient">
+<code class="descname">gradient</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.Triangular.gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The gradient vector of the misfit function.</p>
+<div class="math">
+\[\bar{g} = -2\bar{\bar{J}}^T\bar{r}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix and <span class="math">\(\bar{r}\)</span>
+is the residual vector.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the gradient is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>gradient <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The gradient vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Triangular.hessian">
+<code class="descname">hessian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.Triangular.hessian" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Hessian of the misfit function with respect to the parameters.</p>
+<p>Calculated using the Gauss approximation:</p>
+<div class="math">
+\[\bar{\bar{H}} \approx 2\bar{\bar{J}}^T\bar{\bar{J}}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix.</p>
+<p>For linear problems, the Hessian matrix is cached in memory, so calling
+this method again will not trigger a re-calculation.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the Hessian is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>hessian <span class="classifier-delimiter">:</span> <span class="classifier">2d-array</span></dt>
+<dd><p class="first last">The Hessian matrix</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Triangular.jacobian">
+<code class="descname">jacobian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/basin2d.html#Triangular.jacobian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.basin2d.Triangular.jacobian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Jacobian (sensitivity) matrix for a given parameter
+vector.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Triangular.predicted">
+<code class="descname">predicted</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/basin2d.html#Triangular.predicted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.basin2d.Triangular.predicted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate predicted data for a given parameter vector.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.basin2d.Triangular.regul_param">
+<code class="descname">regul_param</code><a class="headerlink" href="#fatiando.gravmag.basin2d.Triangular.regul_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>The regularization parameter (scale factor) for the objetive function.</p>
+<p>Defaults to 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Triangular.residuals">
+<code class="descname">residuals</code><span class="sig-paren">(</span><em>p=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.Triangular.residuals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the residuals vector (observed - predicted data).</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector used to calculate the residuals. If None, will
+use the current estimate stored in <code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>residuals <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or list of 1d-arrays</span></dt>
+<dd><p class="first last">The residual vector. If this is the sum of 1 or more Misfit
+instances, will return the residual vector from each of the summed
+misfits in the order of the sum.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Triangular.set_weights">
+<code class="descname">set_weights</code><span class="sig-paren">(</span><em>weights</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.Triangular.set_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the data weights.</p>
+<p>Using weights for the data, the least-squares data-misfit function
+becomes:</p>
+<div class="math">
+\[\phi = \bar{r}^T \bar{\bar{W}}\bar{r}\]</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>weights <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or 2d-array or None</span></dt>
+<dd><p class="first last">Weights for the data vector.
+If None, will remove any weights that have been set before.
+If it is a 2d-array, it will be interpreted as the weight matrix
+<span class="math">\(\bar{\bar{W}}\)</span>.
+If it is a 1d-array, it will be interpreted as the diagonal of the
+weight matrix (all off-diagonal elements will default to zero).
+The weight matrix can be a sparse array from <code class="docutils literal"><span class="pre">scipy.sparse</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.basin2d.Triangular.value">
+<code class="descname">value</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.basin2d.Triangular.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the value of the misfit for a given parameter vector.</p>
+<p>The value is given by:</p>
+<div class="math">
+\[\phi(\bar{p}) = \bar{r}^T\bar{\bar{W}}\bar{r}\]</div>
+<p>where <span class="math">\(\bar{r}\)</span> is the residual vector and <span class="math">\(bar{\bar{W}}\)</span>
+are optional data weights.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>value <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The value of the misfit function.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="../_sources/api/gravmag.basin2d.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

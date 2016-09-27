@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The fatiando package &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../index.html" />
+    <link rel="next" title="Gravity and magnetics (fatiando.gravmag)" href="gravmag.html" />
+    <link rel="prev" title="Installing Fatiando" href="../install.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../install.html">Installing</a></li>
+                <li><a href="../docs.html">Documentation</a></li>
+                <li><a href="../cookbook.html">Cookbook</a></li>
+                <li><a href="../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="module-fatiando">
+<span id="the-fatiando-package"></span><span id="fatiando"></span><h1>The <code class="docutils literal"><span class="pre">fatiando</span></code> package<a class="headerlink" href="#module-fatiando" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal"><span class="pre">fatiando</span></code> package contains all the subpackages and modules required for
+most tasks.</p>
+<p>Modules for each geophysical method are group in subpackages:</p>
+<ul class="simple">
+<li><a class="reference internal" href="gravmag.html#module-fatiando.gravmag" title="fatiando.gravmag"><code class="xref py py-mod docutils literal"><span class="pre">gravmag</span></code></a>:
+Gravity and magnetics (i.e., potential fields)</li>
+<li><a class="reference internal" href="seismic.html#module-fatiando.seismic" title="fatiando.seismic"><code class="xref py py-mod docutils literal"><span class="pre">seismic</span></code></a>:
+Seismics and seismology</li>
+<li><a class="reference internal" href="geothermal.html#module-fatiando.geothermal" title="fatiando.geothermal"><code class="xref py py-mod docutils literal"><span class="pre">geothermal</span></code></a>:
+Geothermal heat transfer modeling</li>
+</ul>
+<p>Modules for gridding, meshing, visualization, etc:</p>
+<ul class="simple">
+<li><a class="reference internal" href="mesher.html#module-fatiando.mesher" title="fatiando.mesher"><code class="xref py py-mod docutils literal"><span class="pre">mesher</span></code></a>:
+Mesh generation and definition of geometric elements</li>
+<li><a class="reference internal" href="gridder.html#module-fatiando.gridder" title="fatiando.gridder"><code class="xref py py-mod docutils literal"><span class="pre">gridder</span></code></a>:
+Grid generation and operations (e.g., interpolation)</li>
+<li><a class="reference internal" href="vis.html#module-fatiando.vis" title="fatiando.vis"><code class="xref py py-mod docutils literal"><span class="pre">vis</span></code></a>:
+Plotting utilities for 2D (using matplotlib) and 3D (using mayavi)</li>
+<li><a class="reference internal" href="datasets.html#module-fatiando.datasets" title="fatiando.datasets"><code class="xref py py-mod docutils literal"><span class="pre">datasets</span></code></a>:
+Fetch and load datasets and models from web repositories</li>
+<li><a class="reference internal" href="utils.html#module-fatiando.utils" title="fatiando.utils"><code class="xref py py-mod docutils literal"><span class="pre">utils</span></code></a>:
+Miscelaneous utilities, like mathematical functions, unit conversion, etc</li>
+<li><a class="reference internal" href="constants.html#module-fatiando.constants" title="fatiando.constants"><code class="xref py py-mod docutils literal"><span class="pre">constants</span></code></a>:
+Physical constants and unit conversions</li>
+</ul>
+<p>Also included is the <a class="reference internal" href="inversion.html#module-fatiando.inversion" title="fatiando.inversion"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.inversion</span></code></a> package with utilities for
+implementing inverse problems. There you&#8217;ll find ready to use regularization,
+optimization methods, and templates to implement new inversion methods.</p>
+<p>Inversions implemented in Fatiando leverage <a class="reference internal" href="inversion.html#module-fatiando.inversion" title="fatiando.inversion"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.inversion</span></code></a>,
+providing a common interface and usage patters. For examples, see modules
+<a class="reference internal" href="seismic.epic2d.html#module-fatiando.seismic.epic2d" title="fatiando.seismic.epic2d"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.seismic.epic2d</span></code></a>,
+<a class="reference internal" href="seismic.srtomo.html#module-fatiando.seismic.srtomo" title="fatiando.seismic.srtomo"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.seismic.srtomo</span></code></a>,
+<a class="reference internal" href="gravmag.basin2d.html#module-fatiando.gravmag.basin2d" title="fatiando.gravmag.basin2d"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.gravmag.basin2d</span></code></a>,
+<a class="reference internal" href="gravmag.euler.html#module-fatiando.gravmag.euler" title="fatiando.gravmag.euler"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.gravmag.euler</span></code></a>,
+<a class="reference internal" href="gravmag.eqlayer.html#module-fatiando.gravmag.eqlayer" title="fatiando.gravmag.eqlayer"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.gravmag.eqlayer</span></code></a>,
+etc.</p>
+<p>The design of <a class="reference internal" href="inversion.html#module-fatiando.inversion" title="fatiando.inversion"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.inversion</span></code></a> was inspired by <a class="reference external" href="http://scikit-learn.org">scikit-learn</a>, an
+amazing machine-learning library.</p>
+<hr class="docutils" />
+<p><strong>List of modules and packages:</strong></p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gravmag.html">Gravity and magnetics (<code class="docutils literal"><span class="pre">fatiando.gravmag</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seismic.html">Seismics and seismology (<code class="docutils literal"><span class="pre">fatiando.seismic</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="geothermal.html">Geothermal heat (<code class="docutils literal"><span class="pre">fatiando.geothermal</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesher.html">Meshing (<code class="docutils literal"><span class="pre">fatiando.mesher</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gridder.html">Gridding (<code class="docutils literal"><span class="pre">fatiando.gridder</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vis.html">Visualization (<code class="docutils literal"><span class="pre">fatiando.vis</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Fetch data from the internet (<code class="docutils literal"><span class="pre">fatiando.datasets</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Miscellaneous Utilities (<code class="docutils literal"><span class="pre">fatiando.utils</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constants.html">Physical constants and unit conversions (<code class="docutils literal"><span class="pre">fatiando.constants</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inversion.html">Inverse problems framework (<code class="docutils literal"><span class="pre">fatiando.inversion</span></code>)</a></li>
+</ul>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="../_sources/api/fatiando.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Changelog &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="index.html" />
+    <link rel="next" title="Installing Fatiando" href="install.html" />
+    <link rel="prev" title="Citing" href="cite.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html"><img src="_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="install.html">Installing</a></li>
+                <li><a href="docs.html">Documentation</a></li>
+                <li><a href="cookbook.html">Cookbook</a></li>
+                <li><a href="develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="changelog">
+<span id="id1"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-0-4">
+<h2>Version 0.4<a class="headerlink" href="#version-0-4" title="Permalink to this headline">¶</a></h2>
+<p><strong>Release date</strong>: 2016-04-05</p>
+<p><strong>Changes</strong>:</p>
+<ul class="simple">
+<li><strong>New</strong> obtain a synthetic convolutional seismogram in
+<code class="docutils literal"><span class="pre">fatiando.seismic.conv</span></code>. It can be given a depth model that will be
+converted to a time model before generating the synthetic seismogram.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/190">PR 190</a>)</li>
+<li><strong>Refactor</strong> <code class="docutils literal"><span class="pre">fatiando.inversion</span></code>. Completely redesigned classes make
+implementing new inversions simpler. Subclassing <code class="docutils literal"><span class="pre">Misfit</span></code> is simpler, with
+fewer parameters necessary. The usage of existing inversions has changed
+little. A <strong>new dependency</strong> <code class="docutils literal"><span class="pre">future</span></code> was added to ease the transition to
+support Python 3.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/127">PR 127</a>)</li>
+<li>Fix the broken software carpentry links in <code class="docutils literal"><span class="pre">develop.rst</span></code>.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/245">PR 245</a>)</li>
+<li>Fix the doctest for <code class="docutils literal"><span class="pre">fatiando.gravmag.tensor.center_of_mass</span></code>.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/242">PR 242</a>)</li>
+<li><strong>BUG FIX</strong>: Tesseroid computations failed (silently) when tesseroids were
+smaller than 1e-6 degrees on a side (~ 10 cm). Code now ignores these
+tesseroids on input and warns the user about it. If a tesseroid becomes
+smaller than this during adaptive discretization, the tesseroid effect will
+be computed without division.  The user will be warned when this happens.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/228">PR 228</a>)</li>
+<li><strong>New</strong> reduction to the pole and upward continuation with FFT in
+<code class="docutils literal"><span class="pre">fatiando.gravmag.transform</span></code>. The pole reduction allows both remanent and
+induced magnetization. Upward continuation is more stable and faster than the
+old space domain approach that was implemented.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/156">PR 156</a>)</li>
+<li><strong>IMPORTANT BUG FIX</strong>: Fixed wrong ordering of nodes in
+<code class="docutils literal"><span class="pre">fatiando.mesher.PointGrid</span></code>. The order of nodes had the same problem as the
+regular grids (fixed in
+<a class="reference external" href="https://github.com/fatiando/fatiando/pull/196">196</a>). This was not caught
+before because <code class="docutils literal"><span class="pre">PointGrid</span></code> didn&#8217;t use <code class="docutils literal"><span class="pre">gridder.regular</span></code> to generate its
+internal regular grid. This is an example of why reuse is a good thing! Tests
+now should catch any future problems.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/209">PR 209</a>)</li>
+<li><strong>IMPORTANT BUG FIX</strong>: <code class="docutils literal"><span class="pre">fatiando.gridder.regular</span></code> and many other places in
+Fatiando where using the wrong convention for x, y dimensions.
+x should point North and y East. Thus, a data matrix (regular grid) should
+have x varying in the lines and y varying in the columns. This is <strong>oposite</strong>
+what we had. This fix also changes the <code class="docutils literal"><span class="pre">shape</span></code> argument to be <code class="docutils literal"><span class="pre">(nx,</span> <span class="pre">ny)</span></code>
+instead of <code class="docutils literal"><span class="pre">(ny,</span> <span class="pre">nx)</span></code>. <strong>Users should be aware of this and double check
+their code.</strong>
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/196">PR 196</a>)</li>
+<li>More stable derivatives in <code class="docutils literal"><span class="pre">fatiando.gravamag.transform</span></code>. The horizontal
+derivatives default to central finite-differences for greater stability. The
+FFT based derivatives use a grid padding to avoid edge effects.
+Thanks to <a class="reference external" href="https://mycarta.wordpress.com/">Matteo Niccoli</a> for suggesting
+this fix.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/196">PR 196</a>)</li>
+<li><strong>Renamed</strong> <code class="docutils literal"><span class="pre">fatiando.gravmag.fourier.ansig</span></code> to
+<code class="docutils literal"><span class="pre">fatiando.gravmag.transform.tga</span></code>
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/186">PR 186</a>)</li>
+<li><strong>Remove</strong> <code class="docutils literal"><span class="pre">fatiando.gravmag.fourier</span></code> by moving relevant functions into
+<code class="docutils literal"><span class="pre">fatiando.gravmag.transform</span></code>.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/186">PR 186</a>)</li>
+<li><strong>New</strong> <code class="docutils literal"><span class="pre">seismic_wiggle</span></code> and <code class="docutils literal"><span class="pre">seismic_image</span></code> plotting functions for
+seismic data in <a class="reference internal" href="api/vis.mpl.html#fatiando-vis-mpl"><span>fatiando.vis.mpl</span></a> (<a class="reference external" href="https://github.com/fatiando/fatiando/pull/192">PR 192</a>) plus cookbook</li>
+<li><strong>Remove</strong> OpenMP parallelism from the <code class="docutils literal"><span class="pre">fatiando.gravmag</span></code> Cython coded
+forward modeling. Caused the majority of our install problems and didn&#8217;t
+offer a great speed up anyway (&lt; 2x). Can be replaced by <code class="docutils literal"><span class="pre">multiprocessing</span></code>
+parallelism without the install problems
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/177">PR 177</a>)</li>
+<li>Tesseroid forward modeling functions in <code class="docutils literal"><span class="pre">fatiando.gravmag.tesseroid</span></code> take
+an optional <code class="docutils literal"><span class="pre">pool</span></code> argument. Use it to pass an open
+<code class="docutils literal"><span class="pre">multiprocessing.Pool</span></code> for the function to use. Useful to avoid processes
+spawning overhead when calling the forward modeling many times
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/183">PR 183</a>)</li>
+<li><strong>BUG FIX</strong>: Avoid weird numba error when tesseroid has zero volume. Let to
+better sanitizing the input model. Tesseroids with dimensions &lt; 1cm are
+ignored because they have almost zero gravitational effect
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/179">PR 179</a>)</li>
+<li>Ported the tesseroid forward modeling code from Cython to numba. This is
+following the discussion on issue
+<a class="reference external" href="https://github.com/fatiando/fatiando/issues/169">#169</a> to make installing
+less of burden by removing the compilation step. The numba code runs just as
+fast. New functions support multiprocessing parallelism.
+Thanks to new contributor Graham Markall for help with numba.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/175">PR 175</a>)</li>
+<li>Better documentation and faster implementation of
+<code class="docutils literal"><span class="pre">fatiando.gravmag.tesseroid</span></code>
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/118">PR 118</a>)</li>
+<li><strong>BUG FIX</strong>: Replace <code class="docutils literal"><span class="pre">matplotlib.mlab.griddata</span></code> with
+<code class="docutils literal"><span class="pre">scipy.interpolate.griddata</span></code> in <code class="docutils literal"><span class="pre">fatiando.gridder.interp</span></code> to avoid
+incompatibilities when using <code class="docutils literal"><span class="pre">matplotlib</span> <span class="pre">&gt;</span> <span class="pre">1.3</span></code>
+(at least in MacOS). Nearest neighbor interpolation method flagged as <code class="docutils literal"><span class="pre">nn</span></code>
+was removed. Now it becomes only <code class="docutils literal"><span class="pre">nearest</span></code>. Also replace <code class="docutils literal"><span class="pre">matplotlib</span></code>
+with <code class="docutils literal"><span class="pre">scipy</span></code> in <code class="docutils literal"><span class="pre">fatiando.mesher.PrismMesh.carvetopo</span></code>
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/148">PR 148</a>)</li>
+<li><strong>New class</strong> <code class="docutils literal"><span class="pre">fatiando.gravmag.basin2d.PolygonalBasinGravity</span></code> for 2D
+gravity inversion for the relief of a basin.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/149">PR 149</a>)</li>
+<li>Significant progress on the <a class="reference internal" href="develop.html#develop"><span>Developer Guide</span></a>. From getting
+started to making a release on PyPI.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/144">PR 144</a>)</li>
+<li><strong>Removed</strong> package <code class="docutils literal"><span class="pre">fatiando.gui</span></code>. This was an experimental and temporary
+package to explore interactivity. Given new developments, like the
+<a class="reference external" href="http://nbviewer.ipython.org/github/ipython/ipython/blob/master/examples/Interactive%20Widgets/Index.ipynb">IPython HTML widgets</a>,
+it is no longer relevant. The package will be replaced by package specific
+<code class="docutils literal"><span class="pre">interactive</span></code> modules.
+From the original classes implemented in this package, only <code class="docutils literal"><span class="pre">Moulder</span></code> has
+been saved.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/143">PR 143</a>)</li>
+<li>Moved <code class="docutils literal"><span class="pre">Moulder</span></code> to the <strong>new module</strong> <code class="docutils literal"><span class="pre">fatiando.gravmag.interactive</span></code>.
+Completely rewrote the application. It now allows editing, moving, and
+deleting polygons, persisting the application to a pickle file and reloading,
+etc.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/143">PR 143</a>)</li>
+</ul>
+</div>
+<div class="section" id="version-0-3">
+<h2>Version 0.3<a class="headerlink" href="#version-0-3" title="Permalink to this headline">¶</a></h2>
+<p><strong>Release date</strong>: 2014-10-28</p>
+<p><strong>Changes</strong>:</p>
+<ul class="simple">
+<li><strong>New module</strong> <a class="reference internal" href="api/gravmag.normal_gravity.html#fatiando-gravmag-normal-gravity"><span>fatiando.gravmag.normal_gravity</span></a> to calculate normal gravity (the gravity
+of reference ellipsoids).
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/133">PR 133</a>)</li>
+<li>Using <a class="reference external" href="https://github.com/warner/python-versioneer">versioneer</a> to manage
+version numbers. Access the version number + git commit hash from
+<code class="docutils literal"><span class="pre">fatiando.__version__</span></code>.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/117">PR 117</a>)</li>
+<li><strong>BUG FIX</strong>: <a class="reference internal" href="api/gravmag.prism.html#fatiando-gravmag-prism"><span>fatiando.gravmag.prism</span></a>
+gravitational field functions give correct results in all sides of the prism.
+There were singularities due to log(0) and weird results because of arctan2.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/113">PR 113</a>)</li>
+<li><a class="reference external" href="http://www.python.org/dev/peps/pep-0008/">PEP8</a> compliance (started by
+&#64;SamuelMarks).
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/115">PR 115</a>)</li>
+<li>Multithreaded parallelism with OpenMP in
+<a class="reference internal" href="api/gravmag.sphere.html#fatiando-gravmag-sphere"><span>fatiando.gravmag.sphere</span></a>,
+<a class="reference internal" href="api/gravmag.polyprism.html#fatiando-gravmag-polyprism"><span>fatiando.gravmag.polyprism</span></a> and
+<a class="reference internal" href="api/gravmag.prism.html#fatiando-gravmag-prism"><span>fatiando.gravmag.prism</span></a>.
+Speedups are range from practically none to over 3x.
+Works automatically.
+<strong>Windows users will have to install an extra dependency!</strong>
+See the <a class="reference internal" href="install.html#install"><span>install instructions</span></a>.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/106">PR 106</a>)</li>
+<li>Faster Cython implementations of
+<a class="reference internal" href="api/gravmag.sphere.html#fatiando-gravmag-sphere"><span>fatiando.gravmag.sphere</span></a> and
+<a class="reference internal" href="api/gravmag.polyprism.html#fatiando-gravmag-polyprism"><span>fatiando.gravmag.polyprism</span></a>.
+Also separated gravmag forward modeling functions into &#8220;kernels&#8221; for gravity
+tensor components. This allows them to be reused in the magnetic field
+computations.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/105">PR 105</a>)</li>
+<li>Added <code class="docutils literal"><span class="pre">xy2ne</span></code> flag for <code class="docutils literal"><span class="pre">square</span></code> and <code class="docutils literal"><span class="pre">points</span></code> functions in
+<a class="reference internal" href="api/vis.mpl.html#fatiando-vis-mpl"><span>fatiando.vis.mpl</span></a>.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/94">PR 94</a>)</li>
+<li><strong>New</strong> class <code class="docutils literal"><span class="pre">LCurve</span></code> in <a class="reference internal" href="api/inversion.regularization.html#fatiando-inversion-regularization"><span>fatiando.inversion.regularization</span></a> for estimating the regularization
+parameter using an L-curve criterion.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/90">PR 90</a>)</li>
+<li>Added support for <code class="docutils literal"><span class="pre">vmin</span></code> and <code class="docutils literal"><span class="pre">vmax</span></code> arguments in
+<a class="reference internal" href="api/vis.mpl.html#fatiando-vis-mpl"><span>fatiando.vis.mpl.contourf</span></a>.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/89">PR 89</a>)</li>
+<li><strong>New</strong> module <a class="reference internal" href="api/gravmag.magdir.html#fatiando-gravmag-magdir"><span>fatiando.gravmag.magdir</span></a> for
+estimating the total magnetization vector of multiple sources.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/87">PR 87</a>)</li>
+</ul>
+</div>
+<div class="section" id="version-0-2">
+<h2>Version 0.2<a class="headerlink" href="#version-0-2" title="Permalink to this headline">¶</a></h2>
+<p><strong>Release date</strong>: 2014-01-15</p>
+<p><strong>Changes</strong>:</p>
+<ul class="simple">
+<li>Complete re-implementation of <a class="reference internal" href="api/inversion.html#fatiando-inversion"><span>fatiando.inversion</span></a>
+and all modules that depended on it. Inversion routines now have a standard
+interface. (<a class="reference external" href="https://github.com/fatiando/fatiando/pull/72">PR 72</a>)</li>
+<li>Added moving window solution for Euler deconvolution in
+<a class="reference internal" href="api/gravmag.euler.html#fatiando-gravmag-euler"><span>fatiando.gravmag.euler</span></a>.
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/85">PR 85</a>)</li>
+<li>Renamed the <code class="docutils literal"><span class="pre">fatiando.io</span></code> module to
+<a class="reference internal" href="api/datasets.html#fatiando-datasets"><span>fatiando.datasets</span></a>
+(<a class="reference external" href="https://github.com/fatiando/fatiando/pull/82">PR 82</a>)</li>
+<li><a class="reference internal" href="api/utils.html#fatiando-utils"><span>fatiando.utils.contaminate</span></a> can now take multiple data
+vectors and stddevs</li>
+<li>2x speed-up of <a class="reference internal" href="api/gravmag.talwani.html#fatiando-gravmag-talwani"><span>fatiando.gravmag.talwani</span></a>
+with smarter numpy array usage. (<a class="reference external" href="https://github.com/fatiando/fatiando/pull/57">PR 57</a>)</li>
+<li>300x speed-up of <a class="reference internal" href="api/seismic.ttime2d.html#fatiando-seismic-ttime2d"><span>fatiando.seismic.ttime2d</span></a>
+with new Cython code. (<a class="reference external" href="https://github.com/fatiando/fatiando/pull/62">PR 62</a>)</li>
+<li>Speed-up of <a class="reference internal" href="api/gravmag.tesseroid.html#fatiando-gravmag-tesseroid"><span>fatiando.gravmag.tesseroid</span></a>
+with better Cython code. (<a class="reference external" href="https://github.com/fatiando/fatiando/pull/58">PR 58</a>)</li>
+<li>Various tweaks to <a class="reference internal" href="api/vis.myv.html#fatiando-vis-myv"><span>fatiando.vis.myv</span></a>. (<a class="reference external" href="https://github.com/fatiando/fatiando/pull/56">PR 56</a> and <a class="reference external" href="https://github.com/fatiando/fatiando/pull/60">PR 60</a>)</li>
+<li><strong>New</strong> gravity gradient tensor modeling with spheres in
+<a class="reference internal" href="api/gravmag.sphere.html#fatiando-gravmag-sphere"><span>fatiando.gravmag.sphere</span></a>. (<a class="reference external" href="https://github.com/fatiando/fatiando/pull/55">PR 55</a> and <a class="reference external" href="https://github.com/fatiando/fatiando/pull/24">PR 24</a>, the first one by
+<a class="reference external" href="http://fatiando.org/people/oliveira-jr/">Vanderlei</a>)</li>
+<li><strong>New</strong> function <a class="reference internal" href="api/gridder.html#fatiando-gridder"><span>fatiando.gridder.profile</span></a> to
+extract a profile (cross-section) from map data. (<a class="reference external" href="https://github.com/fatiando/fatiando/pull/46">PR 46</a>)</li>
+<li>Better support for random numbers. <code class="docutils literal"><span class="pre">contaminate</span></code> function now guaranteed to
+use errors with zero mean. Can now control the random seed used in all
+functions relying on random numbers. (<a class="reference external" href="https://github.com/fatiando/fatiando/pull/41">PR 41</a>)</li>
+<li><strong>New</strong> scalar wave 2D finite differences modeling in
+<a class="reference internal" href="api/seismic.wavefd.html#fatiando-seismic-wavefd"><span>fatiando.seismic.wavefd</span></a>. (<a class="reference external" href="https://github.com/fatiando/fatiando/pull/38">PR 38</a> the first by <a class="reference external" href="http://www.fatiando.org/people/ferreira/">Andre</a>!)</li>
+<li><strong>New</strong> algorithms in <a class="reference internal" href="api/seismic.wavefd.html#fatiando-seismic-wavefd"><span>fatiando.seismic.wavefd</span></a> for elastic waves and a new scalar wave solver!
+Using staggered grid finite
+differences makes elastic wave methods are more stable. (<a class="reference external" href="https://github.com/fatiando/fatiando/pull/52">PR 52</a>)</li>
+<li><strong>New</strong> <code class="docutils literal"><span class="pre">extrapolate_nans</span></code> function in
+<a class="reference internal" href="api/gridder.html#fatiando-gridder"><span>fatiando.gridder</span></a> to fill NaNs and masked
+values in arrays using the nearest data point.</li>
+<li><code class="docutils literal"><span class="pre">interp</span></code> function of <a class="reference internal" href="api/gridder.html#fatiando-gridder"><span>fatiando.gridder</span></a> has option
+to extrapolate values outside the convex hull of the data (enabled by
+default). Uses better cubic interpolation by default and returns
+1D arrays like the rest of fatiando, instead of 2D. (<a class="reference external" href="https://github.com/fatiando/fatiando/pull/44">PR 44</a> and <a class="reference external" href="https://github.com/fatiando/fatiando/pull/42">PR 42</a>)</li>
+<li><strong>New</strong> function to load a grid in Surfer format. (<a class="reference external" href="https://github.com/fatiando/fatiando/pull/33">PR</a> the first by <a class="reference external" href="http://fatiando.org/people/santos/">Henrique</a>!)</li>
+<li><strong>New</strong> module <a class="reference internal" href="api/gravmag.eqlayer.html#fatiando-gravmag-eqlayer"><span>fatiando.gravmag.eqlayer</span></a> for
+equivalent layer processing of potential fields.</li>
+<li>Refactored all magnetic modeling and inversion to use either scalar or vector
+magnetization.</li>
+<li><code class="docutils literal"><span class="pre">Seed</span></code> class of
+<a class="reference internal" href="api/gravmag.harvester.html#fatiando-gravmag-harvester"><span>fatiando.gravmag.harvester</span></a> can now be
+used as a <code class="docutils literal"><span class="pre">Prism</span></code> object.</li>
+<li><a class="reference internal" href="api/gravmag.harvester.html#fatiando-gravmag-harvester"><span>fatiando.gravmag.harvester</span></a> now supports
+data weights and magnetic data inversion.</li>
+<li>Removed module <code class="docutils literal"><span class="pre">fatiando.logger</span></code>. (<a class="reference external" href="https://github.com/fatiando/fatiando/pull/30">PR 30</a>)</li>
+</ul>
+</div>
+<div class="section" id="version-0-1">
+<h2>Version 0.1<a class="headerlink" href="#version-0-1" title="Permalink to this headline">¶</a></h2>
+<p><strong>Release date</strong>: 2013-04-12</p>
+<p><strong>Changes</strong>:</p>
+<ul class="simple">
+<li>Change license to BSD (see the <a class="reference internal" href="license.html#license"><span>license text</span></a>).</li>
+<li>The API is now fully accessible by only importing <code class="docutils literal"><span class="pre">fatiando</span></code></li>
+<li>Added a <a class="reference internal" href="cookbook.html#cookbook"><span>Cookbook</span></a> section to the documentation with all the
+sample scripts from the cookbook folder.</li>
+<li>Implemented &#8220;Robust 3D gravity gradient inversion by planting anomalous
+densities&#8221; by Uieda and Barbosa (2012) in
+<a class="reference internal" href="api/gravmag.harvester.html#fatiando-gravmag-harvester"><span>fatiando.gravmag.harvester</span></a></li>
+<li>Added harvester command line program that runs this new inversion</li>
+<li>Added magnetic total field anomaly function to
+<a class="reference internal" href="api/gravmag.prism.html#fatiando-gravmag-prism"><span>fatiando.gravmag.prism</span></a></li>
+<li>Added <a class="reference internal" href="api/vis.myv.html#fatiando-vis-myv"><span>fatiando.vis.myv.savefig3d</span></a> to save a Mayavi
+scene</li>
+<li>Added <a class="reference internal" href="api/vis.myv.html#fatiando-vis-myv"><span>fatiando.vis.myv.polyprisms</span></a> 3D plotter
+function for PolygonalPrism</li>
+<li>Added <a class="reference internal" href="api/vis.myv.html#fatiando-vis-myv"><span>fatiando.vis.myv.points3d</span></a> 3D plotter
+function for points</li>
+<li>Added gravity gradient tensor components and magnetic total field anomaly to
+<a class="reference internal" href="api/gravmag.polyprism.html#fatiando-gravmag-polyprism"><span>fatiando.gravmag.polyprism</span></a></li>
+<li>Added option to control the line width to <cite>prisms</cite> and <cite>polyprisms</cite> in
+<a class="reference internal" href="api/vis.myv.html#fatiando-vis-myv"><span>fatiando.vis.myv</span></a></li>
+<li>Added module <a class="reference internal" href="api/gravmag.tensor.html#fatiando-gravmag-tensor"><span>fatiando.gravmag.tensor</span></a> for
+processing gradient tensor data. Includes eigenvalues and eigenvectors,
+tensor invariants, center of mass estimation, etc.</li>
+<li>Added module <a class="reference internal" href="api/gravmag.imaging.html#fatiando-gravmag-imaging"><span>fatiando.gravmag.imaging</span></a> with
+imaging methods for potential fields</li>
+<li>Added module <a class="reference internal" href="api/gravmag.euler.html#fatiando-gravmag-euler"><span>fatiando.gravmag.euler</span></a> with Euler
+deconvolution methods for potential field data</li>
+<li>Added module <a class="reference internal" href="api/seismic.wavefd.html#fatiando-seismic-wavefd"><span>fatiando.seismic.wavefd</span></a> with 2D
+Finite Difference simulations of elastic seismic waves</li>
+<li>Added unit conversion functions to <a class="reference internal" href="api/utils.html#fatiando-utils"><span>fatiando.utils</span></a></li>
+<li>Added tesseroids forward modeling <a class="reference internal" href="api/gravmag.tesseroid.html#fatiando-gravmag-tesseroid"><span>fatiando.gravmag.tesseroid</span></a>, meshing and plotting with Mayavi</li>
+<li>New <a class="reference internal" href="api/datasets.html#fatiando-io"><span>fatiando.io</span></a> module to fetch models and data from the
+web and convert them to useful formats (for now supports the CRUST2.0 global
+curstal model)</li>
+<li>If building inplace or packaging, the setup script puts the Mercurial
+changeset hash in a file. Then fatiando.logger.header
+loads the hash from file and put a &#8220;Unknown&#8221; if it can&#8217;t read.
+This way importing fatiando won&#8217;t fail if the there is no changeset
+information available.</li>
+<li><a class="reference internal" href="api/mesher.html#fatiando-mesher"><span>fatiando.mesher.PrismMesh.dump</span></a>: takes a mesh
+file, a property file and a property name. Saves the output to these files.</li>
+<li>Transformed all geometric elements (like Prism, Polygon, etc) into classes</li>
+<li>Ported all C extensions to Python + Numpy. This way compiling is not a
+prerequisite to installing</li>
+<li>Using <a class="reference external" href="http://www.cython.org">Cython</a> for optional extension modules. If
+they exist, they are loaded to replace the Python + Numpy versions. This all
+happens at runtime.</li>
+<li>Move all physical constants used in <code class="docutils literal"><span class="pre">fatiando</span></code> to module
+<a class="reference internal" href="api/constants.html#fatiando-constants"><span>fatiando.constants</span></a></li>
+<li>Data modules hidden inside functions in
+<a class="reference internal" href="api/gravmag.basin2d.html#fatiando-gravmag-basin2d"><span>fatiando.gravmag.basin2d</span></a></li>
+<li>Functions in <a class="reference internal" href="api/gravmag.basin2d.html#fatiando-gravmag-basin2d"><span>fatiando.gravmag.basin2d</span></a> spit
+out Polygons instead of the vertices estimated. Now you don&#8217;t have to build
+the polygons by hand.</li>
+</ul>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="_sources/changelog.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

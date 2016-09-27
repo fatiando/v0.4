@@ -1,0 +1,468 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Compute normal gravity and reductions (fatiando.gravmag.normal_gravity) &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Gravity and magnetics (fatiando.gravmag)" href="gravmag.html" />
+    <link rel="next" title="Interactivity through functions and classes (fatiando.gravmag.interactive)" href="gravmag.interactive.html" />
+    <link rel="prev" title="Total magnetization estimation methods (fatiando.gravmag.magdir)" href="gravmag.magdir.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../install.html">Installing</a></li>
+                <li><a href="../docs.html">Documentation</a></li>
+                <li><a href="../cookbook.html">Cookbook</a></li>
+                <li><a href="../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="module-fatiando.gravmag.normal_gravity">
+<span id="compute-normal-gravity-and-reductions-fatiando-gravmag-normal-gravity"></span><span id="fatiando-gravmag-normal-gravity"></span><h1>Compute normal gravity and reductions (<code class="docutils literal"><span class="pre">fatiando.gravmag.normal_gravity</span></code>)<a class="headerlink" href="#module-fatiando.gravmag.normal_gravity" title="Permalink to this headline">¶</a></h1>
+<p>Gravity of ellipsoid models and common reductions (Bouguer, free-air)</p>
+<p><strong>Reference ellipsoids</strong></p>
+<p>This module uses instances of
+<a class="reference internal" href="#fatiando.gravmag.normal_gravity.ReferenceEllipsoid" title="fatiando.gravmag.normal_gravity.ReferenceEllipsoid"><code class="xref py py-class docutils literal"><span class="pre">ReferenceEllipsoid</span></code></a> to store the
+physical constants of ellipsoids.
+To create a new ellipsoid, just instantiate <code class="docutils literal"><span class="pre">ReferenceEllipsoid</span></code> and give it
+the semimajor axis <code class="docutils literal"><span class="pre">a</span></code>, the flattening <code class="docutils literal"><span class="pre">f</span></code>, the geocentric gravitational
+constant <code class="docutils literal"><span class="pre">GM</span></code>, and the angular velocity <code class="docutils literal"><span class="pre">omega</span></code>.
+All  other quantities, like the gravity at the poles and equator,
+eccentricities, etc, are computed by the class from these 4 parameters.</p>
+<p>Available ellipsoids:</p>
+<ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">WGS84</span></code> (values taken from Hofmann-Wellenhof and Moritz, 2005):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.gravmag.normal_gravity</span> <span class="kn">import</span> <span class="n">WGS84</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">WGS84</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="go">World Geodetic System 1984</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39;{:.0f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">WGS84</span><span class="o">.</span><span class="n">a</span><span class="p">))</span>
+<span class="go">6378137</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39;{:.17f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">WGS84</span><span class="o">.</span><span class="n">f</span><span class="p">))</span>
+<span class="go">0.00335281066474748</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39;{:.10g}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">WGS84</span><span class="o">.</span><span class="n">GM</span><span class="p">))</span>
+<span class="go">3.986004418e+14</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39;{:.7g}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">WGS84</span><span class="o">.</span><span class="n">omega</span><span class="p">))</span>
+<span class="go">7.292115e-05</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39;{:.4f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">WGS84</span><span class="o">.</span><span class="n">b</span><span class="p">))</span>
+<span class="go">6356752.3142</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39;{:.8f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">WGS84</span><span class="o">.</span><span class="n">E</span><span class="p">))</span> <span class="c"># Linear eccentricity</span>
+<span class="go">521854.00842339</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39;{:.15f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">WGS84</span><span class="o">.</span><span class="n">e_prime</span><span class="p">))</span> <span class="c"># second eccentricity</span>
+<span class="go">0.082094437949696</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39;{:.10f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">WGS84</span><span class="o">.</span><span class="n">gamma_a</span><span class="p">))</span> <span class="c"># gravity at the equator</span>
+<span class="go">9.7803253359</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39;{:.11f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">WGS84</span><span class="o">.</span><span class="n">gamma_b</span><span class="p">))</span> <span class="c"># gravity at the pole</span>
+<span class="go">9.83218493786</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39;{:.14f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">WGS84</span><span class="o">.</span><span class="n">m</span><span class="p">))</span>
+<span class="go">0.00344978650684</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p><strong>Normal gravity</strong></p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.gravmag.normal_gravity.gamma_somigliana" title="fatiando.gravmag.normal_gravity.gamma_somigliana"><code class="xref py py-func docutils literal"><span class="pre">gamma_somigliana</span></code></a>: compute the normal
+gravity using the Somigliana formula (Hofmann-Wellenhof and Moritz, 2005).
+Calculated <strong>on</strong> the ellipsoid.</li>
+<li><a class="reference internal" href="#fatiando.gravmag.normal_gravity.gamma_somigliana_free_air" title="fatiando.gravmag.normal_gravity.gamma_somigliana_free_air"><code class="xref py py-func docutils literal"><span class="pre">gamma_somigliana_free_air</span></code></a>: compute
+normal gravity at a height using the Somigliana formula plus the free-air
+correction <span class="math">\(-0.3086H\ mGal/m\)</span>.</li>
+<li><a class="reference internal" href="#fatiando.gravmag.normal_gravity.gamma_closed_form" title="fatiando.gravmag.normal_gravity.gamma_closed_form"><code class="xref py py-func docutils literal"><span class="pre">gamma_closed_form</span></code></a>: compute normal
+gravity using the closed form expression from Li and Gotze (2001). Can
+compute anywhere (on, above, under the ellipsoid).</li>
+</ul>
+<p><strong>Bouguer</strong></p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.gravmag.normal_gravity.bouguer_plate" title="fatiando.gravmag.normal_gravity.bouguer_plate"><code class="xref py py-func docutils literal"><span class="pre">bouguer_plate</span></code></a>: compute the
+gravitational attraction of an infinite plate (Bouguer plate). Calculated
+<strong>on top</strong> of the plate.</li>
+</ul>
+<p>You can use <a class="reference internal" href="gravmag.prism.html#module-fatiando.gravmag.prism" title="fatiando.gravmag.prism"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.gravmag.prism</span></code></a> and <a class="reference internal" href="gravmag.tesseroid.html#module-fatiando.gravmag.tesseroid" title="fatiando.gravmag.tesseroid"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.gravmag.tesseroid</span></code></a>
+to calculate the terrain effect for a better correction.</p>
+<p><strong>References</strong></p>
+<p>Hofmann-Wellenhof, B. and H. Moritz, 2005, Physical Geodesy,
+Springer-Verlag Wien, ISBN-13: 978-3-211-23584-3</p>
+<p>Li, X. and H. J. Gotze, 2001, Tutorial: Ellipsoid, geoid, gravity, geodesy,
+and geophysics, Geophysics, 66(6), p. 1660-1668, doi: 10.1190/1.1487109</p>
+<hr class="docutils" />
+<dl class="class">
+<dt id="fatiando.gravmag.normal_gravity.ReferenceEllipsoid">
+<em class="property">class </em><code class="descclassname">fatiando.gravmag.normal_gravity.</code><code class="descname">ReferenceEllipsoid</code><span class="sig-paren">(</span><em>name</em>, <em>a</em>, <em>f</em>, <em>GM</em>, <em>omega</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/normal_gravity.html#ReferenceEllipsoid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.normal_gravity.ReferenceEllipsoid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A generic reference ellipsoid.</p>
+<p>It stores the physical constants defining the ellipsoid and has properties
+for computing other (derived) quantities.</p>
+<p>All quantities are expected and returned in SI units.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>a <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The semimajor axis (the largest one, at the equator). In meters.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>f <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The flattening. Adimensional.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>GM <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The geocentric gravitational constant of the earth, including the
+atmosphere. In <span class="math">\(m^3 s^{-2}\)</span>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>omega <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The angular velocity of the earth. In <span class="math">\(rad s^{-1}\)</span>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="attribute">
+<dt id="fatiando.gravmag.normal_gravity.ReferenceEllipsoid.E">
+<code class="descname">E</code><a class="headerlink" href="#fatiando.gravmag.normal_gravity.ReferenceEllipsoid.E" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear eccentricity</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.normal_gravity.ReferenceEllipsoid.GM">
+<code class="descname">GM</code><a class="headerlink" href="#fatiando.gravmag.normal_gravity.ReferenceEllipsoid.GM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Geocentric gravitational constant (including the atmosphere)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.normal_gravity.ReferenceEllipsoid.a">
+<code class="descname">a</code><a class="headerlink" href="#fatiando.gravmag.normal_gravity.ReferenceEllipsoid.a" title="Permalink to this definition">¶</a></dt>
+<dd><p>Semimajor axis</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.normal_gravity.ReferenceEllipsoid.b">
+<code class="descname">b</code><a class="headerlink" href="#fatiando.gravmag.normal_gravity.ReferenceEllipsoid.b" title="Permalink to this definition">¶</a></dt>
+<dd><p>Semiminor axis</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.normal_gravity.ReferenceEllipsoid.e_prime">
+<code class="descname">e_prime</code><a class="headerlink" href="#fatiando.gravmag.normal_gravity.ReferenceEllipsoid.e_prime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Second eccentricity</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.normal_gravity.ReferenceEllipsoid.f">
+<code class="descname">f</code><a class="headerlink" href="#fatiando.gravmag.normal_gravity.ReferenceEllipsoid.f" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flattening</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.normal_gravity.ReferenceEllipsoid.gamma_a">
+<code class="descname">gamma_a</code><a class="headerlink" href="#fatiando.gravmag.normal_gravity.ReferenceEllipsoid.gamma_a" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normal gravity at the equator</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.normal_gravity.ReferenceEllipsoid.gamma_b">
+<code class="descname">gamma_b</code><a class="headerlink" href="#fatiando.gravmag.normal_gravity.ReferenceEllipsoid.gamma_b" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normal gravity at the poles</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.normal_gravity.ReferenceEllipsoid.m">
+<code class="descname">m</code><a class="headerlink" href="#fatiando.gravmag.normal_gravity.ReferenceEllipsoid.m" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math">\(\omega^2 a^2 b / (GM)\)</span></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.normal_gravity.ReferenceEllipsoid.omega">
+<code class="descname">omega</code><a class="headerlink" href="#fatiando.gravmag.normal_gravity.ReferenceEllipsoid.omega" title="Permalink to this definition">¶</a></dt>
+<dd><p>Angular velocity</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.normal_gravity.bouguer_plate">
+<code class="descclassname">fatiando.gravmag.normal_gravity.</code><code class="descname">bouguer_plate</code><span class="sig-paren">(</span><em>topography</em>, <em>density_rock=2670</em>, <em>density_water=1040</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/normal_gravity.html#bouguer_plate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.normal_gravity.bouguer_plate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the gravitational effect of an infinite Bouguer plate.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The effect is calculated <strong>on top</strong> of the plate.</p>
+</div>
+<p>Uses the famous <span class="math">\(g_{BG} = 2 \pi G \rho t\)</span> formula, where t is the
+height of the topography. On water (i.e., t &lt; 0), uses
+<span class="math">\(g_{BG} = 2 \pi G (\rho_{water} - \rho_{rock})\times (-t)\)</span>.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>topography <span class="classifier-delimiter">:</span> <span class="classifier">float or numpy array</span></dt>
+<dd><p class="first last">The height of topography (in meters).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>density_rock <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The density of crustal rocks</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>density_water <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The density of ocean water</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>g_bouguer <span class="classifier-delimiter">:</span> <span class="classifier">float or array</span></dt>
+<dd><p class="first last">The computed gravitational effect of the Bouguer plate</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.normal_gravity.gamma_closed_form">
+<code class="descclassname">fatiando.gravmag.normal_gravity.</code><code class="descname">gamma_closed_form</code><span class="sig-paren">(</span><em>latitude</em>, <em>height</em>, <em>ellipsoid=&lt;fatiando.gravmag.normal_gravity.ReferenceEllipsoid object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/normal_gravity.html#gamma_closed_form"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.normal_gravity.gamma_closed_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate normal gravity at a height using the closed form expression of
+Li and Gotze (2001).</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>latitude <span class="classifier-delimiter">:</span> <span class="classifier">float or numpy array</span></dt>
+<dd><p class="first last">The latitude where the normal gravity will be computed (in degrees)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>height <span class="classifier-delimiter">:</span> <span class="classifier">float or numpy array</span></dt>
+<dd><p class="first last">The height of computation (in meters). Should be ellipsoidal
+(geometric) heights for geophysical purposes.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>ellipsoid <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference internal" href="#fatiando.gravmag.normal_gravity.ReferenceEllipsoid" title="fatiando.gravmag.normal_gravity.ReferenceEllipsoid"><code class="xref py py-class docutils literal"><span class="pre">ReferenceEllipsoid</span></code></a></span></dt>
+<dd><p class="first last">The reference ellipsoid used.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>gamma <span class="classifier-delimiter">:</span> <span class="classifier">float or numpy array</span></dt>
+<dd><p class="first last">The computed normal gravity (in mGal).</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.normal_gravity.gamma_somigliana">
+<code class="descclassname">fatiando.gravmag.normal_gravity.</code><code class="descname">gamma_somigliana</code><span class="sig-paren">(</span><em>latitude</em>, <em>ellipsoid=&lt;fatiando.gravmag.normal_gravity.ReferenceEllipsoid object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/normal_gravity.html#gamma_somigliana"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.normal_gravity.gamma_somigliana" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the normal gravity by using Somigliana&#8217;s formula.</p>
+<p>This formula computes normal gravity <strong>on</strong> the ellipsoid (height = 0).</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>latitude <span class="classifier-delimiter">:</span> <span class="classifier">float or numpy array</span></dt>
+<dd><p class="first last">The latitude where the normal gravity will be computed (in degrees)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>ellipsoid <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference internal" href="#fatiando.gravmag.normal_gravity.ReferenceEllipsoid" title="fatiando.gravmag.normal_gravity.ReferenceEllipsoid"><code class="xref py py-class docutils literal"><span class="pre">ReferenceEllipsoid</span></code></a></span></dt>
+<dd><p class="first last">The reference ellipsoid used.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>gamma <span class="classifier-delimiter">:</span> <span class="classifier">float or numpy array</span></dt>
+<dd><p class="first last">The computed normal gravity (in mGal).</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.normal_gravity.gamma_somigliana_free_air">
+<code class="descclassname">fatiando.gravmag.normal_gravity.</code><code class="descname">gamma_somigliana_free_air</code><span class="sig-paren">(</span><em>latitude</em>, <em>height</em>, <em>ellipsoid=&lt;fatiando.gravmag.normal_gravity.ReferenceEllipsoid object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/normal_gravity.html#gamma_somigliana_free_air"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.normal_gravity.gamma_somigliana_free_air" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the normal gravity at a height using Somigliana&#8217;s formula and the
+free-air correction.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>latitude <span class="classifier-delimiter">:</span> <span class="classifier">float or numpy array</span></dt>
+<dd><p class="first last">The latitude where the normal gravity will be computed (in degrees)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>height <span class="classifier-delimiter">:</span> <span class="classifier">float or numpy array</span></dt>
+<dd><p class="first last">The height of computation (in meters). Should be ellipsoidal
+(geometric) heights for geophysical purposes.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>ellipsoid <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference internal" href="#fatiando.gravmag.normal_gravity.ReferenceEllipsoid" title="fatiando.gravmag.normal_gravity.ReferenceEllipsoid"><code class="xref py py-class docutils literal"><span class="pre">ReferenceEllipsoid</span></code></a></span></dt>
+<dd><p class="first last">The reference ellipsoid used.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>gamma <span class="classifier-delimiter">:</span> <span class="classifier">float or numpy array</span></dt>
+<dd><p class="first last">The computed normal gravity (in mGal).</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="../_sources/api/gravmag.normal_gravity.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_tensor_centerofmass_expanding_window:
+
+GravMag: Center of mass estimation using the first eigenvector of the gravity gradient tensor (2 sources with expanding windows)
+=================================================================================================================================
+
+
+**Download** source code: :download:`gravmag_tensor_centerofmass_expanding_window.py<../_static/cookbook/gravmag_tensor_centerofmass_expanding_window.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_tensor_centerofmass_expanding_window.py
+    :language: python

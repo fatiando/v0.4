@@ -1,0 +1,10 @@
+.. _cookbook_seismic_srtomo_smooth:
+
+Seismic: 2D straight-ray tomography using smoothness regularization
+====================================================================
+
+
+**Download** source code: :download:`seismic_srtomo_smooth.py<../_static/cookbook/seismic_srtomo_smooth.py>`
+
+.. literalinclude:: ../_static/cookbook/seismic_srtomo_smooth.py
+    :language: python

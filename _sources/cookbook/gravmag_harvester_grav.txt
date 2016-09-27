@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_harvester_grav:
+
+GravMag: 3D gravity inversion by planting anomalous densities using ``harvester`` (more complex interactive example)
+=====================================================================================================================
+
+
+**Download** source code: :download:`gravmag_harvester_grav.py<../_static/cookbook/gravmag_harvester_grav.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_harvester_grav.py
+    :language: python

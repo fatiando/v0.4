@@ -1,0 +1,10 @@
+.. _cookbook_seismic_conv:
+
+Seismic: Synthetic convolutional seismogram for a simple two layer velocity model
+==================================================================================
+
+
+**Download** source code: :download:`seismic_conv.py<../_static/cookbook/seismic_conv.py>`
+
+.. literalinclude:: ../_static/cookbook/seismic_conv.py
+    :language: python

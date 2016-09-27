@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_imaging_sandwich:
+
+GravMag: 3D imaging using the sandwich model method on synthetic gravity data (simple example)
+===============================================================================================
+
+
+**Download** source code: :download:`gravmag_imaging_sandwich.py<../_static/cookbook/gravmag_imaging_sandwich.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_imaging_sandwich.py
+    :language: python

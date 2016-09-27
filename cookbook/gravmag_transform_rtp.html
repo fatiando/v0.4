@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GravMag: Reduction to the pole of a total field anomaly using FFT &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Cookbook" href="../cookbook.html" />
+    <link rel="next" title="GravMag: Calculate the analytic signal of a total field anomaly using FFT" href="gravmag_transform_tga.html" />
+    <link rel="prev" title="GravMag: Calculating the derivatives of the gravity anomaly using FFT" href="gravmag_transform_deriv.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../install.html">Installing</a></li>
+                <li><a href="../docs.html">Documentation</a></li>
+                <li><a href="../cookbook.html">Cookbook</a></li>
+                <li><a href="../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="gravmag-reduction-to-the-pole-of-a-total-field-anomaly-using-fft">
+<span id="cookbook-gravmag-transform-rtp"></span><h1>GravMag: Reduction to the pole of a total field anomaly using FFT<a class="headerlink" href="#gravmag-reduction-to-the-pole-of-a-total-field-anomaly-using-fft" title="Permalink to this headline">¶</a></h1>
+<p><strong>Download</strong> source code: <a class="reference download internal" href="../_downloads/gravmag_transform_rtp.py"><code class="xref download docutils literal"><span class="pre">gravmag_transform_rtp.py</span></code></a></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">GravMag: Reduction to the pole of a total field anomaly using FFT</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">fatiando</span> <span class="kn">import</span> <span class="n">mesher</span><span class="p">,</span> <span class="n">gridder</span><span class="p">,</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">fatiando.gravmag</span> <span class="kn">import</span> <span class="n">prism</span><span class="p">,</span> <span class="n">transform</span>
+<span class="kn">from</span> <span class="nn">fatiando.vis</span> <span class="kn">import</span> <span class="n">mpl</span>
+
+<span class="c"># Direction of the Geomagnetic field</span>
+<span class="n">inc</span><span class="p">,</span> <span class="n">dec</span> <span class="o">=</span> <span class="o">-</span><span class="mi">60</span><span class="p">,</span> <span class="mi">0</span>
+<span class="c"># Make a model with only induced magnetization</span>
+<span class="n">model</span> <span class="o">=</span> <span class="p">[</span><span class="n">mesher</span><span class="o">.</span><span class="n">Prism</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span>
+                      <span class="p">{</span><span class="s">&#39;magnetization&#39;</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">ang2vec</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">)})]</span>
+<span class="n">area</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">5000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="o">-</span><span class="mi">5000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">)</span>
+<span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">z0</span> <span class="o">=</span> <span class="o">-</span><span class="mi">500</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">gridder</span><span class="o">.</span><span class="n">regular</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">z0</span><span class="p">)</span>
+<span class="n">tf</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">contaminate</span><span class="p">(</span><span class="n">prism</span><span class="o">.</span><span class="n">tf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">),</span>
+                       <span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="c"># Reduce to the pole using FFT. Since there is only induced magnetization, the</span>
+<span class="c"># magnetization direction (sinc and sdec) is the same as the geomagnetic field</span>
+<span class="n">pole</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">reduce_to_pole</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="n">sinc</span><span class="o">=</span><span class="n">inc</span><span class="p">,</span> <span class="n">sdec</span><span class="o">=</span><span class="n">dec</span><span class="p">)</span>
+<span class="c"># Calculate the true value at the pole for comparison</span>
+<span class="n">true</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">tf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pmag</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">ang2vec</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&quot;Original total field anomaly&quot;</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">RdBu_r</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;nT&#39;</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">m2km</span><span class="p">()</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&quot;True value at pole&quot;</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">true</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">RdBu_r</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;nT&#39;</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">m2km</span><span class="p">()</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&quot;Reduced to the pole&quot;</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">pole</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">RdBu_r</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;nT&#39;</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">m2km</span><span class="p">()</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="../_sources/cookbook/gravmag_transform_rtp.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_grav_tesseroid:
+
+GravMag: Forward modeling of the gravitational potential and its derivatives using tesseroids
+==============================================================================================
+
+
+**Download** source code: :download:`gravmag_grav_tesseroid.py<../_static/cookbook/gravmag_grav_tesseroid.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_grav_tesseroid.py
+    :language: python

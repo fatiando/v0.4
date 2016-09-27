@@ -1,0 +1,820 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fatiando.inversion.base &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><img src="../../../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../install.html">Installing</a></li>
+                <li><a href="../../../docs.html">Documentation</a></li>
+                <li><a href="../../../cookbook.html">Cookbook</a></li>
+                <li><a href="../../../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for fatiando.inversion.base</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The base classes for inverse problem solving.</span>
+
+<span class="sd">See :mod:`fatiando.inversion` for examples, regularization, and more.</span>
+
+<span class="sd">This module defines base classes that are used by the rest of the</span>
+<span class="sd">``inversion`` package:</span>
+
+<span class="sd">* :class:`~fatiando.inversion.base.MultiObjective`: A &quot;container&quot; class that</span>
+<span class="sd">  emulates a sum of different  objective (goal) functions (like</span>
+<span class="sd">  :class:`~fatiando.inversion.misfit.Misfit` or some form of</span>
+<span class="sd">  :mod:`~fatiando.inversion.regularization`). When two of those classes are</span>
+<span class="sd">  added they generate a ``MultiObjective`` object.</span>
+<span class="sd">* :class:`~fatiando.inversion.base.OperatorMixin`: A mix-in class that defines</span>
+<span class="sd">  the operators ``+`` and ``*`` (by a scalar). Used to give these properties to</span>
+<span class="sd">  ``Misfit`` and the regularizing functions. Adding results in a</span>
+<span class="sd">  ``MultiObjective``. Multiplying sets the ``regul_param`` of the class (like a</span>
+<span class="sd">  scalar weight factor).</span>
+<span class="sd">* :class:`~fatiando.inversion.base.OptimizerMixin`: A mix-in class that defines</span>
+<span class="sd">  the ``fit`` and ``config`` methods for optimizing a ``Misfit`` or</span>
+<span class="sd">  ``MultiObjective`` and fitting the model to the data.</span>
+<span class="sd">* :class:`~fatiando.inversion.base.CachedMethod`: A class that wraps a method</span>
+<span class="sd">  and caches the returned value. When the same argument (an array) is passed</span>
+<span class="sd">  twice in a row, the class returns the cached value instead of recomputing.</span>
+<span class="sd">* :class:`~fatiando.inversion.base.CachedMethodPermanent`: Like</span>
+<span class="sd">  ``CachedMethod`` but always returns the cached value, regardless of the</span>
+<span class="sd">  input. Effectively calculates only the first time the method is called.</span>
+<span class="sd">  Useful for caching the Jacobian matrix in a linear problem.</span>
+
+<span class="sd">----</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">future.utils</span> <span class="kn">import</span> <span class="n">with_metaclass</span>
+<span class="kn">from</span> <span class="nn">future.builtins</span> <span class="kn">import</span> <span class="nb">super</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">range</span><span class="p">,</span> <span class="nb">isinstance</span><span class="p">,</span> <span class="nb">zip</span><span class="p">,</span> <span class="nb">map</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">optimization</span>
+
+
+<div class="viewcode-block" id="OperatorMixin"><a class="viewcode-back" href="../../../api/inversion.base.html#fatiando.geothermal.climsig.OperatorMixin">[docs]</a><span class="k">class</span> <span class="nc">OperatorMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implements the operators + and * for the goal functions classes.</span>
+
+<span class="sd">    This class is not meant to be used on its own. Use it as a parent to give</span>
+<span class="sd">    the child class the + and * operators.</span>
+
+<span class="sd">    Used in :class:`~fatiando.inversion.base.Misfit` and the regularization</span>
+<span class="sd">    classes in :mod:`fatiando.inversion.regularization`.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        Performing ``A + B`` produces a</span>
+<span class="sd">        :class:`~fatiando.inversion.base.MultiObjetive` with copies of ``A``</span>
+<span class="sd">        and ``B``.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        Performing ``scalar*A`` produces a copy of ``A`` with ``scalar`` set as</span>
+<span class="sd">        the ``regul_param`` attribute.</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">regul_param</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The regularization parameter (scale factor) for the objetive function.</span>
+
+<span class="sd">        Defaults to 1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;_regularizing_parameter&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="nd">@regul_param.setter</span>
+    <span class="k">def</span> <span class="nf">regul_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the value of the regularizing parameter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_regularizing_parameter</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;hessian&#39;</span><span class="p">,</span> <span class="s">&#39;gradient&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+                <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                <span class="n">iscached</span> <span class="o">=</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">CachedMethodPermanent</span><span class="p">)</span> <span class="ow">or</span>
+                            <span class="nb">isinstance</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">CachedMethod</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">iscached</span><span class="p">:</span>
+                    <span class="n">method</span><span class="o">.</span><span class="n">hard_reset</span><span class="p">()</span>
+
+<div class="viewcode-block" id="OperatorMixin.copy"><a class="viewcode-back" href="../../../api/inversion.base.html#fatiando.geothermal.climsig.OperatorMixin.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Make a copy of me.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">deep</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obj</span>
+</div>
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add two objective functions to make a MultiObjective.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">nparams</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">nparams</span><span class="p">,</span> \
+            <span class="s">&quot;Can&#39;t add goals with different number of parameters:&quot;</span> \
+            <span class="o">+</span> <span class="s">&#39; {}, {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nparams</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">nparams</span><span class="p">)</span>
+        <span class="c"># Make a shallow copy of self to return. If returned self, doing</span>
+        <span class="c"># &#39;a = b + c&#39; a and b would reference the same object.</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">MultiObjective</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">other</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Multiply the objective function by a scallar to set the `regul_param`</span>
+<span class="sd">        attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;Can only multiply a Objective by a float or int&#39;</span><span class="p">)</span>
+        <span class="c"># Make a shallow copy of self to return. If returned self, doing</span>
+        <span class="c"># &#39;a = 10*b&#39; a and b would reference the same object.</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">regul_param</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">regul_param</span><span class="o">*</span><span class="n">other</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="k">def</span> <span class="nf">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mul__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="OptimizerMixin"><a class="viewcode-back" href="../../../api/inversion.base.html#fatiando.geothermal.climsig.OptimizerMixin">[docs]</a><span class="k">class</span> <span class="nc">OptimizerMixin</span><span class="p">(</span><span class="n">with_metaclass</span><span class="p">(</span><span class="n">ABCMeta</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines ``fit`` and ``config`` methods plus all the optimization methods.</span>
+
+<span class="sd">    This class is not meant to be used on its own. Use it as a parent to give</span>
+<span class="sd">    the child class the methods it implements.</span>
+
+<span class="sd">    Used in :class:`~fatiando.inversion.base.Misfit` and</span>
+<span class="sd">    :class:`fatiando.inversion.base.MultiObjetive`.</span>
+
+<span class="sd">    The :meth:`~fatiando.inversion.base.OptimizerMixin.config` method is used</span>
+<span class="sd">    to configure the optimization method that will be used.</span>
+
+<span class="sd">    The :meth:`~fatiando.inversion.base.OptimizerMixin.fit` method runs the</span>
+<span class="sd">    optimization method configured and stores the computed parameter vector in</span>
+<span class="sd">    the ``p_`` attribute.</span>
+
+<span class="sd">    Some stats about the optimization process are stored in the ``stats_``</span>
+<span class="sd">    attribute as a dictionary.</span>
+
+<span class="sd">    The minimum requirement for a class to inherit from ``OptimizerMixin`` is</span>
+<span class="sd">    that it must define at least a</span>
+<span class="sd">    :meth:`~fatiando.inversion.base.OptimizerMixin.value` method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="OptimizerMixin.config"><a class="viewcode-back" href="../../../api/inversion.base.html#fatiando.geothermal.climsig.OptimizerMixin.config">[docs]</a>    <span class="k">def</span> <span class="nf">config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Configure the optimization method and its parameters.</span>
+
+<span class="sd">        This sets the method used by</span>
+<span class="sd">        :meth:`~fatiando.inversion.base.Objective.fit` and the keyword</span>
+<span class="sd">        arguments that are passed to it.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * method : string</span>
+<span class="sd">            The optimization method. One of: ``&#39;linear&#39;``, ``&#39;newton&#39;``,</span>
+<span class="sd">            ``&#39;levmarq&#39;``, ``&#39;steepest&#39;``, ``&#39;acor&#39;``</span>
+
+<span class="sd">        Other keyword arguments that can be passed are the ones allowed by each</span>
+<span class="sd">        method.</span>
+
+<span class="sd">        Some methods have required arguments:</span>
+
+<span class="sd">        * *newton*, *levmarq* and *steepest* require the ``initial`` argument</span>
+<span class="sd">          (an initial estimate for the gradient descent)</span>
+<span class="sd">        * *acor* requires the ``bounds`` argument (min/max values for the</span>
+<span class="sd">          search space)</span>
+
+<span class="sd">        See the corresponding docstrings for more information:</span>
+
+<span class="sd">        * :meth:`~fatiando.inversion.optimization.linear`</span>
+<span class="sd">        * :meth:`~fatiando.inversion.optimization.newton`</span>
+<span class="sd">        * :meth:`~fatiando.inversion.optimization.levmarq`</span>
+<span class="sd">        * :meth:`~fatiando.inversion.optimization.steepest`</span>
+<span class="sd">        * :meth:`~fatiando.inversion.optimization.acor`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;linear&#39;</span><span class="p">,</span> <span class="s">&#39;newton&#39;</span><span class="p">,</span> <span class="s">&#39;levmarq&#39;</span><span class="p">,</span> <span class="s">&#39;steepest&#39;</span><span class="p">,</span> <span class="s">&#39;acor&#39;</span><span class="p">],</span> \
+            <span class="s">&quot;Invalid optimization method &#39;{}&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;newton&#39;</span><span class="p">,</span> <span class="s">&#39;levmarq&#39;</span><span class="p">,</span> <span class="s">&#39;steepest&#39;</span><span class="p">]:</span>
+            <span class="k">assert</span> <span class="s">&#39;initial&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">,</span> \
+                <span class="s">&quot;Missing required *initial* argument for &#39;{}&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;acor&#39;</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="s">&#39;bounds&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">,</span> \
+                <span class="s">&quot;Missing required *bounds* argument for &#39;{}&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;acor&#39;</span> <span class="ow">and</span> <span class="s">&#39;nparams&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nparams&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nparams</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit_method</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit_args</span> <span class="o">=</span> <span class="n">kwargs</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="OptimizerMixin.fit"><a class="viewcode-back" href="../../../api/inversion.base.html#fatiando.geothermal.climsig.OptimizerMixin.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Solve for the parameter vector that minimizes this objective function.</span>
+
+<span class="sd">        Uses the optimization method and parameters defined using the</span>
+<span class="sd">        :meth:`~fatiando.inversion.base.OptimizerMixin.config` method.</span>
+
+<span class="sd">        The estimated parameter vector can be accessed through the</span>
+<span class="sd">        ``p_`` attribute. A (possibly) formatted version (converted to a more</span>
+<span class="sd">        manageable type) of the estimate can be accessed through the property</span>
+<span class="sd">        ``estimate_``.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">not_configured</span> <span class="o">=</span> <span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;fit_method&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span>
+                          <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;fit_args&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">not_configured</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">islinear</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s">&#39;linear&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s">&#39;levmarq&#39;</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nparams</span><span class="p">))</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">optimization</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_method</span><span class="p">)</span>
+        <span class="c"># Make the generators from the optimization function</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_method</span> <span class="o">==</span> <span class="s">&#39;linear&#39;</span><span class="p">:</span>
+            <span class="n">solver</span> <span class="o">=</span> <span class="n">optimizer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hessian</span><span class="p">(</span><span class="bp">None</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="bp">None</span><span class="p">),</span>
+                               <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_args</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_method</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;newton&#39;</span><span class="p">,</span> <span class="s">&#39;levmarq&#39;</span><span class="p">]:</span>
+            <span class="n">solver</span> <span class="o">=</span> <span class="n">optimizer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hessian</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                               <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_args</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_method</span> <span class="o">==</span> <span class="s">&#39;steepest&#39;</span><span class="p">:</span>
+            <span class="n">solver</span> <span class="o">=</span> <span class="n">optimizer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_args</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_method</span> <span class="o">==</span> <span class="s">&#39;acor&#39;</span><span class="p">:</span>
+            <span class="n">solver</span> <span class="o">=</span> <span class="n">optimizer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_args</span><span class="p">)</span>
+        <span class="c"># Run the optimizer to the end</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">stats</span> <span class="ow">in</span> <span class="n">solver</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats_</span> <span class="o">=</span> <span class="n">stats</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="OptimizerMixin.fmt_estimate"><a class="viewcode-back" href="../../../api/inversion.base.html#fatiando.geothermal.climsig.OptimizerMixin.fmt_estimate">[docs]</a>    <span class="k">def</span> <span class="nf">fmt_estimate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called when accessing the property ``estimate_``.</span>
+
+<span class="sd">        Use this to convert the parameter vector (p) to a more useful form,</span>
+<span class="sd">        like a geometric object, etc.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * p : 1d-array</span>
+<span class="sd">            The parameter vector.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * formatted</span>
+<span class="sd">            Pretty much anything you want.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">p</span>
+</div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">estimate_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A nicely formatted version of the estimate.</span>
+
+<span class="sd">        If the class implements a `fmt_estimate` method, this will its results.</span>
+<span class="sd">        This can be used to convert the parameter vector to a more useful form,</span>
+<span class="sd">        like a :mod:`fatiando.mesher` object.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&quot;No estimate found. Run &#39;fit&#39; first.&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fmt_estimate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p_</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="MultiObjective"><a class="viewcode-back" href="../../../api/inversion.base.html#fatiando.geothermal.climsig.MultiObjective">[docs]</a><span class="k">class</span> <span class="nc">MultiObjective</span><span class="p">(</span><span class="n">OptimizerMixin</span><span class="p">,</span> <span class="n">OperatorMixin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An objective (goal) function with more than one component.</span>
+
+<span class="sd">    This class is a linear combination of other goal functions (like</span>
+<span class="sd">    :class:`~fatiando.inversion.misfit.Misfit` and regularization classes).</span>
+
+<span class="sd">    It is automatically created by adding two goal functions that have the</span>
+<span class="sd">    :class:`~fatiando.inversion.base.OperatorMixin` as a base class.</span>
+
+<span class="sd">    Alternatively, you can create a ``MultiObjetive`` by passing the other</span>
+<span class="sd">    goals function instances as arguments to the constructor.</span>
+
+<span class="sd">    The ``MultiObjetive`` behaves like any other goal function object. It has</span>
+<span class="sd">    ``fit`` and ``config`` methods and can be added and multiplied by a scalar</span>
+<span class="sd">    with the same effects.</span>
+
+<span class="sd">    Indexing a ``MultiObjetive`` will iterate over the component goal</span>
+<span class="sd">    functions.</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">    To show how this class is generated and works, let&#39;s create a simple class</span>
+<span class="sd">    that subclasses ``OperatorMixin``.</span>
+
+<span class="sd">    &gt;&gt;&gt; class MyGoal(OperatorMixin):</span>
+<span class="sd">    ...     def __init__(self, name, nparams, islinear):</span>
+<span class="sd">    ...         self.name = name</span>
+<span class="sd">    ...         self.islinear = islinear</span>
+<span class="sd">    ...         self.nparams = nparams</span>
+<span class="sd">    ...     def value(self, p):</span>
+<span class="sd">    ...         return 1</span>
+<span class="sd">    ...     def gradient(self, p):</span>
+<span class="sd">    ...         return 2</span>
+<span class="sd">    ...     def hessian(self, p):</span>
+<span class="sd">    ...         return 3</span>
+<span class="sd">    &gt;&gt;&gt; a = MyGoal(&#39;A&#39;, 10, True)</span>
+<span class="sd">    &gt;&gt;&gt; b = MyGoal(&#39;B&#39;, 10, True)</span>
+<span class="sd">    &gt;&gt;&gt; c = a + b</span>
+<span class="sd">    &gt;&gt;&gt; type(c)</span>
+<span class="sd">    &lt;class &#39;fatiando.inversion.base.MultiObjective&#39;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; c.size</span>
+<span class="sd">    2</span>
+<span class="sd">    &gt;&gt;&gt; c.nparams</span>
+<span class="sd">    10</span>
+<span class="sd">    &gt;&gt;&gt; c.islinear</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; c[0].name</span>
+<span class="sd">    &#39;A&#39;</span>
+<span class="sd">    &gt;&gt;&gt; c[1].name</span>
+<span class="sd">    &#39;B&#39;</span>
+
+<span class="sd">    Asking for the value, gradient, and Hessian of the ``MultiObjective`` will</span>
+<span class="sd">    give me the sum of both components.</span>
+
+<span class="sd">    &gt;&gt;&gt; c.value(None)</span>
+<span class="sd">    2</span>
+<span class="sd">    &gt;&gt;&gt; c.gradient(None)</span>
+<span class="sd">    4</span>
+<span class="sd">    &gt;&gt;&gt; c.hessian(None)</span>
+<span class="sd">    6</span>
+
+<span class="sd">    Multiplying the ``MultiObjective`` by a scalar will set the regularization</span>
+<span class="sd">    parameter for the sum.</span>
+
+<span class="sd">    &gt;&gt;&gt; d = 10*c</span>
+<span class="sd">    &gt;&gt;&gt; d.value(None)</span>
+<span class="sd">    20</span>
+<span class="sd">    &gt;&gt;&gt; d.gradient(None)</span>
+<span class="sd">    40</span>
+<span class="sd">    &gt;&gt;&gt; d.hessian(None)</span>
+<span class="sd">    60</span>
+
+<span class="sd">    All components must have the same number of parameters. For the moment,</span>
+<span class="sd">    ``MultiObjetive`` doesn&#39;t handle multiple parameter vector (one for each</span>
+<span class="sd">    objective function).</span>
+
+<span class="sd">    &gt;&gt;&gt; e = MyGoal(&quot;E&quot;, 20, True)</span>
+<span class="sd">    &gt;&gt;&gt; a + e</span>
+<span class="sd">    Traceback (most recent call last):</span>
+<span class="sd">      ...</span>
+<span class="sd">    AssertionError: Can&#39;t add goals with different number of parameters: 10, 20</span>
+
+<span class="sd">    The ``MultiObjective`` will automatically detect if the problem remains</span>
+<span class="sd">    linear or not. For example, adding a non-linear problem to a linear one</span>
+<span class="sd">    makes the sum non-linear.</span>
+
+<span class="sd">    &gt;&gt;&gt; (a + b).islinear</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; f = MyGoal(&#39;F&#39;, 10, False)</span>
+<span class="sd">    &gt;&gt;&gt; (a + f).islinear</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; (f + f).islinear</span>
+<span class="sd">    False</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_components</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unpack_components</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_components</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">nparams</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">nparams</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_components</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">nparams</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nparams</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span> \
+            <span class="s">&quot;Can&#39;t add goals with different number of parameters:&quot;</span> \
+            <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nparams</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nparams</span> <span class="o">=</span> <span class="n">nparams</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">islinear</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_components</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">islinear</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">islinear</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_i</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c"># Tracker for indexing</span>
+
+<div class="viewcode-block" id="MultiObjective.fit"><a class="viewcode-back" href="../../../api/inversion.base.html#fatiando.geothermal.climsig.MultiObjective.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">p_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+    <span class="n">fit</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="n">OptimizerMixin</span><span class="o">.</span><span class="n">fit</span><span class="o">.</span><span class="n">__doc__</span>
+
+    <span class="c"># Pass along the configuration in case the classes need to change something</span>
+    <span class="c"># depending on the optimization method.</span>
+<div class="viewcode-block" id="MultiObjective.config"><a class="viewcode-back" href="../../../api/inversion.base.html#fatiando.geothermal.climsig.MultiObjective.config">[docs]</a>    <span class="k">def</span> <span class="nf">config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">&#39;config&#39;</span><span class="p">):</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+    <span class="n">config</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="n">OptimizerMixin</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">__doc__</span>
+
+    <span class="k">def</span> <span class="nf">_unpack_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find all the MultiObjective elements in components and unpack them into</span>
+<span class="sd">        a single list.</span>
+
+<span class="sd">        This is needed so that ``D = A + B + C`` can be indexed as ``D[0] == A,</span>
+<span class="sd">        D[1] == B, D[2] == C``. Otherwise, ``D[1]`` would be a</span>
+<span class="sd">        ``MultiObjetive == B + C``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">components</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">MultiObjective</span><span class="p">):</span>
+                <span class="n">components</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">c</span><span class="o">*</span><span class="n">comp</span><span class="o">.</span><span class="n">regul_param</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">comp</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">components</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_components</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used for iterating over the MultiObjetive.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_i</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span>
+        <span class="n">comp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_i</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">comp</span>
+
+<div class="viewcode-block" id="MultiObjective.fmt_estimate"><a class="viewcode-back" href="../../../api/inversion.base.html#fatiando.geothermal.climsig.MultiObjective.fmt_estimate">[docs]</a>    <span class="k">def</span> <span class="nf">fmt_estimate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Format the current estimated parameter vector into a more useful form.</span>
+
+<span class="sd">        Will call the ``fmt_estimate`` method of the first component goal</span>
+<span class="sd">        function (the first term in the addition that created this object).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_components</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fmt_estimate</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MultiObjective.value"><a class="viewcode-back" href="../../../api/inversion.base.html#fatiando.geothermal.climsig.MultiObjective.value">[docs]</a>    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the value of the multi-objective function.</span>
+
+<span class="sd">        This will be the sum of all goal functions that make up this</span>
+<span class="sd">        multi-objective.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * p : 1d-array</span>
+<span class="sd">            The parameter vector.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * result : scalar (float, int, etc)</span>
+<span class="sd">            The sum of the values of the components.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">regul_param</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MultiObjective.gradient"><a class="viewcode-back" href="../../../api/inversion.base.html#fatiando.geothermal.climsig.MultiObjective.gradient">[docs]</a>    <span class="k">def</span> <span class="nf">gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the gradient of the multi-objective function.</span>
+
+<span class="sd">        This will be the sum of all goal functions that make up this</span>
+<span class="sd">        multi-objective.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * p : 1d-array</span>
+<span class="sd">            The parameter vector.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * result : 1d-array</span>
+<span class="sd">            The sum of the gradients of the components.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">regul_param</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MultiObjective.hessian"><a class="viewcode-back" href="../../../api/inversion.base.html#fatiando.geothermal.climsig.MultiObjective.hessian">[docs]</a>    <span class="k">def</span> <span class="nf">hessian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the hessian of the multi-objective function.</span>
+
+<span class="sd">        This will be the sum of all goal functions that make up this</span>
+<span class="sd">        multi-objective.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * p : 1d-array</span>
+<span class="sd">            The parameter vector.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * result : 2d-array</span>
+<span class="sd">            The sum of the hessians of the components.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">regul_param</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">hessian</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="CachedMethod"><a class="viewcode-back" href="../../../api/inversion.base.html#fatiando.geothermal.climsig.CachedMethod">[docs]</a><span class="k">class</span> <span class="nc">CachedMethod</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrap a method to cache it&#39;s output based on the hash of the input array.</span>
+
+<span class="sd">    Store the output of calling the method on a numpy array. If the method is</span>
+<span class="sd">    called in succession with the same input array, the cached result will be</span>
+<span class="sd">    returned. If the method is called on a different array, the old result will</span>
+<span class="sd">    be discarded and the new one stored.</span>
+
+<span class="sd">    Uses SHA1 hashes of the input array to tell if it is the same array.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        We need the object instance and method name instead of the bound method</span>
+<span class="sd">        (like ``obj.method``) because we can&#39;t pickle bound methods. We need to</span>
+<span class="sd">        be able to pickle so that the solvers can be passed between processes</span>
+<span class="sd">        in parallelization.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * instance : object</span>
+<span class="sd">        The instance of the object that has the method you want to cache.</span>
+<span class="sd">    * meth : string</span>
+<span class="sd">        The name of the method you want to cache.</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; class MyClass(object):</span>
+<span class="sd">    ...     def __init__(self, cached=False):</span>
+<span class="sd">    ...         if cached:</span>
+<span class="sd">    ...             self.my_method = CachedMethod(self, &#39;my_method&#39;)</span>
+<span class="sd">    ...     def my_method(self, p):</span>
+<span class="sd">    ...         return p**2</span>
+<span class="sd">    &gt;&gt;&gt; obj = MyClass(cached=False)</span>
+<span class="sd">    &gt;&gt;&gt; a = obj.my_method(np.arange(0, 5))</span>
+<span class="sd">    &gt;&gt;&gt; a</span>
+<span class="sd">    array([ 0,  1,  4,  9, 16])</span>
+<span class="sd">    &gt;&gt;&gt; b = obj.my_method(np.arange(0, 5))</span>
+<span class="sd">    &gt;&gt;&gt; a is b</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; cached = MyClass(cached=True)</span>
+<span class="sd">    &gt;&gt;&gt; a = cached.my_method(np.arange(0, 5))</span>
+<span class="sd">    &gt;&gt;&gt; a</span>
+<span class="sd">    array([ 0,  1,  4,  9, 16])</span>
+<span class="sd">    &gt;&gt;&gt; b = cached.my_method(np.arange(0, 5))</span>
+<span class="sd">    &gt;&gt;&gt; a is b</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; cached.my_method.hard_reset()</span>
+<span class="sd">    &gt;&gt;&gt; b = cached.my_method(np.arange(0, 5))</span>
+<span class="sd">    &gt;&gt;&gt; a is b</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; c = cached.my_method(np.arange(0, 5))</span>
+<span class="sd">    &gt;&gt;&gt; b is c</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; cached.my_method(np.arange(0, 6))</span>
+<span class="sd">    array([ 0,  1,  4,  9, 16, 25])</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">meth</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_hash</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="n">instance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meth</span> <span class="o">=</span> <span class="n">meth</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">__class__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">meth</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;__doc__&#39;</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="s">&#39;__doc__&#39;</span><span class="p">))</span>
+
+<div class="viewcode-block" id="CachedMethod.hard_reset"><a class="viewcode-back" href="../../../api/inversion.base.html#fatiando.geothermal.climsig.CachedMethod.hard_reset">[docs]</a>    <span class="k">def</span> <span class="nf">hard_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete the cached values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_hash</span> <span class="o">=</span> <span class="bp">None</span>
+</div>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">,</span> <span class="s">&#39;p_&#39;</span><span class="p">)</span>
+        <span class="n">p_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">array_hash</span> <span class="o">!=</span> <span class="n">p_hash</span><span class="p">:</span>
+            <span class="c"># Update the cache</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">array_hash</span> <span class="o">=</span> <span class="n">p_hash</span>
+            <span class="c"># Get the method from the class because the instance will overwrite</span>
+            <span class="c"># it with the CachedMethod instance.</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">__class__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">meth</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span>
+
+</div>
+<div class="viewcode-block" id="CachedMethodPermanent"><a class="viewcode-back" href="../../../api/inversion.base.html#fatiando.geothermal.climsig.CachedMethodPermanent">[docs]</a><span class="k">class</span> <span class="nc">CachedMethodPermanent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrap a method to cache it&#39;s output and return it whenever the method is</span>
+<span class="sd">    called..</span>
+
+<span class="sd">    This is different from :class:`~fatiando.inversion.base.CachedMethod`</span>
+<span class="sd">    because it will only run the method once. All other times, the result</span>
+<span class="sd">    returned will be this first one. This class should be used with methods</span>
+<span class="sd">    that should return always the same output (like the Jacobian matrix of a</span>
+<span class="sd">    linear problem).</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        We need the object instance and method name instead of the bound method</span>
+<span class="sd">        (like ``obj.method``) because we can&#39;t pickle bound methods. We need to</span>
+<span class="sd">        be able to pickle so that the solvers can be passed between processes</span>
+<span class="sd">        in parallelization.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * instance : object</span>
+<span class="sd">        The instance of the object that has the method you want to cache.</span>
+<span class="sd">    * meth : string</span>
+<span class="sd">        The name of the method you want to cache.</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; class MyClass(object):</span>
+<span class="sd">    ...     def __init__(self, cached=False):</span>
+<span class="sd">    ...         if cached:</span>
+<span class="sd">    ...             self.my_method = CachedMethodPermanent(self, &#39;my_method&#39;)</span>
+<span class="sd">    ...     def my_method(self, p):</span>
+<span class="sd">    ...         return p**2</span>
+<span class="sd">    &gt;&gt;&gt; obj = MyClass(cached=False)</span>
+<span class="sd">    &gt;&gt;&gt; a = obj.my_method(np.arange(0, 5))</span>
+<span class="sd">    &gt;&gt;&gt; a</span>
+<span class="sd">    array([ 0,  1,  4,  9, 16])</span>
+<span class="sd">    &gt;&gt;&gt; b = obj.my_method(np.arange(0, 5))</span>
+<span class="sd">    &gt;&gt;&gt; a is b</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; cached = MyClass(cached=True)</span>
+<span class="sd">    &gt;&gt;&gt; a = cached.my_method(np.arange(0, 5))</span>
+<span class="sd">    &gt;&gt;&gt; a</span>
+<span class="sd">    array([ 0,  1,  4,  9, 16])</span>
+<span class="sd">    &gt;&gt;&gt; b = cached.my_method(np.arange(0, 5))</span>
+<span class="sd">    &gt;&gt;&gt; a is b</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; c = cached.my_method(np.arange(10, 15))</span>
+<span class="sd">    &gt;&gt;&gt; c</span>
+<span class="sd">    array([ 0,  1,  4,  9, 16])</span>
+<span class="sd">    &gt;&gt;&gt; a is c</span>
+<span class="sd">    True</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">meth</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="n">instance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meth</span> <span class="o">=</span> <span class="n">meth</span>
+
+<div class="viewcode-block" id="CachedMethodPermanent.hard_reset"><a class="viewcode-back" href="../../../api/inversion.base.html#fatiando.geothermal.climsig.CachedMethodPermanent.hard_reset">[docs]</a>    <span class="k">def</span> <span class="nf">hard_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete the cached values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="bp">None</span>
+</div>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">__class__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">meth</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

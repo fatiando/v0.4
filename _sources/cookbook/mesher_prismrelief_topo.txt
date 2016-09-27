@@ -1,0 +1,10 @@
+.. _cookbook_mesher_prismrelief_topo:
+
+Meshing: Generate a 3D prism model of the topography
+=====================================================
+
+
+**Download** source code: :download:`mesher_prismrelief_topo.py<../_static/cookbook/mesher_prismrelief_topo.py>`
+
+.. literalinclude:: ../_static/cookbook/mesher_prismrelief_topo.py
+    :language: python

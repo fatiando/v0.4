@@ -1,0 +1,324 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Fatiando a Terra: modeling and inversion &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="#" />
+    <link rel="next" title="Announcements" href="news.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#"><img src="_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="install.html">Installing</a></li>
+                <li><a href="docs.html">Documentation</a></li>
+                <li><a href="cookbook.html">Cookbook</a></li>
+                <li><a href="develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="row" style="margin-top: 60px">
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-8">
+        <img src="_static/fatiando-banner-homepage.png" width="100%"
+            style="margin-bottom: 50px;"></img>
+        </div>
+    <div class="col-md-2">
+    </div>
+</div>
+
+<div class="text-center" style="font-size: 16pt; margin-bottom: 50px;"><p>An open-source Python library for modeling and inversion in geophysics.</p>
+<p>Our goal is provide a comprehensive and extensible framework
+for geophysical data analysis and the development of new methodologies.</p>
+</div><div class="row alert alert-info">
+
+<div class="col-md-4"><p><strong>Research:</strong> Fatiando allows you to write Python scripts to
+perform your data analysis and generate figures in a reproducible way.</p>
+</div>
+<div class="col-md-4"><p><strong>Development:</strong> Designed for extensibility, Fatiando offers tools for users to
+build upon the existing infrastructure and develop new inversion methods.
+We take care of the boilerplate.</p>
+</div>
+<div class="col-md-4"><p><strong>Teaching:</strong> Fatiando can be combined with the <a class="reference external" href="https://jupyter.org/">Jupyter notebook</a> to make rich, interactive
+documents. Great for teaching fundamental concepts of geophysics.</p>
+</div></div> <!-- Row --><div class="row">
+
+<div class="col-md-12"><h2>Overview</h2>
+
+<div class="col-md-12">
+<div class="row">
+    <div class="col-md-6">
+        <h3><a href="api/gravmag.html">Gravity and magnetics</a></h3>
+        <p>
+        Modeling, inversion, and processing for potential field methods.
+        </p>
+        <em>
+        3D forward modeling with prisms,
+        polygonal prisms, spheres, and tesseroids.
+        Handles the potential, acceleration,
+        gradient tensor, magnetic induction, total field magnetic anomaly.
+        </em>
+    </div>
+    <div class="col-md-6">
+        <h3><a href="api/seismic.html">Seismology and Seismics</a></h3>
+        <p>
+        Simple modeling functions for seismics and seismology.
+        </p>
+        <em>
+        Toy problems for: Cartesian straight-ray tomography,
+        VSP, epicenter estimation.
+        Experimental finite-difference wave propagation.
+        </em>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <h3><a href="api/inversion.html">Inverse Problems</a></h3>
+        <p>
+        API for building inverse problem solvers.
+        </p>
+        <em>
+        Easily prototype a new inversion.
+        Simple and uniform sintax for running invsersions.
+        Ready-made regularization (damping, smoothness, total variation).
+        </em>
+    </div>
+    <div class="col-md-6">
+        <h3><a href="api/vis.html">2D and 3D plotting</a></h3>
+        <p>
+        Utilities for plotting with
+        <a href="http://matplotlib.org/">matplotlib</a>
+        and
+        <a href="http://code.enthought.com/projects/mayavi/">Mayavi</a>.
+        </p>
+        <em>
+        Better defaults for some matplotlib functions,
+        plot 3D objects from <code>fatiando.mesher</code> in Mayavi,
+        automate common plotting tasks.
+        </em>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <h3><a href="api/gridder.html">Grid manipulation</a></h3>
+        <p>
+        Functions for generating and operating on regular grids and data
+        that is on a map.
+        </p>
+        <em>
+        Generate regular grids and point scatters.
+        Cut grids and extract profiles.
+        Interpolate irregular data.
+        </em>
+    </div>
+    <div class="col-md-6">
+        <h3><a href="api/mesher.html">Geometric objects and meshes</a></h3>
+        <p>
+        Classes that represent geometric objects (points, prisms, polygons,
+        tesseroids) and meshes (regular prism mesh, points on a grid).
+        </p>
+        <em>
+        Standard classes used in all of Fatiando.
+        Efficient classes for meshes that save storage and behave as
+        <a href="https://docs.python.org/2/library/stdtypes.html#iterator-types">iterators</a>.
+        </em>
+    </div>
+</div>
+</div></div></div><!-- Row --><div class="row">
+
+<div class="col-md-6">
+<h2>Getting started</h2><p>See the <a class="reference internal" href="install.html#install"><span>install instructions</span></a> to set up your computer and
+install Fatiando.</p>
+<p>Once you have everything installed,
+take a look at the <a class="reference internal" href="docs.html#docs"><span>Documentation</span></a>
+for a detailed tour of the library.
+You can also browse the <a class="reference internal" href="cookbook.html#cookbook"><span>Cookbook</span></a>
+for examples of what Fatiando can do.</p>
+<p>Keep up-to-date with the project by signing up to our <a class="reference external" href="https://groups.google.com/d/forum/fatiando">mailing list</a>.
+New releases, events, and user feedback requests are all communicated through
+the list.</p>
+</div><div class="col-md-6">
+<h2>Getting help</h2><p>There are many ways to contact us:</p>
+<ul class="simple">
+<li>Write to our <a class="reference external" href="https://groups.google.com/d/forum/fatiando">mailing list</a>.</li>
+<li>Join us on our open <a class="reference external" href="https://gitter.im/fatiando/fatiando">Gitter chat room</a>.</li>
+<li>Report bugs through <a class="reference external" href="https://github.com/fatiando/fatiando/issues?q=is%3Aopen">Github</a>.</li>
+</ul>
+<p>If you come across a bug, please include in your message: your operating
+system, Python version, Fatiando version, code that generated the error, the
+full error message.</p>
+</div></div><!-- Row --><div class="row"><div class="col-md-6">
+<h2>Contributing</h2><p><strong>You don&#8217;t need to be a programmer to contribute.</strong>
+You can start by sending us your
+<strong>feedback</strong>: bug reports, feature requests, code contributions,
+spelling corrections, usage examples, etc.</p>
+<p>We need a lot of help improving the <strong>documentation</strong>.
+You can help by reporting typos, suggesting new sections and improvements,
+and anything that you think would make the docs better in any way.</p>
+<p>If you  want to mess with the <strong>code</strong>,
+take a look at our <a class="reference internal" href="develop.html#develop"><span>Developer Guide</span></a>.
+Don&#8217;t be afraid to ask for help getting started!</p>
+<div class="alert alert-success">
+<h4><strong>Support us!</strong></h4><p>Fatiando is research software <strong>made by scientists</strong>.
+See <a class="reference internal" href="cite.html#cite"><span>Citing</span></a> to find out how to cite it in your publications.</p>
+</div> <!-- Alert bubble --></div><div class="col-md-6">
+<h2>Announcements</h2><ul class="simple">
+<li><strong>April 2016</strong>: Fatiando a Terra v0.4 released! See what is new in this
+released in the <a class="reference internal" href="changelog.html#changelog"><span>Changelog</span></a>.</li>
+<li><strong>October 2014</strong>: Fatiando was featured on volume 89 of the bulletin of the
+Brazilian Geophysical Society (SBGf). Read it on page 13 of the <a class="reference external" href="http://sys2.sbgf.org.br/portal/images/stories/Arquivos/Boletim_89-2014.pdf">PDF file</a>
+(in Portuguese).</li>
+<li><strong>July 2014</strong>: We presented a poster at Scipy 2014 about the
+<code class="docutils literal"><span class="pre">fatiando.inversion</span></code> package. See the
+<a class="reference external" href="https://github.com/leouieda/scipy2014">Github repo</a> for the poster and
+source code behind it.</li>
+</ul>
+<p>Read <a class="reference internal" href="news.html#news"><span>all announcements</span></a>.</p>
+</div></div> <!-- Row --><div class="row" style="margin-top: 50px;">
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-6">
+        <div class="text-center" style="margin-bottom: 20px;">
+            Watch Leo give a presentation about Fatiando at Scipy 2013.
+        </div>
+        <div class="responsive-embed">
+            <iframe width="100%" height="400"
+            src="https://www.youtube.com/embed/Ec38h1oB8cc" frameborder="0"
+            allowfullscreen></iframe>
+        </div>
+    </div>
+    <div class="col-md-3">
+    </div>
+</div><div class="toctree-wrapper compound">
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="_sources/index.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,582 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Potential field transformations (fatiando.gravmag.transform) &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Gravity and magnetics (fatiando.gravmag)" href="gravmag.html" />
+    <link rel="next" title="Forward modeling of half a spherical shell (fatiando.gravmag.half_sph_shell)" href="gravmag.half_sph_shell.html" />
+    <link rel="prev" title="3D Euler deconvolution methods (fatiando.gravmag.euler)" href="gravmag.euler.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../install.html">Installing</a></li>
+                <li><a href="../docs.html">Documentation</a></li>
+                <li><a href="../cookbook.html">Cookbook</a></li>
+                <li><a href="../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="module-fatiando.gravmag.transform">
+<span id="potential-field-transformations-fatiando-gravmag-transform"></span><span id="fatiando-gravmag-transform"></span><h1>Potential field transformations (<code class="docutils literal"><span class="pre">fatiando.gravmag.transform</span></code>)<a class="headerlink" href="#module-fatiando.gravmag.transform" title="Permalink to this headline">¶</a></h1>
+<p>Potential field transformations, like upward continuation and derivatives.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Most, if not all, functions here required gridded data.</p>
+</div>
+<p><strong>Transformations</strong></p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.gravmag.transform.upcontinue" title="fatiando.gravmag.transform.upcontinue"><code class="xref py py-func docutils literal"><span class="pre">upcontinue</span></code></a>: Upward continuation of
+gridded potential field data on a level surface.</li>
+<li><a class="reference internal" href="#fatiando.gravmag.transform.reduce_to_pole" title="fatiando.gravmag.transform.reduce_to_pole"><code class="xref py py-func docutils literal"><span class="pre">reduce_to_pole</span></code></a>: Reduce the total field
+magnetic anomaly to the pole.</li>
+<li><a class="reference internal" href="#fatiando.gravmag.transform.tga" title="fatiando.gravmag.transform.tga"><code class="xref py py-func docutils literal"><span class="pre">tga</span></code></a>: Calculate the amplitude of the
+total gradient (also called the analytic signal)</li>
+</ul>
+<p><strong>Derivatives</strong></p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.gravmag.transform.derivx" title="fatiando.gravmag.transform.derivx"><code class="xref py py-func docutils literal"><span class="pre">derivx</span></code></a>: Calculate the n-th order
+derivative of a potential field in the x-direction (North-South)</li>
+<li><a class="reference internal" href="#fatiando.gravmag.transform.derivy" title="fatiando.gravmag.transform.derivy"><code class="xref py py-func docutils literal"><span class="pre">derivy</span></code></a>: Calculate the n-th order
+derivative of a potential field in the y-direction (East-West)</li>
+<li><a class="reference internal" href="#fatiando.gravmag.transform.derivz" title="fatiando.gravmag.transform.derivz"><code class="xref py py-func docutils literal"><span class="pre">derivz</span></code></a>: Calculate the n-th order
+derivative of a potential field in the z-direction</li>
+</ul>
+<hr class="docutils" />
+<dl class="function">
+<dt id="fatiando.gravmag.transform.derivx">
+<code class="descclassname">fatiando.gravmag.transform.</code><code class="descname">derivx</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>data</em>, <em>shape</em>, <em>order=1</em>, <em>method='fd'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/transform.html#derivx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.transform.derivx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the derivative of a potential field in the x direction.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires gridded data.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If the data is not in SI units, the derivative will be in
+strange units! I strongly recommend converting the data to SI
+<strong>before</strong> calculating the derivative (use one of the unit conversion
+functions of <a class="reference internal" href="utils.html#module-fatiando.utils" title="fatiando.utils"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.utils</span></code></a>). This way the derivative will be in
+SI units and can be easily converted to what unit you want.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, y <span class="classifier-delimiter">:</span> <span class="classifier">1D-arrays</span></dt>
+<dd><p class="first last">The x and y coordinates of the grid points</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">1D-array</span></dt>
+<dd><p class="first last">The potential field at the grid points</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>shape <span class="classifier-delimiter">:</span> <span class="classifier">tuple = (nx, ny)</span></dt>
+<dd><p class="first last">The shape of the grid</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>order <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The order of the derivative</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The method used to calculate the derivatives. Options are:
+<code class="docutils literal"><span class="pre">'fd'</span></code> for central finite-differences (more stable) or <code class="docutils literal"><span class="pre">'fft'</span></code>
+for the Fast Fourier Transform.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>deriv <span class="classifier-delimiter">:</span> <span class="classifier">1D-array</span></dt>
+<dd><p class="first last">The derivative</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.transform.derivy">
+<code class="descclassname">fatiando.gravmag.transform.</code><code class="descname">derivy</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>data</em>, <em>shape</em>, <em>order=1</em>, <em>method='fd'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/transform.html#derivy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.transform.derivy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the derivative of a potential field in the y direction.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires gridded data.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If the data is not in SI units, the derivative will be in
+strange units! I strongly recommend converting the data to SI
+<strong>before</strong> calculating the derivative (use one of the unit conversion
+functions of <a class="reference internal" href="utils.html#module-fatiando.utils" title="fatiando.utils"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.utils</span></code></a>). This way the derivative will be in
+SI units and can be easily converted to what unit you want.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, y <span class="classifier-delimiter">:</span> <span class="classifier">1D-arrays</span></dt>
+<dd><p class="first last">The x and y coordinates of the grid points</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">1D-array</span></dt>
+<dd><p class="first last">The potential field at the grid points</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>shape <span class="classifier-delimiter">:</span> <span class="classifier">tuple = (nx, ny)</span></dt>
+<dd><p class="first last">The shape of the grid</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>order <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The order of the derivative</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The method used to calculate the derivatives. Options are:
+<code class="docutils literal"><span class="pre">'fd'</span></code> for central finite-differences (more stable) or <code class="docutils literal"><span class="pre">'fft'</span></code>
+for the Fast Fourier Transform.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>deriv <span class="classifier-delimiter">:</span> <span class="classifier">1D-array</span></dt>
+<dd><p class="first last">The derivative</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.transform.derivz">
+<code class="descclassname">fatiando.gravmag.transform.</code><code class="descname">derivz</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>data</em>, <em>shape</em>, <em>order=1</em>, <em>method='fft'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/transform.html#derivz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.transform.derivz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the derivative of a potential field in the z direction.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires gridded data.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If the data is not in SI units, the derivative will be in
+strange units! I strongly recommend converting the data to SI
+<strong>before</strong> calculating the derivative (use one of the unit conversion
+functions of <a class="reference internal" href="utils.html#module-fatiando.utils" title="fatiando.utils"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.utils</span></code></a>). This way the derivative will be in
+SI units and can be easily converted to what unit you want.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, y <span class="classifier-delimiter">:</span> <span class="classifier">1D-arrays</span></dt>
+<dd><p class="first last">The x and y coordinates of the grid points</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">1D-array</span></dt>
+<dd><p class="first last">The potential field at the grid points</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>shape <span class="classifier-delimiter">:</span> <span class="classifier">tuple = (nx, ny)</span></dt>
+<dd><p class="first last">The shape of the grid</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>order <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The order of the derivative</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The method used to calculate the derivatives. Options are:
+<code class="docutils literal"><span class="pre">'fft'</span></code> for the Fast Fourier Transform.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>deriv <span class="classifier-delimiter">:</span> <span class="classifier">1D-array</span></dt>
+<dd><p class="first last">The derivative</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.transform.reduce_to_pole">
+<code class="descclassname">fatiando.gravmag.transform.</code><code class="descname">reduce_to_pole</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>data</em>, <em>shape</em>, <em>inc</em>, <em>dec</em>, <em>sinc</em>, <em>sdec</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/transform.html#reduce_to_pole"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.transform.reduce_to_pole" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduce total field magnetic anomaly data to the pole.</p>
+<p>The reduction to the pole if a phase transformation that can be applied to
+total field magnetic anomaly data. It &#8220;simulates&#8221; how the data would be if
+<strong>both</strong> the Geomagnetic field and the magnetization of the source were
+vertical (<span class="math">\(90^\circ\)</span> inclination) (Blakely, 1996).</p>
+<p>This functions performs the reduction in the frequency domain (using the
+FFT). The transform filter is (in the frequency domain):</p>
+<div class="math">
+\[RTP(k_x, k_y) = \frac{|k|}{
+    a_1 k_x^2 + a_2 k_y^2 + a_3 k_x k_y +
+    i|k|(b_1 k_x + b_2 k_y)}\]</div>
+<p>in which <span class="math">\(k_x\)</span> and <span class="math">\(k_y\)</span> are the wave-numbers in the x and y
+directions and</p>
+<div class="math">
+\[\begin{split}|k| = \sqrt{k_x^2 + k_y^2} \\
+a_1 = m_z f_z - m_x f_x \\
+a_2 = m_z f_z - m_y f_y \\
+a_3 = -m_y f_x - m_x f_y \\
+b_1 = m_x f_z + m_z f_x \\
+b_2 = m_y f_z + m_z f_y\end{split}\]</div>
+<p><span class="math">\(\mathbf{m} = (m_x, m_y, m_z)\)</span> is the unit-vector of the total
+magnetization of the source and
+<span class="math">\(\mathbf{f} = (f_x, f_y, f_z)\)</span> is the unit-vector of the Geomagnetic
+field.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires gridded data.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The magnetization direction of the anomaly source is crucial to the
+reduction-to-the-pole.
+<strong>Wrong values of *sinc* and *sdec* will lead to a wrong reduction.</strong></p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, y <span class="classifier-delimiter">:</span> <span class="classifier">1d-arrays</span></dt>
+<dd><p class="first last">The x, y, z coordinates of each data point.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The total field anomaly data at each point.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>shape <span class="classifier-delimiter">:</span> <span class="classifier">tuple = (nx, ny)</span></dt>
+<dd><p class="first last">The shape of the data grid</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>inc, dec <span class="classifier-delimiter">:</span> <span class="classifier">floats</span></dt>
+<dd><p class="first last">The inclination and declination of the inducing Geomagnetic field</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>sinc, sdec <span class="classifier-delimiter">:</span> <span class="classifier">floats</span></dt>
+<dd><p class="first last">The inclination and declination of the total magnetization of the
+anomaly source. The total magnetization is the vector sum of the
+induced and remanent magnetization. If there is only induced
+magnetization, use the <em>inc</em> and <em>dec</em> of the Geomagnetic field.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>rtp <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The data reduced to the pole.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>References:</p>
+<p>Blakely, R. J. (1996), Potential Theory in Gravity and Magnetic
+Applications, Cambridge University Press.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.transform.tga">
+<code class="descclassname">fatiando.gravmag.transform.</code><code class="descname">tga</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>data</em>, <em>shape</em>, <em>method='fd'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/transform.html#tga"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.transform.tga" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the total gradient amplitude (TGA).</p>
+<p>This the same as the <cite>3D analytic signal</cite> of Roest et al. (1992), but we
+prefer the newer, more descriptive nomenclature suggested by Reid (2012).</p>
+<p>The TGA is defined as the amplitude of the gradient vector of a potential
+field <span class="math">\(T\)</span> (e.g. the magnetic total field anomaly):</p>
+<div class="math">
+\[TGA = \sqrt{
+    \left(\frac{\partial T}{\partial x}\right)^2 +
+    \left(\frac{\partial T}{\partial y}\right)^2 +
+    \left(\frac{\partial T}{\partial z}\right)^2 }\]</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires gridded data.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If the data is not in SI units, the derivatives will be in
+strange units and so will the total gradient amplitude! I strongly
+recommend converting the data to SI <strong>before</strong> calculating the
+TGA is you need the gradient in Eotvos (use one of the unit conversion
+functions of <a class="reference internal" href="utils.html#module-fatiando.utils" title="fatiando.utils"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.utils</span></code></a>).</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, y <span class="classifier-delimiter">:</span> <span class="classifier">1D-arrays</span></dt>
+<dd><p class="first last">The x and y coordinates of the grid points</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">1D-array</span></dt>
+<dd><p class="first last">The potential field at the grid points</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>shape <span class="classifier-delimiter">:</span> <span class="classifier">tuple = (nx, ny)</span></dt>
+<dd><p class="first last">The shape of the grid</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The method used to calculate the horizontal derivatives. Options are:
+<code class="docutils literal"><span class="pre">'fd'</span></code> for finite-difference (more stable) or <code class="docutils literal"><span class="pre">'fft'</span></code> for the Fast
+Fourier Transform. The z derivative is always calculated by FFT.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>tga <span class="classifier-delimiter">:</span> <span class="classifier">1D-array</span></dt>
+<dd><p class="first last">The amplitude of the total gradient</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>References:</p>
+<p>Reid, A. (2012), Forgotten truths, myths and sacred cows of Potential
+Fields Geophysics - II, in SEG Technical Program Expanded Abstracts 2012,
+pp. 1-3, Society of Exploration Geophysicists.</p>
+<p>Roest, W., J. Verhoef, and M. Pilkington (1992), Magnetic interpretation
+using the 3-D analytic signal, GEOPHYSICS, 57(1), 116-125,
+doi:10.1190/1.1443174.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.transform.upcontinue">
+<code class="descclassname">fatiando.gravmag.transform.</code><code class="descname">upcontinue</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>data</em>, <em>shape</em>, <em>height</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/transform.html#upcontinue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.transform.upcontinue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upward continuation of potential field data.</p>
+<p>Calculates the continuation through the Fast Fourier Transform in the
+wavenumber domain (Blakely, 1996):</p>
+<div class="math">
+\[F\{h_{up}\} = F\{h\} e^{-\Delta z |k|}\]</div>
+<p>and then transformed back to the space domain. <span class="math">\(h_{up}\)</span> is the upward
+continue data, <span class="math">\(\Delta z\)</span> is the height increase, <span class="math">\(F\)</span> denotes
+the Fourier Transform,  and <span class="math">\(|k|\)</span> is the wavenumber modulus.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires gridded data.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">x, y, z and height should be in meters.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, y <span class="classifier-delimiter">:</span> <span class="classifier">1D-arrays</span></dt>
+<dd><p class="first last">The x and y coordinates of the grid points</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">1D-array</span></dt>
+<dd><p class="first last">The potential field at the grid points</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>shape <span class="classifier-delimiter">:</span> <span class="classifier">tuple = (nx, ny)</span></dt>
+<dd><p class="first last">The shape of the grid</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>height <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The height increase (delta z) in meters.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>cont <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The upward continued data</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>References:</p>
+<p>Blakely, R. J. (1996), Potential Theory in Gravity and Magnetic
+Applications, Cambridge University Press.</p>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="../_sources/api/gravmag.transform.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

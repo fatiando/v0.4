@@ -1,0 +1,10 @@
+.. _cookbook_grid_profile:
+
+Gridding: Extract a profile from map data
+==========================================
+
+
+**Download** source code: :download:`grid_profile.py<../_static/cookbook/grid_profile.py>`
+
+.. literalinclude:: ../_static/cookbook/grid_profile.py
+    :language: python

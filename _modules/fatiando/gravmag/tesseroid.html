@@ -1,0 +1,1047 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fatiando.gravmag.tesseroid &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><img src="../../../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../install.html">Installing</a></li>
+                <li><a href="../../../docs.html">Documentation</a></li>
+                <li><a href="../../../cookbook.html">Cookbook</a></li>
+                <li><a href="../../../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for fatiando.gravmag.tesseroid</h1><div class="highlight"><pre>
+<span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">Calculates the potential fields of a tesseroid (spherical prism).</span>
+
+
+<span class="sd">Functions in this module calculate the gravitational fields of a tesseroid with</span>
+<span class="sd">respect to the local North-oriented coordinate system of the computation point.</span>
+<span class="sd">See the figure below.</span>
+
+<span class="sd">.. raw:: html</span>
+
+<span class="sd">    &lt;div class=&quot;row&quot;&gt;</span>
+<span class="sd">    &lt;div class=&quot;col-md-3&quot;&gt;</span>
+<span class="sd">    &lt;/div&gt;</span>
+<span class="sd">    &lt;div class=&quot;col-md-6&quot;&gt;</span>
+
+<span class="sd">.. figure:: ../_static/images/tesseroid-coord-sys.png</span>
+<span class="sd">    :alt: A tesseroid in a geocentric coordinate system</span>
+<span class="sd">    :width: 100%</span>
+<span class="sd">    :align: center</span>
+
+<span class="sd">    A tesseroid in a geocentric coordinate system (X, Y, Z). Point P is a</span>
+<span class="sd">    computation point with associated local North-oriented coordinate system</span>
+<span class="sd">    (x, y, z).</span>
+<span class="sd">    Image by L. Uieda (doi:`10.6084/m9.figshare.1495525</span>
+<span class="sd">    &lt;http://dx.doi.org/10.6084/m9.figshare.1495525&gt;`__).</span>
+
+<span class="sd">.. raw:: html</span>
+
+<span class="sd">    &lt;/div&gt;</span>
+<span class="sd">    &lt;div class=&quot;col-md-3&quot;&gt;</span>
+<span class="sd">    &lt;/div&gt;</span>
+<span class="sd">    &lt;/div&gt;</span>
+
+
+<span class="sd">.. note:: Coordinate systems</span>
+
+<span class="sd">    The gravitational attraction</span>
+<span class="sd">    and gravity gradient tensor</span>
+<span class="sd">    are calculated with respect to</span>
+<span class="sd">    the local coordinate system of the computation point.</span>
+<span class="sd">    This system has **x -&gt; North**, **y -&gt; East**, **z -&gt; up**</span>
+<span class="sd">    (radial direction).</span>
+
+<span class="sd">.. warning:: The :math:`g_z` component is an **exception** to this.</span>
+<span class="sd">    In order to conform with the regular convention</span>
+<span class="sd">    of z-axis pointing toward the center of the Earth,</span>
+<span class="sd">    **this component only** is calculated with **z -&gt; Down**.</span>
+<span class="sd">    This way, gravity anomalies of</span>
+<span class="sd">    tesseroids with positive density</span>
+<span class="sd">    are positive, not negative.</span>
+
+<span class="sd">Gravity</span>
+<span class="sd">-------</span>
+
+<span class="sd">Forward modeling of gravitational fields is performed by functions:</span>
+<span class="sd">:func:`~fatiando.gravmag.tesseroid.potential`,</span>
+<span class="sd">:func:`~fatiando.gravmag.tesseroid.gx`,</span>
+<span class="sd">:func:`~fatiando.gravmag.tesseroid.gy`,</span>
+<span class="sd">:func:`~fatiando.gravmag.tesseroid.gz`,</span>
+<span class="sd">:func:`~fatiando.gravmag.tesseroid.gxx`,</span>
+<span class="sd">:func:`~fatiando.gravmag.tesseroid.gxy`,</span>
+<span class="sd">:func:`~fatiando.gravmag.tesseroid.gxz`,</span>
+<span class="sd">:func:`~fatiando.gravmag.tesseroid.gyy`,</span>
+<span class="sd">:func:`~fatiando.gravmag.tesseroid.gyz`,</span>
+<span class="sd">:func:`~fatiando.gravmag.tesseroid.gzz`</span>
+
+<span class="sd">The gravitational fields are calculated using the formula of Grombein et al.</span>
+<span class="sd">(2013):</span>
+
+<span class="sd">.. math::</span>
+<span class="sd">    V(r,\phi,\lambda) = G \rho</span>
+<span class="sd">        \displaystyle\int_{\lambda_1}^{\lambda_2}</span>
+<span class="sd">        \displaystyle\int_{\phi_1}^{\phi_2}</span>
+<span class="sd">        \displaystyle\int_{r_1}^{r_2}</span>
+<span class="sd">        \frac{1}{\ell} \kappa \ d r&#39; d \phi&#39; d \lambda&#39;</span>
+
+<span class="sd">.. math::</span>
+<span class="sd">    g_{\alpha}(r,\phi,\lambda) = G \rho</span>
+<span class="sd">        \displaystyle\int_{\lambda_1}^{\lambda_2}</span>
+<span class="sd">        \displaystyle\int_{\phi_1}^{\phi_2} \displaystyle\int_{r_1}^{r_2}</span>
+<span class="sd">        \frac{\Delta_{\alpha}}{\ell^3} \kappa \ d r&#39; d \phi&#39; d \lambda&#39;</span>
+<span class="sd">        \ \ \alpha \in \{x,y,z\}</span>
+
+<span class="sd">.. math::</span>
+<span class="sd">    g_{\alpha\beta}(r,\phi,\lambda) = G \rho</span>
+<span class="sd">        \displaystyle\int_{\lambda_1}^{\lambda_2}</span>
+<span class="sd">        \displaystyle\int_{\phi_1}^{\phi_2} \displaystyle\int_{r_1}^{r_2}</span>
+<span class="sd">        I_{\alpha\beta}({r&#39;}, {\phi&#39;}, {\lambda&#39;} )</span>
+<span class="sd">        \ d r&#39; d \phi&#39; d \lambda&#39;</span>
+<span class="sd">        \ \ \alpha,\beta \in \{x,y,z\}</span>
+
+<span class="sd">.. math::</span>
+<span class="sd">    I_{\alpha\beta}({r&#39;}, {\phi&#39;}, {\lambda&#39;}) =</span>
+<span class="sd">        \left(</span>
+<span class="sd">            \frac{3\Delta_{\alpha} \Delta_{\beta}}{\ell^5} -</span>
+<span class="sd">            \frac{\delta_{\alpha\beta}}{\ell^3}</span>
+<span class="sd">        \right)</span>
+<span class="sd">        \kappa\</span>
+<span class="sd">        \ \ \alpha,\beta \in \{x,y,z\}</span>
+
+<span class="sd">where :math:`\rho` is density,</span>
+<span class="sd">:math:`\{x, y, z\}` correspond to the local coordinate system</span>
+<span class="sd">of the computation point P,</span>
+<span class="sd">:math:`\delta_{\alpha\beta}` is the `Kronecker delta`_, and</span>
+
+<span class="sd">.. math::</span>
+<span class="sd">   :nowrap:</span>
+
+<span class="sd">    \begin{eqnarray*}</span>
+<span class="sd">        \Delta_x &amp;=&amp; r&#39; K_{\phi} \\</span>
+<span class="sd">        \Delta_y &amp;=&amp; r&#39; \cos \phi&#39; \sin(\lambda&#39; - \lambda) \\</span>
+<span class="sd">        \Delta_z &amp;=&amp; r&#39; \cos \psi - r\\</span>
+<span class="sd">        \ell &amp;=&amp; \sqrt{r&#39;^2 + r^2 - 2 r&#39; r \cos \psi} \\</span>
+<span class="sd">        \cos\psi &amp;=&amp; \sin\phi\sin\phi&#39; + \cos\phi\cos\phi&#39;</span>
+<span class="sd">                     \cos(\lambda&#39; - \lambda) \\</span>
+<span class="sd">        K_{\phi} &amp;=&amp; \cos\phi\sin\phi&#39; - \sin\phi\cos\phi&#39;</span>
+<span class="sd">                     \cos(\lambda&#39; - \lambda)\\</span>
+<span class="sd">        \kappa &amp;=&amp; {r&#39;}^2 \cos \phi&#39;</span>
+<span class="sd">    \end{eqnarray*}</span>
+
+
+<span class="sd">:math:`\phi` is latitude,</span>
+<span class="sd">:math:`\lambda` is longitude, and</span>
+<span class="sd">:math:`r` is radius.</span>
+
+<span class="sd">.. _Kronecker delta: http://en.wikipedia.org/wiki/Kronecker_delta</span>
+
+<span class="sd">Numerical integration</span>
+<span class="sd">+++++++++++++++++++++</span>
+
+<span class="sd">The above integrals are solved using the Gauss-Legendre Quadrature rule</span>
+<span class="sd">(Asgharzadeh et al., 2007;</span>
+<span class="sd">Wild-Pfeiffer, 2008):</span>
+
+<span class="sd">.. math::</span>
+<span class="sd">    g_{\alpha\beta}(r,\phi,\lambda) \approx G \rho</span>
+<span class="sd">        \frac{(\lambda_2 - \lambda_1)(\phi_2 - \phi_1)(r_2 - r_1)}{8}</span>
+<span class="sd">        \displaystyle\sum_{k=1}^{N^{\lambda}}</span>
+<span class="sd">        \displaystyle\sum_{j=1}^{N^{\phi}}</span>
+<span class="sd">        \displaystyle\sum_{i=1}^{N^r}</span>
+<span class="sd">        W^r_i W^{\phi}_j W^{\lambda}_k</span>
+<span class="sd">        I_{\alpha\beta}({r&#39;}_i, {\phi&#39;}_j, {\lambda&#39;}_k )</span>
+<span class="sd">        \ \alpha,\beta \in \{1,2,3\}</span>
+
+<span class="sd">where :math:`W_i^r`, :math:`W_j^{\phi}`, and :math:`W_k^{\lambda}`</span>
+<span class="sd">are weighting coefficients</span>
+<span class="sd">and :math:`N^r`, :math:`N^{\phi}`, and :math:`N^{\lambda}`</span>
+<span class="sd">are the number of quadrature nodes</span>
+<span class="sd">(i.e., the order of the quadrature),</span>
+<span class="sd">for the radius, latitude, and longitude, respectively.</span>
+
+<span class="sd">Accurate numerical integration is achieved by an adaptive discretization</span>
+<span class="sd">algorithm. The one implemented here is a modified version of Li et al (2011).</span>
+<span class="sd">The adaptive discretization keeps the integration error below 0.1%.</span>
+
+<span class="sd">.. warning::</span>
+
+<span class="sd">    The integration error may be larger than this if the computation</span>
+<span class="sd">    points are closer than 1 km of the tesseroids. This effect is more</span>
+<span class="sd">    significant in the gravity gradient components.</span>
+
+<span class="sd">References</span>
+<span class="sd">++++++++++</span>
+
+<span class="sd">Asgharzadeh, M. F., R. R. B. von Frese, H. R. Kim, T. E. Leftwich,</span>
+<span class="sd">and J. W. Kim (2007),</span>
+<span class="sd">Spherical prism gravity effects by Gauss-Legendre quadrature integration,</span>
+<span class="sd">Geophysical Journal International, 169(1), 1-11,</span>
+<span class="sd">doi:10.1111/j.1365-246X.2007.03214.x.</span>
+
+<span class="sd">Grombein, T.; Seitz, K.; Heck, B. (2013), Optimized formulas for the</span>
+<span class="sd">gravitational field of a tesseroid, Journal of Geodesy,</span>
+<span class="sd">doi: 10.1007/s00190-013-0636-1</span>
+
+<span class="sd">Li, Z., T. Hao, Y. Xu, and Y. Xu (2011), An efficient and adaptive approach for</span>
+<span class="sd">modeling gravity effects in spherical coordinates, Journal of Applied</span>
+<span class="sd">Geophysics, 73(3), 221-231, doi:10.1016/j.jappgeo.2011.01.004.</span>
+
+<span class="sd">Wild-Pfeiffer, F. (2008),</span>
+<span class="sd">A comparison of different mass elements for use in gravity gradiometry,</span>
+<span class="sd">Journal of Geodesy, 82(10), 637-653, doi:10.1007/s00190-008-0219-8.</span>
+
+
+<span class="sd">----</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">numba</span>
+    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_tesseroid_numba</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">numba</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_tesseroid_numpy</span>
+<span class="kn">from</span> <span class="nn">..constants</span> <span class="kn">import</span> <span class="n">SI2MGAL</span><span class="p">,</span> <span class="n">SI2EOTVOS</span><span class="p">,</span> <span class="n">MEAN_EARTH_RADIUS</span><span class="p">,</span> <span class="n">G</span>
+
+<span class="n">RATIO_V</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">RATIO_G</span> <span class="o">=</span> <span class="mf">1.6</span>
+<span class="n">RATIO_GG</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">STACK_SIZE</span> <span class="o">=</span> <span class="mi">100</span>
+
+
+<span class="k">def</span> <span class="nf">_check_input</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">njobs</span><span class="p">,</span> <span class="n">pool</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the inputs are as expected and generate the output array.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * results : 1d-array, zero filled</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">lon</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">lat</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">height</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> \
+        <span class="s">&quot;Input coordinate arrays must have same shape&quot;</span>
+    <span class="k">assert</span> <span class="n">ratio</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&quot;Invalid ratio {}. Must be &gt; 0.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ratio</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">njobs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&quot;Invalid number of jobs {}. Must be &gt; 0.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">njobs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">njobs</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">pool</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&quot;njobs should be number of processes in the pool&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">lon</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">def</span> <span class="nf">_convert_coords</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert angles to radians and heights to radius.</span>
+
+<span class="sd">    Pre-compute the sine and cosine of latitude because that is what we need</span>
+<span class="sd">    from it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># Convert things to radians</span>
+    <span class="n">lon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">lon</span><span class="p">)</span>
+    <span class="n">lat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span>
+    <span class="n">sinlat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span>
+    <span class="n">coslat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span>
+    <span class="c"># Transform the heights into radius</span>
+    <span class="n">radius</span> <span class="o">=</span> <span class="n">MEAN_EARTH_RADIUS</span> <span class="o">+</span> <span class="n">height</span>
+    <span class="k">return</span> <span class="n">lon</span><span class="p">,</span> <span class="n">sinlat</span><span class="p">,</span> <span class="n">coslat</span><span class="p">,</span> <span class="n">radius</span>
+
+
+<span class="k">def</span> <span class="nf">_get_engine</span><span class="p">(</span><span class="n">engine</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the correct module to perform the computations.</span>
+
+<span class="sd">    Options are the Cython version, a pure Python version, and a numba version.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">engine</span> <span class="o">==</span> <span class="s">&#39;default&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">numba</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">engine</span> <span class="o">=</span> <span class="s">&#39;numpy&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">engine</span> <span class="o">=</span> <span class="s">&#39;numba&#39;</span>
+    <span class="k">assert</span> <span class="n">engine</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;numpy&#39;</span><span class="p">,</span> <span class="s">&#39;numba&#39;</span><span class="p">],</span> \
+        <span class="s">&quot;Invalid compute module {}&quot;</span><span class="o">.</span><span class="n">fotmat</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">engine</span> <span class="o">==</span> <span class="s">&#39;numba&#39;</span><span class="p">:</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="n">_tesseroid_numba</span>
+    <span class="k">elif</span> <span class="n">engine</span> <span class="o">==</span> <span class="s">&#39;numpy&#39;</span><span class="p">:</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="n">_tesseroid_numpy</span>
+    <span class="k">return</span> <span class="n">module</span>
+
+
+<span class="k">def</span> <span class="nf">_check_tesseroid</span><span class="p">(</span><span class="n">tesseroid</span><span class="p">,</span> <span class="n">dens</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the tesseroid is valid and get the right density to use.</span>
+
+<span class="sd">    Returns None if the tesseroid should be ignored. Else, return the density</span>
+<span class="sd">    that should be used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">tesseroid</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="s">&#39;density&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tesseroid</span><span class="o">.</span><span class="n">props</span> <span class="ow">and</span> <span class="n">dens</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="n">w</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="n">tesseroid</span><span class="o">.</span><span class="n">get_bounds</span><span class="p">()</span>
+    <span class="c"># Check if the dimensions given are valid</span>
+    <span class="k">assert</span> <span class="n">w</span> <span class="o">&lt;=</span> <span class="n">e</span> <span class="ow">and</span> <span class="n">s</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">top</span> <span class="o">&gt;=</span> <span class="n">bottom</span><span class="p">,</span> \
+        <span class="s">&quot;Invalid tesseroid dimensions {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tesseroid</span><span class="o">.</span><span class="n">get_bounds</span><span class="p">())</span>
+    <span class="c"># Check if the tesseroid has volume &gt; 0</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">e</span> <span class="o">-</span> <span class="n">w</span> <span class="o">&lt;=</span> <span class="mf">1e-6</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">s</span> <span class="o">&lt;=</span> <span class="mf">1e-6</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">top</span> <span class="o">-</span> <span class="n">bottom</span> <span class="o">&lt;=</span> <span class="mf">1e-3</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;Encountered tesseroid with dimensions smaller than the &quot;</span>
+               <span class="o">+</span> <span class="s">&quot;numerical threshold (1e-6 degrees or 1e-3 m). &quot;</span>
+               <span class="o">+</span> <span class="s">&quot;Ignoring this tesseroid.&quot;</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="n">dens</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">dens</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">tesseroid</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;density&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">density</span>
+
+
+<span class="k">def</span> <span class="nf">_dispatcher</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dispatch the computation of *field* to the appropriate function.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * result : 1d-array</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">njobs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;njobs&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;pool&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;engine&#39;</span><span class="p">]</span>
+    <span class="n">dens</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dens&#39;</span><span class="p">]</span>
+    <span class="n">ratio</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ratio&#39;</span><span class="p">]</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_check_input</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">njobs</span><span class="p">,</span> <span class="n">pool</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">njobs</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">pool</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">pool</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">njobs</span><span class="p">)</span>
+        <span class="n">created_pool</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">created_pool</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">pool</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">_forward_model</span><span class="p">([</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="p">,</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span>
+                        <span class="n">field</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">chunks</span> <span class="o">=</span> <span class="n">_split_arrays</span><span class="p">(</span><span class="n">arrays</span><span class="o">=</span><span class="p">[</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">result</span><span class="p">],</span>
+                               <span class="n">extra_args</span><span class="o">=</span><span class="p">[</span><span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="p">,</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">field</span><span class="p">],</span>
+                               <span class="n">nparts</span><span class="o">=</span><span class="n">njobs</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">_forward_model</span><span class="p">,</span> <span class="n">chunks</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">created_pool</span><span class="p">:</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">def</span> <span class="nf">_forward_model</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run the computations on the model for a given list of arguments.</span>
+
+<span class="sd">    This is used because multiprocessing.Pool.map can only use functions that</span>
+<span class="sd">    receive a single argument.</span>
+
+<span class="sd">    Arguments should be, in order:</span>
+
+<span class="sd">    lon, lat, height, result, model, dens, ratio, engine, field</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="p">,</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">field</span> <span class="o">=</span> <span class="n">args</span>
+    <span class="n">lon</span><span class="p">,</span> <span class="n">sinlat</span><span class="p">,</span> <span class="n">coslat</span><span class="p">,</span> <span class="n">radius</span> <span class="o">=</span> <span class="n">_convert_coords</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+    <span class="n">module</span> <span class="o">=</span> <span class="n">_get_engine</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+    <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+    <span class="n">warning_msg</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s">&quot;Stopped dividing a tesseroid because it&#39;s dimensions would be below &quot;</span>
+        <span class="o">+</span> <span class="s">&quot;the minimum numerical threshold (1e-6 degrees or 1e-3 m). &quot;</span>
+        <span class="o">+</span> <span class="s">&quot;Will compute without division. Cannot guarantee the accuracy of &quot;</span>
+        <span class="o">+</span> <span class="s">&quot;the solution.&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">tesseroid</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">_check_tesseroid</span><span class="p">(</span><span class="n">tesseroid</span><span class="p">,</span> <span class="n">dens</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">density</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">sinlat</span><span class="p">,</span> <span class="n">coslat</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">tesseroid</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">ratio</span><span class="p">,</span>
+                     <span class="n">STACK_SIZE</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">error</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warning_msg</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">def</span> <span class="nf">_split_arrays</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="n">extra_args</span><span class="p">,</span> <span class="n">nparts</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Split the coordinate arrays into nparts. Add extra_args to each part.</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">    &gt;&gt;&gt; chunks = _split_arrays([[1, 2, 3, 4, 5, 6]], [&#39;meh&#39;], 3)</span>
+<span class="sd">    &gt;&gt;&gt; chunks[0]</span>
+<span class="sd">    [[1, 2], &#39;meh&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; chunks[1]</span>
+<span class="sd">    [[3, 4], &#39;meh&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; chunks[2]</span>
+<span class="sd">    [[5, 6], &#39;meh&#39;]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arrays</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">size</span><span class="o">//</span><span class="n">nparts</span>
+    <span class="n">strides</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">nparts</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
+    <span class="n">strides</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">strides</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">size</span><span class="p">))</span>
+    <span class="n">chunks</span> <span class="o">=</span> <span class="p">[[</span><span class="n">x</span><span class="p">[</span><span class="n">low</span><span class="p">:</span><span class="n">high</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">arrays</span><span class="p">]</span> <span class="o">+</span> <span class="n">extra_args</span>
+              <span class="k">for</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span> <span class="ow">in</span> <span class="n">strides</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">chunks</span>
+
+
+<div class="viewcode-block" id="potential"><a class="viewcode-back" href="../../../api/gravmag.tesseroid.html#fatiando.gravmag.tesseroid.potential">[docs]</a><span class="k">def</span> <span class="nf">potential</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="n">RATIO_V</span><span class="p">,</span>
+              <span class="n">engine</span><span class="o">=</span><span class="s">&#39;default&#39;</span><span class="p">,</span> <span class="n">njobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the gravitational potential due to a tesseroid model.</span>
+
+<span class="sd">    .. warning:: Tesseroids with dimensions &lt; 10 cm will be ignored to avoid</span>
+<span class="sd">        numerical errors.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * lon, lat, height : arrays</span>
+<span class="sd">        Arrays with the longitude, latitude and height coordinates of the</span>
+<span class="sd">        computation points.</span>
+<span class="sd">    * model : list of :class:`~fatiando.mesher.Tesseroid`</span>
+<span class="sd">        The density model used to calculate the gravitational effect.</span>
+<span class="sd">        Tesseroids must have the property ``&#39;density&#39;``. Those that don&#39;t have</span>
+<span class="sd">        this property will be ignored in the computations. Elements that are</span>
+<span class="sd">        None will also be ignored.</span>
+<span class="sd">    * dens : float or None</span>
+<span class="sd">        If not None, will use this value instead of the ``&#39;density&#39;`` property</span>
+<span class="sd">        of the tesseroids. Use this, e.g., for sensitivity matrix building.</span>
+<span class="sd">    * ratio : float</span>
+<span class="sd">        Will divide each tesseroid until the distance between it and the</span>
+<span class="sd">        computation points is &lt; ratio*size of tesseroid. Used to guarantee the</span>
+<span class="sd">        accuracy of the numerical integration.</span>
+<span class="sd">    * engine : str</span>
+<span class="sd">        What implementation to use. If ``&#39;numba&#39;`` will use the numba library</span>
+<span class="sd">        implementation for greater speed. If ``&#39;numpy&#39;`` will use a pure Python</span>
+<span class="sd">        + numpy version (~100x slower). If ``&#39;default&#39;``, will use numba if it</span>
+<span class="sd">        is installed, and numpy if it is not.</span>
+<span class="sd">    * njobs : int</span>
+<span class="sd">        Split the computation into *njobs* parts and run it in parallel using</span>
+<span class="sd">        ``multiprocessing``. If ``njobs=1`` will run the computation in serial.</span>
+<span class="sd">    * pool : None or multiprocessing.Pool object</span>
+<span class="sd">        If not None, will use this pool to run the computation in parallel</span>
+<span class="sd">        instead of creating a new one. You must still specify *njobs* as the</span>
+<span class="sd">        number of processes in the pool. Use this to avoid spawning processes</span>
+<span class="sd">        on each call to this functions, which can have significant overhead.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The calculated field in SI units</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">field</span> <span class="o">=</span> <span class="s">&#39;potential&#39;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_dispatcher</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="n">dens</span><span class="p">,</span>
+                         <span class="n">ratio</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">njobs</span><span class="o">=</span><span class="n">njobs</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">*=</span> <span class="n">G</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+</div>
+<div class="viewcode-block" id="gx"><a class="viewcode-back" href="../../../api/gravmag.tesseroid.html#fatiando.gravmag.tesseroid.gx">[docs]</a><span class="k">def</span> <span class="nf">gx</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="n">RATIO_G</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s">&#39;default&#39;</span><span class="p">,</span>
+       <span class="n">njobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the North component of the gravitational attraction.</span>
+
+<span class="sd">    .. warning:: Tesseroids with dimensions &lt; 10 cm will be ignored to avoid</span>
+<span class="sd">        numerical errors.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * lon, lat, height : arrays</span>
+<span class="sd">        Arrays with the longitude, latitude and height coordinates of the</span>
+<span class="sd">        computation points.</span>
+<span class="sd">    * model : list of :class:`~fatiando.mesher.Tesseroid`</span>
+<span class="sd">        The density model used to calculate the gravitational effect.</span>
+<span class="sd">        Tesseroids must have the property ``&#39;density&#39;``. Those that don&#39;t have</span>
+<span class="sd">        this property will be ignored in the computations. Elements that are</span>
+<span class="sd">        None will also be ignored.</span>
+<span class="sd">    * dens : float or None</span>
+<span class="sd">        If not None, will use this value instead of the ``&#39;density&#39;`` property</span>
+<span class="sd">        of the tesseroids. Use this, e.g., for sensitivity matrix building.</span>
+<span class="sd">    * ratio : float</span>
+<span class="sd">        Will divide each tesseroid until the distance between it and the</span>
+<span class="sd">        computation points is &lt; ratio*size of tesseroid. Used to guarantee the</span>
+<span class="sd">        accuracy of the numerical integration.</span>
+<span class="sd">    * engine : str</span>
+<span class="sd">        What implementation to use. If ``&#39;numba&#39;`` will use the numba library</span>
+<span class="sd">        implementation for greater speed. If ``&#39;numpy&#39;`` will use a pure Python</span>
+<span class="sd">        + numpy version (~100x slower). If ``&#39;default&#39;``, will use numba if it</span>
+<span class="sd">        is installed, and numpy if it is not.</span>
+<span class="sd">    * njobs : int</span>
+<span class="sd">        Split the computation into *njobs* parts and run it in parallel using</span>
+<span class="sd">        ``multiprocessing``. If ``njobs=1`` will run the computation in serial.</span>
+<span class="sd">    * pool : None or multiprocessing.Pool object</span>
+<span class="sd">        If not None, will use this pool to run the computation in parallel</span>
+<span class="sd">        instead of creating a new one. You must still specify *njobs* as the</span>
+<span class="sd">        number of processes in the pool. Use this to avoid spawning processes</span>
+<span class="sd">        on each call to this functions, which can have significant overhead.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The calculated field in mGal</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">field</span> <span class="o">=</span> <span class="s">&#39;gx&#39;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_dispatcher</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="n">dens</span><span class="p">,</span>
+                         <span class="n">ratio</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">njobs</span><span class="o">=</span><span class="n">njobs</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">*=</span> <span class="n">SI2MGAL</span><span class="o">*</span><span class="n">G</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+</div>
+<div class="viewcode-block" id="gy"><a class="viewcode-back" href="../../../api/gravmag.tesseroid.html#fatiando.gravmag.tesseroid.gy">[docs]</a><span class="k">def</span> <span class="nf">gy</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="n">RATIO_G</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s">&#39;default&#39;</span><span class="p">,</span>
+       <span class="n">njobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the East component of the gravitational attraction.</span>
+
+<span class="sd">    .. warning:: Tesseroids with dimensions &lt; 10 cm will be ignored to avoid</span>
+<span class="sd">        numerical errors.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * lon, lat, height : arrays</span>
+<span class="sd">        Arrays with the longitude, latitude and height coordinates of the</span>
+<span class="sd">        computation points.</span>
+<span class="sd">    * model : list of :class:`~fatiando.mesher.Tesseroid`</span>
+<span class="sd">        The density model used to calculate the gravitational effect.</span>
+<span class="sd">        Tesseroids must have the property ``&#39;density&#39;``. Those that don&#39;t have</span>
+<span class="sd">        this property will be ignored in the computations. Elements that are</span>
+<span class="sd">        None will also be ignored.</span>
+<span class="sd">    * dens : float or None</span>
+<span class="sd">        If not None, will use this value instead of the ``&#39;density&#39;`` property</span>
+<span class="sd">        of the tesseroids. Use this, e.g., for sensitivity matrix building.</span>
+<span class="sd">    * ratio : float</span>
+<span class="sd">        Will divide each tesseroid until the distance between it and the</span>
+<span class="sd">        computation points is &lt; ratio*size of tesseroid. Used to guarantee the</span>
+<span class="sd">        accuracy of the numerical integration.</span>
+<span class="sd">    * engine : str</span>
+<span class="sd">        What implementation to use. If ``&#39;numba&#39;`` will use the numba library</span>
+<span class="sd">        implementation for greater speed. If ``&#39;numpy&#39;`` will use a pure Python</span>
+<span class="sd">        + numpy version (~100x slower). If ``&#39;default&#39;``, will use numba if it</span>
+<span class="sd">        is installed, and numpy if it is not.</span>
+<span class="sd">    * njobs : int</span>
+<span class="sd">        Split the computation into *njobs* parts and run it in parallel using</span>
+<span class="sd">        ``multiprocessing``. If ``njobs=1`` will run the computation in serial.</span>
+<span class="sd">    * pool : None or multiprocessing.Pool object</span>
+<span class="sd">        If not None, will use this pool to run the computation in parallel</span>
+<span class="sd">        instead of creating a new one. You must still specify *njobs* as the</span>
+<span class="sd">        number of processes in the pool. Use this to avoid spawning processes</span>
+<span class="sd">        on each call to this functions, which can have significant overhead.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The calculated field in mGal</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">field</span> <span class="o">=</span> <span class="s">&#39;gy&#39;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_dispatcher</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="n">dens</span><span class="p">,</span>
+                         <span class="n">ratio</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">njobs</span><span class="o">=</span><span class="n">njobs</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">*=</span> <span class="n">SI2MGAL</span><span class="o">*</span><span class="n">G</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+</div>
+<div class="viewcode-block" id="gz"><a class="viewcode-back" href="../../../api/gravmag.tesseroid.html#fatiando.gravmag.tesseroid.gz">[docs]</a><span class="k">def</span> <span class="nf">gz</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="n">RATIO_G</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s">&#39;default&#39;</span><span class="p">,</span>
+       <span class="n">njobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the radial component of the gravitational attraction.</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">        In order to conform with the regular convention of positive density</span>
+<span class="sd">        giving positive gz values, **this component only** is calculated</span>
+<span class="sd">        with **z axis -&gt; Down**.</span>
+
+<span class="sd">    .. warning:: Tesseroids with dimensions &lt; 10 cm will be ignored to avoid</span>
+<span class="sd">        numerical errors.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * lon, lat, height : arrays</span>
+<span class="sd">        Arrays with the longitude, latitude and height coordinates of the</span>
+<span class="sd">        computation points.</span>
+<span class="sd">    * model : list of :class:`~fatiando.mesher.Tesseroid`</span>
+<span class="sd">        The density model used to calculate the gravitational effect.</span>
+<span class="sd">        Tesseroids must have the property ``&#39;density&#39;``. Those that don&#39;t have</span>
+<span class="sd">        this property will be ignored in the computations. Elements that are</span>
+<span class="sd">        None will also be ignored.</span>
+<span class="sd">    * dens : float or None</span>
+<span class="sd">        If not None, will use this value instead of the ``&#39;density&#39;`` property</span>
+<span class="sd">        of the tesseroids. Use this, e.g., for sensitivity matrix building.</span>
+<span class="sd">    * ratio : float</span>
+<span class="sd">        Will divide each tesseroid until the distance between it and the</span>
+<span class="sd">        computation points is &lt; ratio*size of tesseroid. Used to guarantee the</span>
+<span class="sd">        accuracy of the numerical integration.</span>
+<span class="sd">    * engine : str</span>
+<span class="sd">        What implementation to use. If ``&#39;numba&#39;`` will use the numba library</span>
+<span class="sd">        implementation for greater speed. If ``&#39;numpy&#39;`` will use a pure Python</span>
+<span class="sd">        + numpy version (~100x slower). If ``&#39;default&#39;``, will use numba if it</span>
+<span class="sd">        is installed, and numpy if it is not.</span>
+<span class="sd">    * njobs : int</span>
+<span class="sd">        Split the computation into *njobs* parts and run it in parallel using</span>
+<span class="sd">        ``multiprocessing``. If ``njobs=1`` will run the computation in serial.</span>
+<span class="sd">    * pool : None or multiprocessing.Pool object</span>
+<span class="sd">        If not None, will use this pool to run the computation in parallel</span>
+<span class="sd">        instead of creating a new one. You must still specify *njobs* as the</span>
+<span class="sd">        number of processes in the pool. Use this to avoid spawning processes</span>
+<span class="sd">        on each call to this functions, which can have significant overhead.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The calculated field in mGal</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">field</span> <span class="o">=</span> <span class="s">&#39;gz&#39;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_dispatcher</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="n">dens</span><span class="p">,</span>
+                         <span class="n">ratio</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">njobs</span><span class="o">=</span><span class="n">njobs</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">*=</span> <span class="n">SI2MGAL</span><span class="o">*</span><span class="n">G</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+</div>
+<div class="viewcode-block" id="gxx"><a class="viewcode-back" href="../../../api/gravmag.tesseroid.html#fatiando.gravmag.tesseroid.gxx">[docs]</a><span class="k">def</span> <span class="nf">gxx</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="n">RATIO_GG</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s">&#39;default&#39;</span><span class="p">,</span>
+        <span class="n">njobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the xx component of the gravity gradient tensor.</span>
+
+<span class="sd">    .. warning:: Tesseroids with dimensions &lt; 10 cm will be ignored to avoid</span>
+<span class="sd">        numerical errors.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * lon, lat, height : arrays</span>
+<span class="sd">        Arrays with the longitude, latitude and height coordinates of the</span>
+<span class="sd">        computation points.</span>
+<span class="sd">    * model : list of :class:`~fatiando.mesher.Tesseroid`</span>
+<span class="sd">        The density model used to calculate the gravitational effect.</span>
+<span class="sd">        Tesseroids must have the property ``&#39;density&#39;``. Those that don&#39;t have</span>
+<span class="sd">        this property will be ignored in the computations. Elements that are</span>
+<span class="sd">        None will also be ignored.</span>
+<span class="sd">    * dens : float or None</span>
+<span class="sd">        If not None, will use this value instead of the ``&#39;density&#39;`` property</span>
+<span class="sd">        of the tesseroids. Use this, e.g., for sensitivity matrix building.</span>
+<span class="sd">    * ratio : float</span>
+<span class="sd">        Will divide each tesseroid until the distance between it and the</span>
+<span class="sd">        computation points is &lt; ratio*size of tesseroid. Used to guarantee the</span>
+<span class="sd">        accuracy of the numerical integration.</span>
+<span class="sd">    * engine : str</span>
+<span class="sd">        What implementation to use. If ``&#39;numba&#39;`` will use the numba library</span>
+<span class="sd">        implementation for greater speed. If ``&#39;numpy&#39;`` will use a pure Python</span>
+<span class="sd">        + numpy version (~100x slower). If ``&#39;default&#39;``, will use numba if it</span>
+<span class="sd">        is installed, and numpy if it is not.</span>
+<span class="sd">    * njobs : int</span>
+<span class="sd">        Split the computation into *njobs* parts and run it in parallel using</span>
+<span class="sd">        ``multiprocessing``. If ``njobs=1`` will run the computation in serial.</span>
+<span class="sd">    * pool : None or multiprocessing.Pool object</span>
+<span class="sd">        If not None, will use this pool to run the computation in parallel</span>
+<span class="sd">        instead of creating a new one. You must still specify *njobs* as the</span>
+<span class="sd">        number of processes in the pool. Use this to avoid spawning processes</span>
+<span class="sd">        on each call to this functions, which can have significant overhead.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The calculated field in Eotvos</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">field</span> <span class="o">=</span> <span class="s">&#39;gxx&#39;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_dispatcher</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="n">dens</span><span class="p">,</span>
+                         <span class="n">ratio</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">njobs</span><span class="o">=</span><span class="n">njobs</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">*=</span> <span class="n">SI2EOTVOS</span><span class="o">*</span><span class="n">G</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+</div>
+<div class="viewcode-block" id="gxy"><a class="viewcode-back" href="../../../api/gravmag.tesseroid.html#fatiando.gravmag.tesseroid.gxy">[docs]</a><span class="k">def</span> <span class="nf">gxy</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="n">RATIO_GG</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s">&#39;default&#39;</span><span class="p">,</span>
+        <span class="n">njobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the xy component of the gravity gradient tensor.</span>
+
+<span class="sd">    .. warning:: Tesseroids with dimensions &lt; 10 cm will be ignored to avoid</span>
+<span class="sd">        numerical errors.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * lon, lat, height : arrays</span>
+<span class="sd">        Arrays with the longitude, latitude and height coordinates of the</span>
+<span class="sd">        computation points.</span>
+<span class="sd">    * model : list of :class:`~fatiando.mesher.Tesseroid`</span>
+<span class="sd">        The density model used to calculate the gravitational effect.</span>
+<span class="sd">        Tesseroids must have the property ``&#39;density&#39;``. Those that don&#39;t have</span>
+<span class="sd">        this property will be ignored in the computations. Elements that are</span>
+<span class="sd">        None will also be ignored.</span>
+<span class="sd">    * dens : float or None</span>
+<span class="sd">        If not None, will use this value instead of the ``&#39;density&#39;`` property</span>
+<span class="sd">        of the tesseroids. Use this, e.g., for sensitivity matrix building.</span>
+<span class="sd">    * ratio : float</span>
+<span class="sd">        Will divide each tesseroid until the distance between it and the</span>
+<span class="sd">        computation points is &lt; ratio*size of tesseroid. Used to guarantee the</span>
+<span class="sd">        accuracy of the numerical integration.</span>
+<span class="sd">    * engine : str</span>
+<span class="sd">        What implementation to use. If ``&#39;numba&#39;`` will use the numba library</span>
+<span class="sd">        implementation for greater speed. If ``&#39;numpy&#39;`` will use a pure Python</span>
+<span class="sd">        + numpy version (~100x slower). If ``&#39;default&#39;``, will use numba if it</span>
+<span class="sd">        is installed, and numpy if it is not.</span>
+<span class="sd">    * njobs : int</span>
+<span class="sd">        Split the computation into *njobs* parts and run it in parallel using</span>
+<span class="sd">        ``multiprocessing``. If ``njobs=1`` will run the computation in serial.</span>
+<span class="sd">    * pool : None or multiprocessing.Pool object</span>
+<span class="sd">        If not None, will use this pool to run the computation in parallel</span>
+<span class="sd">        instead of creating a new one. You must still specify *njobs* as the</span>
+<span class="sd">        number of processes in the pool. Use this to avoid spawning processes</span>
+<span class="sd">        on each call to this functions, which can have significant overhead.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The calculated field in Eotvos</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">field</span> <span class="o">=</span> <span class="s">&#39;gxy&#39;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_dispatcher</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="n">dens</span><span class="p">,</span>
+                         <span class="n">ratio</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">njobs</span><span class="o">=</span><span class="n">njobs</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">*=</span> <span class="n">SI2EOTVOS</span><span class="o">*</span><span class="n">G</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+</div>
+<div class="viewcode-block" id="gxz"><a class="viewcode-back" href="../../../api/gravmag.tesseroid.html#fatiando.gravmag.tesseroid.gxz">[docs]</a><span class="k">def</span> <span class="nf">gxz</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="n">RATIO_GG</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s">&#39;default&#39;</span><span class="p">,</span>
+        <span class="n">njobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the xz component of the gravity gradient tensor.</span>
+
+<span class="sd">    .. warning:: Tesseroids with dimensions &lt; 10 cm will be ignored to avoid</span>
+<span class="sd">        numerical errors.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * lon, lat, height : arrays</span>
+<span class="sd">        Arrays with the longitude, latitude and height coordinates of the</span>
+<span class="sd">        computation points.</span>
+<span class="sd">    * model : list of :class:`~fatiando.mesher.Tesseroid`</span>
+<span class="sd">        The density model used to calculate the gravitational effect.</span>
+<span class="sd">        Tesseroids must have the property ``&#39;density&#39;``. Those that don&#39;t have</span>
+<span class="sd">        this property will be ignored in the computations. Elements that are</span>
+<span class="sd">        None will also be ignored.</span>
+<span class="sd">    * dens : float or None</span>
+<span class="sd">        If not None, will use this value instead of the ``&#39;density&#39;`` property</span>
+<span class="sd">        of the tesseroids. Use this, e.g., for sensitivity matrix building.</span>
+<span class="sd">    * ratio : float</span>
+<span class="sd">        Will divide each tesseroid until the distance between it and the</span>
+<span class="sd">        computation points is &lt; ratio*size of tesseroid. Used to guarantee the</span>
+<span class="sd">        accuracy of the numerical integration.</span>
+<span class="sd">    * engine : str</span>
+<span class="sd">        What implementation to use. If ``&#39;numba&#39;`` will use the numba library</span>
+<span class="sd">        implementation for greater speed. If ``&#39;numpy&#39;`` will use a pure Python</span>
+<span class="sd">        + numpy version (~100x slower). If ``&#39;default&#39;``, will use numba if it</span>
+<span class="sd">        is installed, and numpy if it is not.</span>
+<span class="sd">    * njobs : int</span>
+<span class="sd">        Split the computation into *njobs* parts and run it in parallel using</span>
+<span class="sd">        ``multiprocessing``. If ``njobs=1`` will run the computation in serial.</span>
+<span class="sd">    * pool : None or multiprocessing.Pool object</span>
+<span class="sd">        If not None, will use this pool to run the computation in parallel</span>
+<span class="sd">        instead of creating a new one. You must still specify *njobs* as the</span>
+<span class="sd">        number of processes in the pool. Use this to avoid spawning processes</span>
+<span class="sd">        on each call to this functions, which can have significant overhead.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The calculated field in Eotvos</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">field</span> <span class="o">=</span> <span class="s">&#39;gxz&#39;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_dispatcher</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="n">dens</span><span class="p">,</span>
+                         <span class="n">ratio</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">njobs</span><span class="o">=</span><span class="n">njobs</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">*=</span> <span class="n">SI2EOTVOS</span><span class="o">*</span><span class="n">G</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+</div>
+<div class="viewcode-block" id="gyy"><a class="viewcode-back" href="../../../api/gravmag.tesseroid.html#fatiando.gravmag.tesseroid.gyy">[docs]</a><span class="k">def</span> <span class="nf">gyy</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="n">RATIO_GG</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s">&#39;default&#39;</span><span class="p">,</span>
+        <span class="n">njobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the yy component of the gravity gradient tensor.</span>
+
+<span class="sd">    .. warning:: Tesseroids with dimensions &lt; 10 cm will be ignored to avoid</span>
+<span class="sd">        numerical errors.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * lon, lat, height : arrays</span>
+<span class="sd">        Arrays with the longitude, latitude and height coordinates of the</span>
+<span class="sd">        computation points.</span>
+<span class="sd">    * model : list of :class:`~fatiando.mesher.Tesseroid`</span>
+<span class="sd">        The density model used to calculate the gravitational effect.</span>
+<span class="sd">        Tesseroids must have the property ``&#39;density&#39;``. Those that don&#39;t have</span>
+<span class="sd">        this property will be ignored in the computations. Elements that are</span>
+<span class="sd">        None will also be ignored.</span>
+<span class="sd">    * dens : float or None</span>
+<span class="sd">        If not None, will use this value instead of the ``&#39;density&#39;`` property</span>
+<span class="sd">        of the tesseroids. Use this, e.g., for sensitivity matrix building.</span>
+<span class="sd">    * ratio : float</span>
+<span class="sd">        Will divide each tesseroid until the distance between it and the</span>
+<span class="sd">        computation points is &lt; ratio*size of tesseroid. Used to guarantee the</span>
+<span class="sd">        accuracy of the numerical integration.</span>
+<span class="sd">    * engine : str</span>
+<span class="sd">        What implementation to use. If ``&#39;numba&#39;`` will use the numba library</span>
+<span class="sd">        implementation for greater speed. If ``&#39;numpy&#39;`` will use a pure Python</span>
+<span class="sd">        + numpy version (~100x slower). If ``&#39;default&#39;``, will use numba if it</span>
+<span class="sd">        is installed, and numpy if it is not.</span>
+<span class="sd">    * njobs : int</span>
+<span class="sd">        Split the computation into *njobs* parts and run it in parallel using</span>
+<span class="sd">        ``multiprocessing``. If ``njobs=1`` will run the computation in serial.</span>
+<span class="sd">    * pool : None or multiprocessing.Pool object</span>
+<span class="sd">        If not None, will use this pool to run the computation in parallel</span>
+<span class="sd">        instead of creating a new one. You must still specify *njobs* as the</span>
+<span class="sd">        number of processes in the pool. Use this to avoid spawning processes</span>
+<span class="sd">        on each call to this functions, which can have significant overhead.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The calculated field in Eotvos</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">field</span> <span class="o">=</span> <span class="s">&#39;gyy&#39;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_dispatcher</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="n">dens</span><span class="p">,</span>
+                         <span class="n">ratio</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">njobs</span><span class="o">=</span><span class="n">njobs</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">*=</span> <span class="n">SI2EOTVOS</span><span class="o">*</span><span class="n">G</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+</div>
+<div class="viewcode-block" id="gyz"><a class="viewcode-back" href="../../../api/gravmag.tesseroid.html#fatiando.gravmag.tesseroid.gyz">[docs]</a><span class="k">def</span> <span class="nf">gyz</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="n">RATIO_GG</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s">&#39;default&#39;</span><span class="p">,</span>
+        <span class="n">njobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the yz component of the gravity gradient tensor.</span>
+
+<span class="sd">    .. warning:: Tesseroids with dimensions &lt; 10 cm will be ignored to avoid</span>
+<span class="sd">        numerical errors.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * lon, lat, height : arrays</span>
+<span class="sd">        Arrays with the longitude, latitude and height coordinates of the</span>
+<span class="sd">        computation points.</span>
+<span class="sd">    * model : list of :class:`~fatiando.mesher.Tesseroid`</span>
+<span class="sd">        The density model used to calculate the gravitational effect.</span>
+<span class="sd">        Tesseroids must have the property ``&#39;density&#39;``. Those that don&#39;t have</span>
+<span class="sd">        this property will be ignored in the computations. Elements that are</span>
+<span class="sd">        None will also be ignored.</span>
+<span class="sd">    * dens : float or None</span>
+<span class="sd">        If not None, will use this value instead of the ``&#39;density&#39;`` property</span>
+<span class="sd">        of the tesseroids. Use this, e.g., for sensitivity matrix building.</span>
+<span class="sd">    * ratio : float</span>
+<span class="sd">        Will divide each tesseroid until the distance between it and the</span>
+<span class="sd">        computation points is &lt; ratio*size of tesseroid. Used to guarantee the</span>
+<span class="sd">        accuracy of the numerical integration.</span>
+<span class="sd">    * engine : str</span>
+<span class="sd">        What implementation to use. If ``&#39;numba&#39;`` will use the numba library</span>
+<span class="sd">        implementation for greater speed. If ``&#39;numpy&#39;`` will use a pure Python</span>
+<span class="sd">        + numpy version (~100x slower). If ``&#39;default&#39;``, will use numba if it</span>
+<span class="sd">        is installed, and numpy if it is not.</span>
+<span class="sd">    * njobs : int</span>
+<span class="sd">        Split the computation into *njobs* parts and run it in parallel using</span>
+<span class="sd">        ``multiprocessing``. If ``njobs=1`` will run the computation in serial.</span>
+<span class="sd">    * pool : None or multiprocessing.Pool object</span>
+<span class="sd">        If not None, will use this pool to run the computation in parallel</span>
+<span class="sd">        instead of creating a new one. You must still specify *njobs* as the</span>
+<span class="sd">        number of processes in the pool. Use this to avoid spawning processes</span>
+<span class="sd">        on each call to this functions, which can have significant overhead.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The calculated field in Eotvos</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">field</span> <span class="o">=</span> <span class="s">&#39;gyz&#39;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_dispatcher</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="n">dens</span><span class="p">,</span>
+                         <span class="n">ratio</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">njobs</span><span class="o">=</span><span class="n">njobs</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">*=</span> <span class="n">SI2EOTVOS</span><span class="o">*</span><span class="n">G</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+</div>
+<div class="viewcode-block" id="gzz"><a class="viewcode-back" href="../../../api/gravmag.tesseroid.html#fatiando.gravmag.tesseroid.gzz">[docs]</a><span class="k">def</span> <span class="nf">gzz</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="n">RATIO_GG</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s">&#39;default&#39;</span><span class="p">,</span>
+        <span class="n">njobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the zz component of the gravity gradient tensor.</span>
+
+<span class="sd">    .. warning:: Tesseroids with dimensions &lt; 10 cm will be ignored to avoid</span>
+<span class="sd">        numerical errors.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * lon, lat, height : arrays</span>
+<span class="sd">        Arrays with the longitude, latitude and height coordinates of the</span>
+<span class="sd">        computation points.</span>
+<span class="sd">    * model : list of :class:`~fatiando.mesher.Tesseroid`</span>
+<span class="sd">        The density model used to calculate the gravitational effect.</span>
+<span class="sd">        Tesseroids must have the property ``&#39;density&#39;``. Those that don&#39;t have</span>
+<span class="sd">        this property will be ignored in the computations. Elements that are</span>
+<span class="sd">        None will also be ignored.</span>
+<span class="sd">    * dens : float or None</span>
+<span class="sd">        If not None, will use this value instead of the ``&#39;density&#39;`` property</span>
+<span class="sd">        of the tesseroids. Use this, e.g., for sensitivity matrix building.</span>
+<span class="sd">    * ratio : float</span>
+<span class="sd">        Will divide each tesseroid until the distance between it and the</span>
+<span class="sd">        computation points is &lt; ratio*size of tesseroid. Used to guarantee the</span>
+<span class="sd">        accuracy of the numerical integration.</span>
+<span class="sd">    * engine : str</span>
+<span class="sd">        What implementation to use. If ``&#39;numba&#39;`` will use the numba library</span>
+<span class="sd">        implementation for greater speed. If ``&#39;numpy&#39;`` will use a pure Python</span>
+<span class="sd">        + numpy version (~100x slower). If ``&#39;default&#39;``, will use numba if it</span>
+<span class="sd">        is installed, and numpy if it is not.</span>
+<span class="sd">    * njobs : int</span>
+<span class="sd">        Split the computation into *njobs* parts and run it in parallel using</span>
+<span class="sd">        ``multiprocessing``. If ``njobs=1`` will run the computation in serial.</span>
+<span class="sd">    * pool : None or multiprocessing.Pool object</span>
+<span class="sd">        If not None, will use this pool to run the computation in parallel</span>
+<span class="sd">        instead of creating a new one. You must still specify *njobs* as the</span>
+<span class="sd">        number of processes in the pool. Use this to avoid spawning processes</span>
+<span class="sd">        on each call to this functions, which can have significant overhead.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The calculated field in Eotvos</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">field</span> <span class="o">=</span> <span class="s">&#39;gzz&#39;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_dispatcher</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dens</span><span class="o">=</span><span class="n">dens</span><span class="p">,</span>
+                         <span class="n">ratio</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">njobs</span><span class="o">=</span><span class="n">njobs</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">*=</span> <span class="n">SI2EOTVOS</span><span class="o">*</span><span class="n">G</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

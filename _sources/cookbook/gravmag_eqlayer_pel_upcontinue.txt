@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_eqlayer_pel_upcontinue:
+
+GravMag: Use the polynomial equivalent layer to upward continue gravity data
+=============================================================================
+
+
+**Download** source code: :download:`gravmag_eqlayer_pel_upcontinue.py<../_static/cookbook/gravmag_eqlayer_pel_upcontinue.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_eqlayer_pel_upcontinue.py
+    :language: python

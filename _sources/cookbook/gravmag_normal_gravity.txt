@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_normal_gravity:
+
+GravMag: Calculate the gravity disturbance and Bouguer anomaly for Hawaii
+==========================================================================
+
+
+**Download** source code: :download:`gravmag_normal_gravity.py<../_static/cookbook/gravmag_normal_gravity.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_normal_gravity.py
+    :language: python

@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_transform_tga:
+
+GravMag: Calculate the analytic signal of a total field anomaly using FFT
+==========================================================================
+
+
+**Download** source code: :download:`gravmag_transform_tga.py<../_static/cookbook/gravmag_transform_tga.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_transform_tga.py
+    :language: python

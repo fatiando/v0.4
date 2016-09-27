@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_mag_prism:
+
+GravMag: 3D forward modeling of total-field magnetic anomaly using rectangular prisms (model with induced and remanent magnetization)
+======================================================================================================================================
+
+
+**Download** source code: :download:`gravmag_mag_prism.py<../_static/cookbook/gravmag_mag_prism.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_mag_prism.py
+    :language: python

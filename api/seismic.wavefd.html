@@ -1,0 +1,1069 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Finite difference solution of the 2D wave equation (fatiando.seismic.wavefd) &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Seismics and seismology (fatiando.seismic)" href="seismic.html" />
+    <link rel="next" title="Convolutional seismic modeling (fatiando.seismic.conv)" href="seismic.conv.html" />
+    <link rel="prev" title="Straigh-ray 2D tomography with SrTomo (fatiando.seismic.srtomo)" href="seismic.srtomo.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../install.html">Installing</a></li>
+                <li><a href="../docs.html">Documentation</a></li>
+                <li><a href="../cookbook.html">Cookbook</a></li>
+                <li><a href="../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="module-fatiando.seismic.wavefd">
+<span id="finite-difference-solution-of-the-2d-wave-equation-fatiando-seismic-wavefd"></span><span id="fatiando-seismic-wavefd"></span><h1>Finite difference solution of the 2D wave equation (<code class="docutils literal"><span class="pre">fatiando.seismic.wavefd</span></code>)<a class="headerlink" href="#module-fatiando.seismic.wavefd" title="Permalink to this headline">¶</a></h1>
+<p>Finite difference solution of the 2D wave equation for isotropic media.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.seismic.wavefd.elastic_psv" title="fatiando.seismic.wavefd.elastic_psv"><code class="xref py py-func docutils literal"><span class="pre">elastic_psv</span></code></a>: Simulates the coupled P and SV
+elastic waves using the Parsimonious Staggered Grid method of Luo and
+Schuster (1990)</li>
+<li><a class="reference internal" href="#fatiando.seismic.wavefd.elastic_sh" title="fatiando.seismic.wavefd.elastic_sh"><code class="xref py py-func docutils literal"><span class="pre">elastic_sh</span></code></a>: Simulates SH elastic waves using
+the Equivalent Staggered Grid method of Di Bartolo et al. (2012)</li>
+<li><a class="reference internal" href="#fatiando.seismic.wavefd.scalar" title="fatiando.seismic.wavefd.scalar"><code class="xref py py-func docutils literal"><span class="pre">scalar</span></code></a>: Simulates scalar waves using simple
+explicit finite differences scheme</li>
+</ul>
+<p><strong>Sources</strong></p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.seismic.wavefd.MexHatSource" title="fatiando.seismic.wavefd.MexHatSource"><code class="xref py py-class docutils literal"><span class="pre">MexHatSource</span></code></a>: Mexican hat wavelet source</li>
+<li><a class="reference internal" href="#fatiando.seismic.wavefd.SinSqrSource" title="fatiando.seismic.wavefd.SinSqrSource"><code class="xref py py-class docutils literal"><span class="pre">SinSqrSource</span></code></a>: Sine squared source</li>
+<li><a class="reference internal" href="#fatiando.seismic.wavefd.GaussSource" title="fatiando.seismic.wavefd.GaussSource"><code class="xref py py-class docutils literal"><span class="pre">GaussSource</span></code></a>: Gauss derivative source</li>
+<li><a class="reference internal" href="#fatiando.seismic.wavefd.blast_source" title="fatiando.seismic.wavefd.blast_source"><code class="xref py py-func docutils literal"><span class="pre">blast_source</span></code></a>: A source blasting in all
+directions</li>
+</ul>
+<p><strong>Auxiliary functions</strong></p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.seismic.wavefd.lame_lamb" title="fatiando.seismic.wavefd.lame_lamb"><code class="xref py py-func docutils literal"><span class="pre">lame_lamb</span></code></a>: Calculate the lambda Lame
+parameter</li>
+<li><a class="reference internal" href="#fatiando.seismic.wavefd.lame_mu" title="fatiando.seismic.wavefd.lame_mu"><code class="xref py py-func docutils literal"><span class="pre">lame_mu</span></code></a>: Calculate the mu Lame parameter</li>
+<li><a class="reference internal" href="#fatiando.seismic.wavefd.xz2ps" title="fatiando.seismic.wavefd.xz2ps"><code class="xref py py-func docutils literal"><span class="pre">xz2ps</span></code></a>: Convert x and z displacements to
+representations of P and S waves</li>
+<li><a class="reference internal" href="#fatiando.seismic.wavefd.maxdt" title="fatiando.seismic.wavefd.maxdt"><code class="xref py py-func docutils literal"><span class="pre">maxdt</span></code></a>: Calculate the maximum time step for
+elastic wave simulations</li>
+<li><a class="reference internal" href="#fatiando.seismic.wavefd.scalar_maxdt" title="fatiando.seismic.wavefd.scalar_maxdt"><code class="xref py py-func docutils literal"><span class="pre">scalar_maxdt</span></code></a>: Calculate the maximum time
+step for a scalar wave simulation</li>
+</ul>
+<p><strong>Theory</strong></p>
+<p>A good place to start is the equation of motion for elastic isotropic materials</p>
+<div class="math">
+\[\partial_j \tau_{ij} - \rho \partial_t^2 u_i = -f_i\]</div>
+<p>where <span class="math">\(\tau_{ij}\)</span> is the stress tensor, <span class="math">\(\rho\)</span> the density,
+<span class="math">\(u_i\)</span> the displacement (particle motion) and <span class="math">\(f_i\)</span> is the source
+term.
+But what I&#8217;m interested in modeling are the displacements in x, y and z.
+They are what is recorded by the seismometers.
+Luckily, I can use Hooke&#8217;s law to write the stress tensor as a function of the
+displacements</p>
+<div class="math">
+\[\tau_{ij} = \lambda\delta_{ij}\partial_k u_k +
+\mu(\partial_i u_j + \partial_j u_i)\]</div>
+<p>where <span class="math">\(\lambda\)</span> and <span class="math">\(\mu\)</span> are the Lame parameters and
+<span class="math">\(\delta_{ij}\)</span> is the Kronecker delta.
+Just as a reminder, in tensor notation, <span class="math">\(\partial_k u_k\)</span> is the divergent
+of <span class="math">\(\mathbf{u}\)</span>. Free indices (not <span class="math">\(i,j\)</span>) represent a summation.</p>
+<p>In a 2D medium, there is no variation in one of the directions.
+So I&#8217;ll choose the y direction for this purpose, so all y-derivatives cancel
+out.
+Looking at the second component of the equation of motion</p>
+<div class="math">
+\[\partial_x\tau_{xy} + \underbrace{\partial_y\tau_{yy}}_{0} +
+\partial_z\tau_{yz}  -  \rho \partial_t^2 u_y = -f_y\]</div>
+<p>Substituting the stress formula in the above equation yields</p>
+<div class="math">
+\[\partial_x\mu\partial_x u_y  + \partial_z\mu\partial_z u_y
+- \rho\partial_t^2 u_y = -f_y\]</div>
+<p>which is the wave equation for horizontally polarized S waves, i.e. SH waves.
+This equation is solved here using the Equivalent Staggered Grid (ESG) method
+of Di Bartolo et al. (2012).
+This method was developed for acoustic (pressure) waves but can be applied
+without modification to SH waves.</p>
+<p>Canceling the y derivatives in the first and third components of the equation
+of motion</p>
+<div class="math">
+\[\partial_x\tau_{xx} + \partial_z\tau_{xz} - \rho \partial_t^2 u_x = -f_x\]</div>
+<div class="math">
+\[\partial_x\tau_{xz} + \partial_z\tau_{zz} - \rho \partial_t^2 u_z = -f_z\]</div>
+<p>And the corresponding stress components are</p>
+<div class="math">
+\[\tau_{xx} = (\lambda + 2\mu)\partial_x u_x + \lambda\partial_z u_z\]</div>
+<div class="math">
+\[\tau_{zz} = (\lambda + 2\mu)\partial_z u_z + \lambda\partial_x u_x\]</div>
+<div class="math">
+\[\tau_{xz} = \mu( \partial_x u_z + \partial_z u_x)\]</div>
+<p>This means that the displacements in x and z are coupled and must be solved
+together.
+This equation describes the motion of pressure (P) and vertically polarized S
+waves (SV).
+The method used here to solve these equations is the Parsimonious Staggered
+Grid (PSG) of Luo and Schuster (1990).</p>
+<p><strong>References</strong></p>
+<p>Di Bartolo, L., C. Dors, and W. J. Mansur (2012), A new family of
+finite-difference schemes to solve the heterogeneous acoustic wave equation,
+Geophysics, 77(5), T187-T199, doi:10.1190/geo2011-0345.1.</p>
+<p>Luo, Y., and G. Schuster (1990), Parsimonious staggered grid
+finite-differencing of the wave equation, Geophysical Research Letters, 17(2),
+155-158, doi:10.1029/GL017i002p00155.</p>
+<hr class="docutils" />
+<dl class="class">
+<dt id="fatiando.seismic.wavefd.GaussSource">
+<em class="property">class </em><code class="descclassname">fatiando.seismic.wavefd.</code><code class="descname">GaussSource</code><span class="sig-paren">(</span><em>x</em>, <em>z</em>, <em>area</em>, <em>shape</em>, <em>amp</em>, <em>frequency</em>, <em>delay=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/seismic/wavefd.html#GaussSource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.seismic.wavefd.GaussSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatiando.seismic.wavefd.MexHatSource" title="fatiando.seismic.wavefd.MexHatSource"><code class="xref py py-class docutils literal"><span class="pre">fatiando.seismic.wavefd.MexHatSource</span></code></a></p>
+<p>A wave source that vibrates as a Gaussian derivative wavelet.</p>
+<div class="math">
+\[\psi(t) = A 2 \sqrt{e}\ f\ t\ e^\left(-2t^2f^2\right)\]</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, z <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The x, z coordinates of the source</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>area <span class="classifier-delimiter">:</span> <span class="classifier">[xmin, xmax, zmin, zmax]</span></dt>
+<dd><p class="first last">The area bounding the finite difference simulation</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>shape <span class="classifier-delimiter">:</span> <span class="classifier">(nz, nx)</span></dt>
+<dd><p class="first last">The number of nodes in the finite difference grid</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>amp <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The amplitude of the source (<span class="math">\(A\)</span>)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>frequency <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The approximate frequency of the source</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>delay <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The delay before the source starts</p>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you want the source to start with amplitude close to 0,
+use <code class="docutils literal"><span class="pre">delay</span> <span class="pre">=</span> <span class="pre">3.0/frequency</span></code>.</p>
+</div>
+<dl class="method">
+<dt id="fatiando.seismic.wavefd.GaussSource.coords">
+<code class="descname">coords</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.seismic.wavefd.GaussSource.coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the x, z coordinates of the source.</p>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>(x, z) <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">The x, z coordinates</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.seismic.wavefd.GaussSource.indexes">
+<code class="descname">indexes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.seismic.wavefd.GaussSource.indexes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the i,j coordinates of the source in the finite difference grid.</p>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>(i,j) <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">The i,j coordinates</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatiando.seismic.wavefd.MexHatSource">
+<em class="property">class </em><code class="descclassname">fatiando.seismic.wavefd.</code><code class="descname">MexHatSource</code><span class="sig-paren">(</span><em>x</em>, <em>z</em>, <em>area</em>, <em>shape</em>, <em>amp</em>, <em>frequency</em>, <em>delay=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/seismic/wavefd.html#MexHatSource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.seismic.wavefd.MexHatSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A wave source that vibrates as a Mexican hat (Ricker) wavelet.</p>
+<div class="math">
+\[\psi(t) = A(1 - 2 \pi^2 f^2 t^2)exp(-\pi^2 f^2 t^2)\]</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, z <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The x, z coordinates of the source</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>area <span class="classifier-delimiter">:</span> <span class="classifier">[xmin, xmax, zmin, zmax]</span></dt>
+<dd><p class="first last">The area bounding the finite difference simulation</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>shape <span class="classifier-delimiter">:</span> <span class="classifier">(nz, nx)</span></dt>
+<dd><p class="first last">The number of nodes in the finite difference grid</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>amp <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The amplitude of the source (<span class="math">\(A\)</span>)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>frequency <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The peak frequency of the wavelet</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>delay <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first">The delay before the source starts</p>
+<div class="last admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you want the source to start with amplitude close to 0,
+use <code class="docutils literal"><span class="pre">delay</span> <span class="pre">=</span> <span class="pre">3.5/frequency</span></code>.</p>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="method">
+<dt id="fatiando.seismic.wavefd.MexHatSource.coords">
+<code class="descname">coords</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/seismic/wavefd.html#MexHatSource.coords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.seismic.wavefd.MexHatSource.coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the x, z coordinates of the source.</p>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>(x, z) <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">The x, z coordinates</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.seismic.wavefd.MexHatSource.indexes">
+<code class="descname">indexes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/seismic/wavefd.html#MexHatSource.indexes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.seismic.wavefd.MexHatSource.indexes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the i,j coordinates of the source in the finite difference grid.</p>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>(i,j) <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">The i,j coordinates</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatiando.seismic.wavefd.SinSqrSource">
+<em class="property">class </em><code class="descclassname">fatiando.seismic.wavefd.</code><code class="descname">SinSqrSource</code><span class="sig-paren">(</span><em>x</em>, <em>z</em>, <em>area</em>, <em>shape</em>, <em>amp</em>, <em>frequency</em>, <em>delay=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/seismic/wavefd.html#SinSqrSource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.seismic.wavefd.SinSqrSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatiando.seismic.wavefd.MexHatSource" title="fatiando.seismic.wavefd.MexHatSource"><code class="xref py py-class docutils literal"><span class="pre">fatiando.seismic.wavefd.MexHatSource</span></code></a></p>
+<p>A wave source that vibrates as a sine squared function.</p>
+<p>This source vibrates for a time equal to one period (T).</p>
+<div class="math">
+\[\psi(t) = A\sin\left(t\frac{2\pi}{T}\right)^2\]</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, z <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The x, z coordinates of the source</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>area <span class="classifier-delimiter">:</span> <span class="classifier">[xmin, xmax, zmin, zmax]</span></dt>
+<dd><p class="first last">The area bounding the finite difference simulation</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>shape <span class="classifier-delimiter">:</span> <span class="classifier">(nz, nx)</span></dt>
+<dd><p class="first last">The number of nodes in the finite difference grid</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>amp <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The amplitude of the source (<span class="math">\(A\)</span>)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>frequency <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The frequency of the source</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>delay <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first">The delay before the source starts</p>
+<div class="last admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you want the source to start with amplitude close to 0,
+use <code class="docutils literal"><span class="pre">delay</span> <span class="pre">=</span> <span class="pre">3.5/frequency</span></code>.</p>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="method">
+<dt id="fatiando.seismic.wavefd.SinSqrSource.coords">
+<code class="descname">coords</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.seismic.wavefd.SinSqrSource.coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the x, z coordinates of the source.</p>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>(x, z) <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">The x, z coordinates</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.seismic.wavefd.SinSqrSource.indexes">
+<code class="descname">indexes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.seismic.wavefd.SinSqrSource.indexes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the i,j coordinates of the source in the finite difference grid.</p>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>(i,j) <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">The i,j coordinates</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.seismic.wavefd.blast_source">
+<code class="descclassname">fatiando.seismic.wavefd.</code><code class="descname">blast_source</code><span class="sig-paren">(</span><em>x</em>, <em>z</em>, <em>area</em>, <em>shape</em>, <em>amp</em>, <em>frequency</em>, <em>delay=0</em>, <em>sourcetype=&lt;class 'fatiando.seismic.wavefd.MexHatSource'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/seismic/wavefd.html#blast_source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.seismic.wavefd.blast_source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses several MexHatSources to create a blast source that pushes in all
+directions.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, z <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The x, z coordinates of the source</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>area <span class="classifier-delimiter">:</span> <span class="classifier">[xmin, xmax, zmin, zmax]</span></dt>
+<dd><p class="first last">The area bounding the finite difference simulation</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>shape <span class="classifier-delimiter">:</span> <span class="classifier">(nz, nx)</span></dt>
+<dd><p class="first last">The number of nodes in the finite difference grid</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>amp <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The amplitude of the source</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>frequency <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The frequency of the source</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>delay <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The delay before the source starts</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>sourcetype <span class="classifier-delimiter">:</span> <span class="classifier">source class</span></dt>
+<dd><p class="first last">The type of source to use, like
+<a class="reference internal" href="#fatiando.seismic.wavefd.MexHatSource" title="fatiando.seismic.wavefd.MexHatSource"><code class="xref py py-class docutils literal"><span class="pre">MexHatSource</span></code></a>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>[xsources, zsources]</dt>
+<dd><p class="first last">Lists of sources for x- and z-displacements</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.seismic.wavefd.elastic_psv">
+<code class="descclassname">fatiando.seismic.wavefd.</code><code class="descname">elastic_psv</code><span class="sig-paren">(</span><em>mu</em>, <em>lamb</em>, <em>density</em>, <em>area</em>, <em>dt</em>, <em>iterations</em>, <em>sources</em>, <em>stations=None</em>, <em>snapshot=None</em>, <em>padding=50</em>, <em>taper=0.002</em>, <em>xz2ps=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/seismic/wavefd.html#elastic_psv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.seismic.wavefd.elastic_psv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate P and SV waves using the Parsimonious Staggered Grid (PSG) finite
+differences scheme of Luo and Schuster (1990).</p>
+<p>This is an iterator. It yields panels of $u_x$ and $u_z$ displacements
+and a list of arrays with recorded displacements in a time series.
+Parameter <em>snapshot</em> controls how often the iterator yields. The default
+is only at the end, so only the final panel and full time series are
+yielded.</p>
+<p>Uses absorbing boundary conditions (Gaussian taper) in the lower, left and
+right boundaries. The top implements the free-surface boundary condition
+of Vidale and Clayton (1986).</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>mu <span class="classifier-delimiter">:</span> <span class="classifier">2D-array (shape = <em>shape</em>)</span></dt>
+<dd><p class="first last">The <span class="math">\(\mu\)</span> Lame parameter at all the grid nodes</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>lamb <span class="classifier-delimiter">:</span> <span class="classifier">2D-array (shape = <em>shape</em>)</span></dt>
+<dd><p class="first last">The <span class="math">\(\lambda\)</span> Lame parameter at all the grid nodes</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>density <span class="classifier-delimiter">:</span> <span class="classifier">2D-array (shape = <em>shape</em>)</span></dt>
+<dd><p class="first last">The value of the density at all the grid nodes</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>area <span class="classifier-delimiter">:</span> <span class="classifier">[xmin, xmax, zmin, zmax]</span></dt>
+<dd><p class="first last">The x, z limits of the simulation area, e.g., the shallowest point is
+at zmin, the deepest at zmax.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dt <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The time interval between iterations</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>iterations <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of time steps to take</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>sources <span class="classifier-delimiter">:</span> <span class="classifier">[xsources, zsources]</span> <span class="classifier-delimiter">:</span> <span class="classifier">lists</span></dt>
+<dd><p class="first last">A lists of the sources of waves for the particle movement in the x and
+z directions
+(see <a class="reference internal" href="#fatiando.seismic.wavefd.MexHatSource" title="fatiando.seismic.wavefd.MexHatSource"><code class="xref py py-class docutils literal"><span class="pre">MexHatSource</span></code></a> for an example
+source)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>stations <span class="classifier-delimiter">:</span> <span class="classifier">None or list</span></dt>
+<dd><p class="first last">If not None, then a list of [x, z] pairs with the x and z coordinates
+of the recording stations. These are physical coordinates, not the
+indexes!</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>snapshot <span class="classifier-delimiter">:</span> <span class="classifier">None or int</span></dt>
+<dd><p class="first last">If not None, than yield a snapshot of the displacements at every
+<em>snapshot</em> iterations.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>padding <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of grid nodes to use for the absorbing boundary region</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>taper <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The intensity of the Gaussian taper function used for the absorbing
+boundary conditions</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>xz2ps <span class="classifier-delimiter">:</span> <span class="classifier">True or False</span></dt>
+<dd><p class="first last">If True, will yield P and S wave panels instead of ux, uz. See
+<a class="reference internal" href="#fatiando.seismic.wavefd.xz2ps" title="fatiando.seismic.wavefd.xz2ps"><code class="xref py py-func docutils literal"><span class="pre">xz2ps</span></code></a>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Yields:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>[t, ux, uz, xseismograms, zseismograms]</dt>
+<dd><p class="first last">The current iteration, the particle displacements in the x and z
+directions, lists of arrays containing the displacements recorded at
+each station until the current iteration.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>References:</p>
+<p>Vidale, J. E., and R. W. Clayton (1986), A stable free-surface boundary
+condition for two-dimensional elastic finite-difference wave simulation,
+Geophysics, 51(12), 2247-2249.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.seismic.wavefd.elastic_sh">
+<code class="descclassname">fatiando.seismic.wavefd.</code><code class="descname">elastic_sh</code><span class="sig-paren">(</span><em>mu</em>, <em>density</em>, <em>area</em>, <em>dt</em>, <em>iterations</em>, <em>sources</em>, <em>stations=None</em>, <em>snapshot=None</em>, <em>padding=50</em>, <em>taper=0.005</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/seismic/wavefd.html#elastic_sh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.seismic.wavefd.elastic_sh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate SH waves using the Equivalent Staggered Grid (ESG) finite
+differences scheme of Di Bartolo et al. (2012).</p>
+<p>This is an iterator. It yields a panel of $u_y$ displacements and a list
+of arrays with recorded displacements in a time series.
+Parameter <em>snapshot</em> controls how often the iterator yields. The default
+is only at the end, so only the final panel and full time series are
+yielded.</p>
+<p>Uses absorbing boundary conditions (Gaussian taper) in the lower, left and
+right boundaries. The top implements a free-surface boundary condition.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>mu <span class="classifier-delimiter">:</span> <span class="classifier">2D-array (shape = <em>shape</em>)</span></dt>
+<dd><p class="first last">The <span class="math">\(\mu\)</span> Lame parameter at all the grid nodes</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>density <span class="classifier-delimiter">:</span> <span class="classifier">2D-array (shape = <em>shape</em>)</span></dt>
+<dd><p class="first last">The value of the density at all the grid nodes</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>area <span class="classifier-delimiter">:</span> <span class="classifier">[xmin, xmax, zmin, zmax]</span></dt>
+<dd><p class="first last">The x, z limits of the simulation area, e.g., the shallowest point is
+at zmin, the deepest at zmax.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dt <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The time interval between iterations</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>iterations <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of time steps to take</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>sources <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">A list of the sources of waves
+(see <a class="reference internal" href="#fatiando.seismic.wavefd.MexHatSource" title="fatiando.seismic.wavefd.MexHatSource"><code class="xref py py-class docutils literal"><span class="pre">MexHatSource</span></code></a> for an example
+source)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>stations <span class="classifier-delimiter">:</span> <span class="classifier">None or list</span></dt>
+<dd><p class="first last">If not None, then a list of [x, z] pairs with the x and z coordinates
+of the recording stations. These are physical coordinates, not the
+indexes</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>snapshot <span class="classifier-delimiter">:</span> <span class="classifier">None or int</span></dt>
+<dd><p class="first last">If not None, than yield a snapshot of the displacement at every
+<em>snapshot</em> iterations.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>padding <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of grid nodes to use for the absorbing boundary region</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>taper <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The intensity of the Gaussian taper function used for the absorbing
+boundary conditions</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Yields:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>t, uy, seismograms <span class="classifier-delimiter">:</span> <span class="classifier">int, 2D-array and list of 1D-arrays</span></dt>
+<dd><p class="first last">The current iteration, the particle displacement in the y direction
+and a list of the displacements recorded at each station until the
+current iteration.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.seismic.wavefd.lame_lamb">
+<code class="descclassname">fatiando.seismic.wavefd.</code><code class="descname">lame_lamb</code><span class="sig-paren">(</span><em>pvel</em>, <em>svel</em>, <em>dens</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/seismic/wavefd.html#lame_lamb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.seismic.wavefd.lame_lamb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Lame parameter <span class="math">\(\lambda\)</span> P and S wave velocities
+(<span class="math">\(\alpha\)</span> and <span class="math">\(\beta\)</span>) and the density (<span class="math">\(\rho\)</span>).</p>
+<div class="math">
+\[\lambda = \alpha^2 \rho - 2\beta^2 \rho\]</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>pvel <span class="classifier-delimiter">:</span> <span class="classifier">float or array</span></dt>
+<dd><p class="first last">The P wave velocity</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>svel <span class="classifier-delimiter">:</span> <span class="classifier">float or array</span></dt>
+<dd><p class="first last">The S wave velocity</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or array</span></dt>
+<dd><p class="first last">The density</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>lambda <span class="classifier-delimiter">:</span> <span class="classifier">float or array</span></dt>
+<dd><p class="first last">The Lame parameter</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lame_lamb</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">2700</span><span class="p">)</span>
+<span class="go">5400000000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1700</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dens</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2700</span><span class="p">,</span> <span class="mi">3100</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lame_lamb</span><span class="p">(</span><span class="n">pv</span><span class="p">,</span> <span class="n">sv</span><span class="p">,</span> <span class="n">dens</span><span class="p">)</span>
+<span class="go">[5400000000 9982000000]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.seismic.wavefd.lame_mu">
+<code class="descclassname">fatiando.seismic.wavefd.</code><code class="descname">lame_mu</code><span class="sig-paren">(</span><em>svel</em>, <em>dens</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/seismic/wavefd.html#lame_mu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.seismic.wavefd.lame_mu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Lame parameter <span class="math">\(\mu\)</span> from S wave velocity
+(<span class="math">\(\beta\)</span>) and the density (<span class="math">\(\rho\)</span>).</p>
+<div class="math">
+\[\mu = \beta^2 \rho\]</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>svel <span class="classifier-delimiter">:</span> <span class="classifier">float or array</span></dt>
+<dd><p class="first last">The S wave velocity</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or array</span></dt>
+<dd><p class="first last">The density</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>mu <span class="classifier-delimiter">:</span> <span class="classifier">float or array</span></dt>
+<dd><p class="first last">The Lame parameter</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lame_mu</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2700</span><span class="p">)</span>
+<span class="go">2700000000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1700</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dens</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2700</span><span class="p">,</span> <span class="mi">3100</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lame_mu</span><span class="p">(</span><span class="n">sv</span><span class="p">,</span> <span class="n">dens</span><span class="p">)</span>
+<span class="go">[2700000000 8959000000]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.seismic.wavefd.maxdt">
+<code class="descclassname">fatiando.seismic.wavefd.</code><code class="descname">maxdt</code><span class="sig-paren">(</span><em>area</em>, <em>shape</em>, <em>maxvel</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/seismic/wavefd.html#maxdt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.seismic.wavefd.maxdt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the maximum time step that can be used in the simulation.</p>
+<p>Uses the result of the Von Neumann type analysis of Di Bartolo et al.
+(2012).</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>area <span class="classifier-delimiter">:</span> <span class="classifier">[xmin, xmax, zmin, zmax]</span></dt>
+<dd><p class="first last">The x, z limits of the simulation area, e.g., the shallowest point is
+at zmin, the deepest at zmax.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>shape <span class="classifier-delimiter">:</span> <span class="classifier">(nz, nx)</span></dt>
+<dd><p class="first last">The number of nodes in the finite difference grid</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>maxvel <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The maximum velocity in the medium</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>maxdt <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The maximum time step</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.seismic.wavefd.scalar">
+<code class="descclassname">fatiando.seismic.wavefd.</code><code class="descname">scalar</code><span class="sig-paren">(</span><em>vel</em>, <em>area</em>, <em>dt</em>, <em>iterations</em>, <em>sources</em>, <em>stations=None</em>, <em>snapshot=None</em>, <em>padding=50</em>, <em>taper=0.005</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/seismic/wavefd.html#scalar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.seismic.wavefd.scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate scalar waves using an explicit finite differences scheme 4th order
+space. Space increment must be equal in x and z.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>vel <span class="classifier-delimiter">:</span> <span class="classifier">2D-array (defines shape simulation)</span></dt>
+<dd><p class="first last">The wave velocity at all the grid nodes</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>area <span class="classifier-delimiter">:</span> <span class="classifier">[xmin, xmax, zmin, zmax]</span></dt>
+<dd><p class="first last">The x, z limits of the simulation area, e.g., the shallowest point is
+at zmin, the deepest at zmax.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dt <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The time interval between iterations</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>iterations <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of time steps to take</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>sources <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">A list of the sources of waves
+(see <a class="reference internal" href="#fatiando.seismic.wavefd.MexHatSource" title="fatiando.seismic.wavefd.MexHatSource"><code class="xref py py-class docutils literal"><span class="pre">MexHatSource</span></code></a> for an example
+source)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>stations <span class="classifier-delimiter">:</span> <span class="classifier">None or list</span></dt>
+<dd><p class="first last">If not None, then a list of [x, z] pairs with the x and z coordinates
+of the recording stations. These are physical coordinates, not the
+indexes</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>snapshot <span class="classifier-delimiter">:</span> <span class="classifier">None or int</span></dt>
+<dd><p class="first last">If not None, than yield a snapshot of the displacement at every
+<em>snapshot</em> iterations.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>padding <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of grid nodes to use for the absorbing boundary region</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>taper <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The intensity of the Gaussian taper function used for the absorbing
+boundary conditions</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Yields:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>i, u, seismograms <span class="classifier-delimiter">:</span> <span class="classifier">int, 2D-array and list of 1D-arrays</span></dt>
+<dd><p class="first last">The current iteration, the scalar quantity disturbed
+and a list of the scalar quantity disturbed recorded at each
+station until the current iteration.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.seismic.wavefd.scalar_maxdt">
+<code class="descclassname">fatiando.seismic.wavefd.</code><code class="descname">scalar_maxdt</code><span class="sig-paren">(</span><em>area</em>, <em>shape</em>, <em>maxvel</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/seismic/wavefd.html#scalar_maxdt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.seismic.wavefd.scalar_maxdt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the maximum time step that can be used in the
+FD scalar simulation with 4th order space 1st time backward.</p>
+<p>References</p>
+<p>Alford R.M., Kelly K.R., Boore D.M. (1974) Accuracy of finite-difference
+modeling of the acoustic wave equation Geophysics, 39 (6), P. 834-842</p>
+<p>Chen, Jing-Bo (2011) A stability formula for Lax-Wendroff methods
+with fourth-order in time and general-order in space for
+the scalar wave equation Geophysics, v. 76, p. T37-T42</p>
+<p>Convergence</p>
+<div class="math">
+\[\Delta t \leq \frac{2 \Delta s}{ V \sqrt{\sum_{a=-N}^{N} (|w_a^1| +
+|w_a^2|)}}
+= \frac{ \Delta s \sqrt{3}}{ V_{max} \sqrt{8}}\]</div>
+<p>Where w_a are the centered differences weights</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>area <span class="classifier-delimiter">:</span> <span class="classifier">[xmin, xmax, zmin, zmax]</span></dt>
+<dd><p class="first last">The x, z limits of the simulation area, e.g., the shallowest point is
+at zmin, the deepest at zmax.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>shape <span class="classifier-delimiter">:</span> <span class="classifier">(nz, nx)</span></dt>
+<dd><p class="first last">The number of nodes in the finite difference grid</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>maxvel <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The maximum velocity in the medium</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>maxdt <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The maximum time step</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.seismic.wavefd.xz2ps">
+<code class="descclassname">fatiando.seismic.wavefd.</code><code class="descname">xz2ps</code><span class="sig-paren">(</span><em>ux</em>, <em>uz</em>, <em>area</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/seismic/wavefd.html#xz2ps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.seismic.wavefd.xz2ps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the x and z displacements into representations of P and S waves
+using the divergence and curl, respectively, after Kennett (2002, pp 57)</p>
+<div class="math">
+\[P: \frac{\partial u_x}{\partial x} + \frac{\partial u_z}{\partial z}\]</div>
+<div class="math">
+\[S: \frac{\partial u_x}{\partial z} - \frac{\partial u_z}{\partial x}\]</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>ux, uz <span class="classifier-delimiter">:</span> <span class="classifier">2D-arrays</span></dt>
+<dd><p class="first last">The x and z displacement panels</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>area <span class="classifier-delimiter">:</span> <span class="classifier">[xmin, xmax, zmin, zmax]</span></dt>
+<dd><p class="first last">The x, z limits of the simulation area, e.g., the shallowest point is
+at zmin, the deepest at zmax.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p, s <span class="classifier-delimiter">:</span> <span class="classifier">2D-arrays</span></dt>
+<dd><p class="first last">Panels corresponding to P and S wave components</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>References:</p>
+<p>Kennett, B. L. N. (2002), The Seismic Wavefield: Volume 2, Interpretation
+of Seismograms on Regional and Global Scales, Cambridge University Press.</p>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="../_sources/api/seismic.wavefd.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

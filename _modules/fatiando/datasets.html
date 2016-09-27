@@ -1,0 +1,319 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fatiando.datasets &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html"><img src="../../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../install.html">Installing</a></li>
+                <li><a href="../../docs.html">Documentation</a></li>
+                <li><a href="../../cookbook.html">Cookbook</a></li>
+                <li><a href="../../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for fatiando.datasets</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Load datasets from the internet.</span>
+
+<span class="sd">**CRUST2.0**</span>
+
+<span class="sd">Load and convert the `CRUST2.0 global crustal model</span>
+<span class="sd">&lt;http://igppweb.ucsd.edu/~gabi/rem.html&gt;`_ (Bassin et al., 2000).</span>
+
+<span class="sd">* :func:`~fatiando.datasets.fetch_crust2`: Download the .tar.gz archive with</span>
+<span class="sd">  the model from the website</span>
+<span class="sd">* :func:`~fatiando.datasets.crust2_to_tesseroids`: Convert the CRUST2.0 model</span>
+<span class="sd">  to tesseroids</span>
+
+<span class="sd">**Sample data**</span>
+
+<span class="sd">Download a `Bouguer anomaly map of Alps (EGM 2008 model)</span>
+<span class="sd">&lt;https://gist.github.com/leouieda/6023922&gt;`_ in Surfer ASCII grid file format.</span>
+
+<span class="sd">* :func:`~fatiando.io.fetch_bouguer_alps_egm`: Download the .grd archive with</span>
+<span class="sd">  the Bouguer anomaly of Alps (EGM 2008 model) from the website</span>
+
+<span class="sd">**References**</span>
+
+<span class="sd">Bassin, C., Laske, G. and Masters, G., The Current Limits of Resolution for</span>
+<span class="sd">Surface Wave Tomography in North America, EOS Trans AGU, 81, F897, 2000.</span>
+
+<span class="sd">----</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">urllib</span>
+<span class="kn">import</span> <span class="nn">tarfile</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">gridder</span>
+<span class="kn">from</span> <span class="nn">.mesher</span> <span class="kn">import</span> <span class="n">Tesseroid</span>
+
+
+<div class="viewcode-block" id="fetch_crust2"><a class="viewcode-back" href="../../api/datasets.html#fatiando.datasets.fetch_crust2">[docs]</a><span class="k">def</span> <span class="nf">fetch_crust2</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s">&#39;crust2.tar.gz&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download the CRUST2.0 model from http://igppweb.ucsd.edu/~gabi/crust2.html</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * fname : str</span>
+<span class="sd">        The name that the archive file will be saved when downloaded</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * fname : str</span>
+<span class="sd">        The downloaded file name</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">urllib</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="s">&#39;http://igpppublic.ucsd.edu/~gabi/ftp/crust2.tar.gz&#39;</span><span class="p">,</span>
+                       <span class="n">filename</span><span class="o">=</span><span class="n">fname</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fname</span>
+
+</div>
+<div class="viewcode-block" id="crust2_to_tesseroids"><a class="viewcode-back" href="../../api/datasets.html#fatiando.datasets.crust2_to_tesseroids">[docs]</a><span class="k">def</span> <span class="nf">crust2_to_tesseroids</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert the CRUST2.0 model to tesseroids.</span>
+
+<span class="sd">    Opens the .tar.gz archive and converts the model to</span>
+<span class="sd">    :class:`fatiando.mesher.Tesseroid`.</span>
+<span class="sd">    Each tesseroid will have its ``props`` set to the apropriate Vp, Vs and</span>
+<span class="sd">    density.</span>
+
+<span class="sd">    The CRUST2.0 model includes 7 layers: ice, water, soft sediments, hard</span>
+<span class="sd">    sediments, upper crust, middle curst and lower crust. It also includes the</span>
+<span class="sd">    mantle below the Moho. The mantle portion is not included in this</span>
+<span class="sd">    conversion because there is no way to place a bottom on it.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * fname : str</span>
+<span class="sd">        Name of the model .tar.gz archive (see</span>
+<span class="sd">        :func:`~fatiando.io.fetch_crust2`)</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * model : list of :class:`fatiando.mesher.Tesseroid`</span>
+<span class="sd">        The converted model</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">archive</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s">&#39;r:gz&#39;</span><span class="p">)</span>
+    <span class="c"># First get the topography and bathymetry information</span>
+    <span class="n">topogrd</span> <span class="o">=</span> <span class="n">_crust2_get_topo</span><span class="p">(</span><span class="n">archive</span><span class="p">)</span>
+    <span class="c"># Now make a dict with the codec for each type code</span>
+    <span class="n">codec</span> <span class="o">=</span> <span class="n">_crust2_get_codec</span><span class="p">(</span><span class="n">archive</span><span class="p">)</span>
+    <span class="c"># Get the type codes with the actual model</span>
+    <span class="n">types</span> <span class="o">=</span> <span class="n">_crust2_get_types</span><span class="p">(</span><span class="n">archive</span><span class="p">)</span>
+    <span class="c"># Convert to tesseroids</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">lons</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+    <span class="n">lats</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="n">size</span><span class="p">)</span>  <span class="c"># This is how lats are in the file</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lats</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lons</span><span class="p">)):</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">types</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">top</span> <span class="o">=</span> <span class="n">topogrd</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">7</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">codec</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="s">&#39;thickness&#39;</span><span class="p">][</span><span class="n">layer</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">w</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">lons</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">lons</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">size</span><span class="p">,</span> <span class="n">lats</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">size</span><span class="p">,</span> <span class="n">lats</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">bottom</span> <span class="o">=</span> <span class="n">top</span> <span class="o">-</span> <span class="n">codec</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="s">&#39;thickness&#39;</span><span class="p">][</span><span class="n">layer</span><span class="p">]</span>
+                <span class="n">props</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;density&#39;</span><span class="p">:</span> <span class="n">codec</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="s">&#39;density&#39;</span><span class="p">][</span><span class="n">layer</span><span class="p">],</span>
+                         <span class="s">&#39;vp&#39;</span><span class="p">:</span> <span class="n">codec</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="s">&#39;vp&#39;</span><span class="p">][</span><span class="n">layer</span><span class="p">],</span>
+                         <span class="s">&#39;vs&#39;</span><span class="p">:</span> <span class="n">codec</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="s">&#39;vs&#39;</span><span class="p">][</span><span class="n">layer</span><span class="p">]}</span>
+                <span class="n">model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Tesseroid</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">props</span><span class="p">))</span>
+                <span class="n">top</span> <span class="o">=</span> <span class="n">bottom</span>
+    <span class="k">return</span> <span class="n">model</span>
+
+</div>
+<span class="k">def</span> <span class="nf">_crust2_get_topo</span><span class="p">(</span><span class="n">archive</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetch the matrix of topography and bathymetry from the CRUST2.0 archive.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">archive</span><span class="o">.</span><span class="n">extractfile</span><span class="p">(</span><span class="s">&#39;./CNelevatio2.txt&#39;</span><span class="p">)</span>
+    <span class="n">topogrd</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">:]</span>
+    <span class="k">return</span> <span class="n">topogrd</span>
+
+
+<span class="k">def</span> <span class="nf">_crust2_get_types</span><span class="p">(</span><span class="n">archive</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetch a matrix with the type code for each 2x2 degree cell.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">archive</span><span class="o">.</span><span class="n">extractfile</span><span class="p">(</span><span class="s">&#39;./CNtype2.txt&#39;</span><span class="p">)</span>
+    <span class="n">typegrd</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">str</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">:]</span>
+    <span class="k">return</span> <span class="n">typegrd</span>
+
+
+<span class="k">def</span> <span class="nf">_crust2_get_codec</span><span class="p">(</span><span class="n">archive</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetch the type code traslation codec from the archive and convert it to a</span>
+<span class="sd">    dict.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">archive</span><span class="o">.</span><span class="n">extractfile</span><span class="p">(</span><span class="s">&#39;./CNtype2_key.txt&#39;</span><span class="p">)</span>
+    <span class="c"># Skip the first 5 lines which are the header</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()[</span><span class="mi">5</span><span class="p">:]</span> <span class="k">if</span> <span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+    <span class="c"># Each type code is 5 lines: code, vp, vs, density, thickness</span>
+    <span class="n">codec</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">/</span> <span class="mi">5</span><span class="p">):</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">5</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="c"># Get the values and convert them to SI units</span>
+        <span class="n">vp</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+        <span class="n">vs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+        <span class="c"># Skip the last thickness because it is an inf indicating the mantle</span>
+        <span class="n">thickness</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="mi">7</span><span class="p">]]</span>
+        <span class="n">codec</span><span class="p">[</span><span class="n">code</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;vp&#39;</span><span class="p">:</span> <span class="n">vp</span><span class="p">,</span> <span class="s">&#39;vs&#39;</span><span class="p">:</span> <span class="n">vs</span><span class="p">,</span> <span class="s">&#39;density&#39;</span><span class="p">:</span> <span class="n">density</span><span class="p">,</span>
+                       <span class="s">&#39;thickness&#39;</span><span class="p">:</span> <span class="n">thickness</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">codec</span>
+
+
+<div class="viewcode-block" id="fetch_bouguer_alps_egm"><a class="viewcode-back" href="../../api/datasets.html#fatiando.datasets.fetch_bouguer_alps_egm">[docs]</a><span class="k">def</span> <span class="nf">fetch_bouguer_alps_egm</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s">&#39;bouguer_alps_egm08.grd&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download the Bouguer anomaly of Alps (EGM 2008 model) in Surfer ASCII grid</span>
+<span class="sd">    file format from https://gist.github.com/leouieda/6023922</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * fname : str</span>
+<span class="sd">        The name that the archive file will be saved when downloaded</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * fname : str</span>
+<span class="sd">        The downloaded file name</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">urllib</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="s">&#39;https://gist.github.com/leouieda/6023922/raw/&#39;</span>
+                       <span class="s">&#39;948b0acbadb18e6ad49efe2092d9d9518b247780/&#39;</span>
+                       <span class="s">&#39;bouguer_alps_egm08.grd&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">fname</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fname</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

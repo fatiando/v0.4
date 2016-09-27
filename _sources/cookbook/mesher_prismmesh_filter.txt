@@ -1,0 +1,10 @@
+.. _cookbook_mesher_prismmesh_filter:
+
+Meshing: Filter prisms from a 3D prism mesh based on their physical properties
+===============================================================================
+
+
+**Download** source code: :download:`mesher_prismmesh_filter.py<../_static/cookbook/mesher_prismmesh_filter.py>`
+
+.. literalinclude:: ../_static/cookbook/mesher_prismmesh_filter.py
+    :language: python

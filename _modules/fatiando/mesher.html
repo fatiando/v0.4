@@ -1,0 +1,1880 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fatiando.mesher &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html"><img src="../../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../install.html">Installing</a></li>
+                <li><a href="../../docs.html">Documentation</a></li>
+                <li><a href="../../cookbook.html">Cookbook</a></li>
+                <li><a href="../../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for fatiando.mesher</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Generate and operate on various kinds of meshes and geometric elements</span>
+
+<span class="sd">**Geometric elements**</span>
+
+<span class="sd">* :class:`~fatiando.mesher.Polygon`</span>
+<span class="sd">* :class:`~fatiando.mesher.Square`</span>
+<span class="sd">* :class:`~fatiando.mesher.Prism`</span>
+<span class="sd">* :class:`~fatiando.mesher.PolygonalPrism`</span>
+<span class="sd">* :class:`~fatiando.mesher.Sphere`</span>
+<span class="sd">* :class:`~fatiando.mesher.Tesseroid`</span>
+
+<span class="sd">**Meshes**</span>
+
+<span class="sd">* :class:`~fatiando.mesher.SquareMesh`</span>
+<span class="sd">* :class:`~fatiando.mesher.PrismMesh`</span>
+<span class="sd">* :class:`~fatiando.mesher.PrismRelief`</span>
+<span class="sd">* :class:`~fatiando.mesher.TesseroidMesh`</span>
+<span class="sd">* :class:`~fatiando.mesher.PointGrid`</span>
+
+<span class="sd">**Utility functions**</span>
+
+<span class="sd">* :func:`~fatiando.mesher.extract`: Extract the values of a physical</span>
+<span class="sd">  property from the cells in a list</span>
+<span class="sd">* :func:`~fatiando.mesher.vfilter`: Remove cells whose physical property</span>
+<span class="sd">  value falls outside a given range</span>
+<span class="sd">* :func:`~fatiando.mesher.vremove`: Remove the cells with a given physical</span>
+<span class="sd">  property value</span>
+
+<span class="sd">----</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">scipy.special</span>
+<span class="kn">import</span> <span class="nn">scipy.interpolate</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">gridder</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utils</span>
+
+
+<div class="viewcode-block" id="GeometricElement"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.GeometricElement">[docs]</a><span class="k">class</span> <span class="nc">GeometricElement</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class for all geometric elements.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">props</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">props</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">props</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">props</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+
+<div class="viewcode-block" id="GeometricElement.addprop"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.GeometricElement.addprop">[docs]</a>    <span class="k">def</span> <span class="nf">addprop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a physical property to this geometric element.</span>
+
+<span class="sd">        If it already has the property, the given value will overwrite the</span>
+<span class="sd">        existing one.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * prop : str</span>
+<span class="sd">            Name of the physical property.</span>
+<span class="sd">        * value : float</span>
+<span class="sd">            The value of this physical property.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+</div></div>
+<div class="viewcode-block" id="Polygon"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.Polygon">[docs]</a><span class="k">class</span> <span class="nc">Polygon</span><span class="p">(</span><span class="n">GeometricElement</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a polygon object.</span>
+
+<span class="sd">    .. note:: Most applications require the vertices to be **clockwise**!</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * vertices : list of lists</span>
+<span class="sd">        List of [x, y] pairs with the coordinates of the vertices.</span>
+<span class="sd">    * props : dict</span>
+<span class="sd">        Physical properties assigned to the polygon.</span>
+<span class="sd">        Ex: ``props={&#39;density&#39;:10, &#39;susceptibility&#39;:10000}``</span>
+
+<span class="sd">    Examples::</span>
+
+<span class="sd">        &gt;&gt;&gt; poly = Polygon([[0, 0], [1, 4], [2, 5]], {&#39;density&#39;: 500})</span>
+<span class="sd">        &gt;&gt;&gt; poly.props</span>
+<span class="sd">        {&#39;density&#39;: 500}</span>
+<span class="sd">        &gt;&gt;&gt; poly.nverts</span>
+<span class="sd">        3</span>
+<span class="sd">        &gt;&gt;&gt; poly.vertices</span>
+<span class="sd">        array([[0, 0],</span>
+<span class="sd">               [1, 4],</span>
+<span class="sd">               [2, 5]])</span>
+<span class="sd">        &gt;&gt;&gt; poly.x</span>
+<span class="sd">        array([0, 1, 2])</span>
+<span class="sd">        &gt;&gt;&gt; poly.y</span>
+<span class="sd">        array([0, 4, 5])</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Polygon</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">props</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nverts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+</div>
+<div class="viewcode-block" id="Square"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.Square">[docs]</a><span class="k">class</span> <span class="nc">Square</span><span class="p">(</span><span class="n">Polygon</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a square object.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * bounds : list = [x1, x2, y1, y2]</span>
+<span class="sd">        Coordinates of the top right and bottom left corners of the square</span>
+<span class="sd">    * props : dict</span>
+<span class="sd">        Physical properties assigned to the square.</span>
+<span class="sd">        Ex: ``props={&#39;density&#39;:10, &#39;slowness&#39;:10000}``</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        &gt;&gt;&gt; sq = Square([0, 1, 2, 4], {&#39;density&#39;: 750})</span>
+<span class="sd">        &gt;&gt;&gt; sq.bounds</span>
+<span class="sd">        [0, 1, 2, 4]</span>
+<span class="sd">        &gt;&gt;&gt; sq.x1</span>
+<span class="sd">        0</span>
+<span class="sd">        &gt;&gt;&gt; sq.x2</span>
+<span class="sd">        1</span>
+<span class="sd">        &gt;&gt;&gt; sq.props</span>
+<span class="sd">        {&#39;density&#39;: 750}</span>
+<span class="sd">        &gt;&gt;&gt; sq.addprop(&#39;magnetization&#39;, 100)</span>
+<span class="sd">        &gt;&gt;&gt; sq.props[&#39;magnetization&#39;]</span>
+<span class="sd">        100</span>
+
+<span class="sd">    A square can be used as a :class:`~fatiando.mesher.Polygon`::</span>
+
+<span class="sd">        &gt;&gt;&gt; sq.vertices</span>
+<span class="sd">        array([[0, 2],</span>
+<span class="sd">               [1, 2],</span>
+<span class="sd">               [1, 4],</span>
+<span class="sd">               [0, 4]])</span>
+<span class="sd">        &gt;&gt;&gt; sq.x</span>
+<span class="sd">        array([0, 1, 1, 0])</span>
+<span class="sd">        &gt;&gt;&gt; sq.y</span>
+<span class="sd">        array([2, 2, 4, 4])</span>
+<span class="sd">        &gt;&gt;&gt; sq.nverts</span>
+<span class="sd">        4</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Square</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y2</span> <span class="o">=</span> <span class="n">bounds</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The x, y boundaries of the square as [xmin, xmax, ymin, ymax]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">x1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y2</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The vertices of the square.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">verts</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">x1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y1</span><span class="p">],</span>
+             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">x2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y1</span><span class="p">],</span>
+             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">x2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y2</span><span class="p">],</span>
+             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">x1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y2</span><span class="p">]])</span>
+        <span class="k">return</span> <span class="n">verts</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a string representation of the square.&quot;&quot;&quot;</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;x1&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x1</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;x2&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x2</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;y1&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y1</span><span class="p">),</span>
+                 <span class="p">(</span><span class="s">&#39;y2&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y2</span><span class="p">)]</span>
+        <span class="n">names</span><span class="o">.</span><span class="n">extend</span><span class="p">((</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s">&#39; | &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">:</span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">names</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="SquareMesh"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.SquareMesh">[docs]</a><span class="k">class</span> <span class="nc">SquareMesh</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a 2D regular mesh of squares.</span>
+
+<span class="sd">    For all purposes, :class:`~fatiando.mesher.SquareMesh` can be used as a</span>
+<span class="sd">    list of :class:`~fatiando.mesher.Square`. The order of the squares in the</span>
+<span class="sd">    list is: x directions varies first, then y.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * bounds :  list = [x1, x2, y1, y2]</span>
+<span class="sd">        Boundaries of the mesh</span>
+<span class="sd">    * shape : tuple = (ny, nx)</span>
+<span class="sd">        Number of squares in the y and x dimension, respectively</span>
+<span class="sd">    * props : dict</span>
+<span class="sd">        Physical properties of each square in the mesh.</span>
+<span class="sd">        Each key should be the name of a physical property. The corresponding</span>
+<span class="sd">        value should be a list with the values of that particular property on</span>
+<span class="sd">        each square of the mesh.</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">        &gt;&gt;&gt; mesh = SquareMesh((0, 4, 0, 6), (2, 2))</span>
+<span class="sd">        &gt;&gt;&gt; for s in mesh:</span>
+<span class="sd">        ...     print s</span>
+<span class="sd">        x1:0 | x2:2 | y1:0 | y2:3</span>
+<span class="sd">        x1:2 | x2:4 | y1:0 | y2:3</span>
+<span class="sd">        x1:0 | x2:2 | y1:3 | y2:6</span>
+<span class="sd">        x1:2 | x2:4 | y1:3 | y2:6</span>
+<span class="sd">        &gt;&gt;&gt; print mesh[1]</span>
+<span class="sd">        x1:2 | x2:4 | y1:0 | y2:3</span>
+<span class="sd">        &gt;&gt;&gt; print mesh[-1]</span>
+<span class="sd">        x1:2 | x2:4 | y1:3 | y2:6</span>
+
+<span class="sd">    With physical properties::</span>
+
+<span class="sd">        &gt;&gt;&gt; mesh = SquareMesh((0, 4, 0, 6), (2, 1), {&#39;slowness&#39;:[3.4, 8.6]})</span>
+<span class="sd">        &gt;&gt;&gt; for s in mesh:</span>
+<span class="sd">        ...     print s</span>
+<span class="sd">        x1:0 | x2:4 | y1:0 | y2:3 | slowness:3.4</span>
+<span class="sd">        x1:0 | x2:4 | y1:3 | y2:6 | slowness:8.6</span>
+
+<span class="sd">    Or::</span>
+
+<span class="sd">        &gt;&gt;&gt; mesh = SquareMesh((0, 4, 0, 6), (2, 1))</span>
+<span class="sd">        &gt;&gt;&gt; mesh.addprop(&#39;slowness&#39;, [3.4, 8.6])</span>
+<span class="sd">        &gt;&gt;&gt; for s in mesh:</span>
+<span class="sd">        ...     print s</span>
+<span class="sd">        x1:0 | x2:4 | y1:0 | y2:3 | slowness:3.4</span>
+<span class="sd">        x1:0 | x2:4 | y1:3 | y2:6 | slowness:8.6</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="nb">object</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">shape</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nx</span> <span class="o">*</span> <span class="n">ny</span><span class="p">)</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">bounds</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span><span class="o">/</span><span class="n">nx</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span><span class="o">/</span><span class="n">ny</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">shape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">)</span>
+        <span class="c"># props has to be None, not {} by default because {} would be permanent</span>
+        <span class="c"># for all instaces of the class (like a class variable) and changes</span>
+        <span class="c"># to one instace would lead to changes in another (and a huge mess)</span>
+        <span class="k">if</span> <span class="n">props</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">props</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">props</span> <span class="o">=</span> <span class="n">props</span>
+        <span class="c"># The index of the current square in an iteration. Needed when mesh is</span>
+        <span class="c"># used as an iterator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c"># List of masked squares. Will return None if trying to access them</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="c"># To walk backwards in the list</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="n">index</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">index</span><span class="o">//</span><span class="n">nx</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">index</span> <span class="o">-</span> <span class="n">j</span><span class="o">*</span><span class="n">nx</span>
+        <span class="n">x1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">i</span>
+        <span class="n">x2</span> <span class="o">=</span> <span class="n">x1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">y1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">j</span>
+        <span class="n">y2</span> <span class="o">=</span> <span class="n">y1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">props</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">index</span><span class="p">]]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Square</span><span class="p">((</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">),</span> <span class="n">props</span><span class="o">=</span><span class="n">props</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span>
+        <span class="n">square</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">square</span>
+
+<div class="viewcode-block" id="SquareMesh.addprop"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.SquareMesh.addprop">[docs]</a>    <span class="k">def</span> <span class="nf">addprop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add physical property values to the cells in the mesh.</span>
+
+<span class="sd">        Different physical properties of the mesh are stored in a dictionary.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * prop : str</span>
+<span class="sd">            Name of the physical property</span>
+<span class="sd">        * values : list or array</span>
+<span class="sd">            The value of this physical property in each square of the mesh.</span>
+<span class="sd">            For the ordering of squares in the mesh see</span>
+<span class="sd">            :class:`~fatiando.mesher.SquareMesh`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span>
+</div>
+<div class="viewcode-block" id="SquareMesh.img2prop"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.SquareMesh.img2prop">[docs]</a>    <span class="k">def</span> <span class="nf">img2prop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">prop</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load the physical property value from an image file.</span>
+
+<span class="sd">        The image is converted to gray scale and the gray intensity of each</span>
+<span class="sd">        pixel is used to set the value of the physical property of the</span>
+<span class="sd">        cells in the mesh. Gray intensity values are scaled to the range</span>
+<span class="sd">        ``[vmin, vmax]``.</span>
+
+<span class="sd">        If the shape of image (number of pixels in y and x) is different from</span>
+<span class="sd">        the shape of the mesh, the image will be interpolated to match the</span>
+<span class="sd">        shape of the mesh.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * fname : str</span>
+<span class="sd">            Name of the image file</span>
+<span class="sd">        * vmax, vmin : float</span>
+<span class="sd">            Range of physical property values (used to convert the gray scale</span>
+<span class="sd">            to physical property values)</span>
+<span class="sd">        * prop : str</span>
+<span class="sd">            Name of the physical property</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">fromimage</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">ranges</span><span class="o">=</span><span class="p">[</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">],</span>
+                                           <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="SquareMesh.get_xs"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.SquareMesh.get_xs">[docs]</a>    <span class="k">def</span> <span class="nf">get_xs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a list of the x coordinates of the corners of the cells in the</span>
+<span class="sd">        mesh.</span>
+
+<span class="sd">        If the mesh has nx cells, get_xs() will return nx + 1 values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span>
+        <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">xs</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="s">&#39;f&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span> <span class="o">==</span> <span class="n">nx</span> <span class="o">+</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">xs</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span> <span class="o">==</span> <span class="n">nx</span><span class="p">:</span>
+            <span class="n">xs</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">xs</span>
+</div>
+<div class="viewcode-block" id="SquareMesh.get_ys"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.SquareMesh.get_ys">[docs]</a>    <span class="k">def</span> <span class="nf">get_ys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a list of the y coordinates of the corners of the cells in the</span>
+<span class="sd">        mesh.</span>
+
+<span class="sd">        If the mesh has ny cells, get_ys() will return ny + 1 values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span>
+        <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="s">&#39;f&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span> <span class="o">==</span> <span class="n">ny</span> <span class="o">+</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ys</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span> <span class="o">==</span> <span class="n">ny</span><span class="p">:</span>
+            <span class="n">ys</span> <span class="o">=</span> <span class="n">ys</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">ys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y2</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ys</span>
+
+</div></div>
+<div class="viewcode-block" id="Prism"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.Prism">[docs]</a><span class="k">class</span> <span class="nc">Prism</span><span class="p">(</span><span class="n">GeometricElement</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a 3D right rectangular prism.</span>
+
+<span class="sd">    .. note:: The coordinate system used is x -&gt; North, y -&gt; East and z -&gt; Down</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * x1, x2 : float</span>
+<span class="sd">        South and north borders of the prism</span>
+<span class="sd">    * y1, y2 : float</span>
+<span class="sd">        West and east borders of the prism</span>
+<span class="sd">    * z1, z2 : float</span>
+<span class="sd">        Top and bottom of the prism</span>
+<span class="sd">    * props : dict</span>
+<span class="sd">        Physical properties assigned to the prism.</span>
+<span class="sd">        Ex: ``props={&#39;density&#39;:10, &#39;magnetization&#39;:10000}``</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">        &gt;&gt;&gt; from fatiando.mesher import Prism</span>
+<span class="sd">        &gt;&gt;&gt; p = Prism(1, 2, 3, 4, 5, 6, {&#39;density&#39;:200})</span>
+<span class="sd">        &gt;&gt;&gt; p.props[&#39;density&#39;]</span>
+<span class="sd">        200</span>
+<span class="sd">        &gt;&gt;&gt; print p.get_bounds()</span>
+<span class="sd">        [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]</span>
+<span class="sd">        &gt;&gt;&gt; print p</span>
+<span class="sd">        x1:1 | x2:2 | y1:3 | y2:4 | z1:5 | z2:6 | density:200</span>
+<span class="sd">        &gt;&gt;&gt; p = Prism(1, 2, 3, 4, 5, 6)</span>
+<span class="sd">        &gt;&gt;&gt; print p</span>
+<span class="sd">        x1:1 | x2:2 | y1:3 | y2:4 | z1:5 | z2:6</span>
+<span class="sd">        &gt;&gt;&gt; p.addprop(&#39;density&#39;, 2670)</span>
+<span class="sd">        &gt;&gt;&gt; print p</span>
+<span class="sd">        x1:1 | x2:2 | y1:3 | y2:4 | z1:5 | z2:6 | density:2670</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">GeometricElement</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x1</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y1</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">y1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">y2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z1</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">z1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">z2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a string representation of the prism.&quot;&quot;&quot;</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;x1&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x1</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;x2&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x2</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;y1&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y1</span><span class="p">),</span>
+                 <span class="p">(</span><span class="s">&#39;y2&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y2</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;z1&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z1</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;z2&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z2</span><span class="p">)]</span>
+        <span class="n">names</span><span class="o">.</span><span class="n">extend</span><span class="p">((</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s">&#39; | &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">:</span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">names</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Prism.get_bounds"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.Prism.get_bounds">[docs]</a>    <span class="k">def</span> <span class="nf">get_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the bounding box of the prism (i.e., the borders of the prism).</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * bounds : list</span>
+<span class="sd">            ``[x1, x2, y1, y2, z1, z2]``, the bounds of the prism</span>
+
+<span class="sd">        Examples:</span>
+
+<span class="sd">            &gt;&gt;&gt; p = Prism(1, 2, 3, 4, 5, 6)</span>
+<span class="sd">            &gt;&gt;&gt; print p.get_bounds()</span>
+<span class="sd">            [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">x1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z2</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="Prism.center"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.Prism.center">[docs]</a>    <span class="k">def</span> <span class="nf">center</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the coordinates of the center of the prism.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * coords : list = [xc, yc, zc]</span>
+<span class="sd">            Coordinates of the center</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">            &gt;&gt;&gt; prism = Prism(1, 2, 1, 3, 0, 2)</span>
+<span class="sd">            &gt;&gt;&gt; print prism.center()</span>
+<span class="sd">            [ 1.5  2.   1. ]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">xc</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x2</span><span class="p">)</span>
+        <span class="n">yc</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y2</span><span class="p">)</span>
+        <span class="n">zc</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">z2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">xc</span><span class="p">,</span> <span class="n">yc</span><span class="p">,</span> <span class="n">zc</span><span class="p">])</span>
+
+</div></div>
+<div class="viewcode-block" id="Tesseroid"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.Tesseroid">[docs]</a><span class="k">class</span> <span class="nc">Tesseroid</span><span class="p">(</span><span class="n">GeometricElement</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a tesseroid (spherical prism).</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * w, e : float</span>
+<span class="sd">        West and east borders of the tesseroid in decimal degrees</span>
+<span class="sd">    * s, n : float</span>
+<span class="sd">        South and north borders of the tesseroid in decimal degrees</span>
+<span class="sd">    * top, bottom : float</span>
+<span class="sd">        Bottom and top of the tesseroid with respect to the mean earth radius</span>
+<span class="sd">        in meters. Ex: if the top is 100 meters above the mean earth radius,</span>
+<span class="sd">        ``top=100``, if 100 meters below ``top=-100``.</span>
+<span class="sd">    * props : dict</span>
+<span class="sd">        Physical properties assigned to the tesseroid.</span>
+<span class="sd">        Ex: ``props={&#39;density&#39;:10, &#39;magnetization&#39;:10000}``</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">        &gt;&gt;&gt; from fatiando.mesher import Tesseroid</span>
+<span class="sd">        &gt;&gt;&gt; t = Tesseroid(1, 2, 3, 4, 6, 5, {&#39;density&#39;:200})</span>
+<span class="sd">        &gt;&gt;&gt; t.props[&#39;density&#39;]</span>
+<span class="sd">        200</span>
+<span class="sd">        &gt;&gt;&gt; print t.get_bounds()</span>
+<span class="sd">        [1.0, 2.0, 3.0, 4.0, 6.0, 5.0]</span>
+<span class="sd">        &gt;&gt;&gt; print t</span>
+<span class="sd">        w:1 | e:2 | s:3 | n:4 | top:6 | bottom:5 | density:200</span>
+<span class="sd">        &gt;&gt;&gt; t = Tesseroid(1, 2, 3, 4, 6, 5)</span>
+<span class="sd">        &gt;&gt;&gt; print t</span>
+<span class="sd">        w:1 | e:2 | s:3 | n:4 | top:6 | bottom:5</span>
+<span class="sd">        &gt;&gt;&gt; t.addprop(&#39;density&#39;, 2670)</span>
+<span class="sd">        &gt;&gt;&gt; print t</span>
+<span class="sd">        w:1 | e:2 | s:3 | n:4 | top:6 | bottom:5 | density:2670</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">GeometricElement</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">bottom</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">top</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a string representation of the tesseroid.&quot;&quot;&quot;</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;e&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">),</span>
+                 <span class="p">(</span><span class="s">&#39;n&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;top&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;bottom&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span><span class="p">)]</span>
+        <span class="n">names</span><span class="o">.</span><span class="n">extend</span><span class="p">((</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s">&#39; | &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">:</span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">names</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Tesseroid.get_bounds"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.Tesseroid.get_bounds">[docs]</a>    <span class="k">def</span> <span class="nf">get_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the bounding box of the tesseroid (i.e., the borders).</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * bounds : list</span>
+<span class="sd">            ``[w, e, s, n, top, bottom]``, the bounds of the tesseroid</span>
+
+<span class="sd">        Examples:</span>
+
+<span class="sd">            &gt;&gt;&gt; t = Tesseroid(1, 2, 3, 4, 6, 5)</span>
+<span class="sd">            &gt;&gt;&gt; print t.get_bounds()</span>
+<span class="sd">            [1.0, 2.0, 3.0, 4.0, 6.0, 5.0]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="Tesseroid.half"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.Tesseroid.half">[docs]</a>    <span class="k">def</span> <span class="nf">half</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Divide the tesseroid in 2 halfs for each dimension (total 8)</span>
+
+<span class="sd">        The smaller tesseroids will share the large one&#39;s props.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * lon, lat, r : True or False</span>
+<span class="sd">            Dimensions along which the tesseroid will be split in half.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * tesseroids : list</span>
+<span class="sd">            A list of maximum 8 tesseroids that make up the larger one.</span>
+
+<span class="sd">        Examples::</span>
+
+<span class="sd">            &gt;&gt;&gt; tess = Tesseroid(-10, 10, -20, 20, 0, -40, {&#39;density&#39;:2})</span>
+<span class="sd">            &gt;&gt;&gt; split = tess.half()</span>
+<span class="sd">            &gt;&gt;&gt; print len(split)</span>
+<span class="sd">            8</span>
+<span class="sd">            &gt;&gt;&gt; for t in split:</span>
+<span class="sd">            ...     print t</span>
+<span class="sd">            w:-10 | e:0 | s:-20 | n:0 | top:-20 | bottom:-40 | density:2</span>
+<span class="sd">            w:-10 | e:0 | s:-20 | n:0 | top:0 | bottom:-20 | density:2</span>
+<span class="sd">            w:-10 | e:0 | s:0 | n:20 | top:-20 | bottom:-40 | density:2</span>
+<span class="sd">            w:-10 | e:0 | s:0 | n:20 | top:0 | bottom:-20 | density:2</span>
+<span class="sd">            w:0 | e:10 | s:-20 | n:0 | top:-20 | bottom:-40 | density:2</span>
+<span class="sd">            w:0 | e:10 | s:-20 | n:0 | top:0 | bottom:-20 | density:2</span>
+<span class="sd">            w:0 | e:10 | s:0 | n:20 | top:-20 | bottom:-40 | density:2</span>
+<span class="sd">            w:0 | e:10 | s:0 | n:20 | top:0 | bottom:-20 | density:2</span>
+<span class="sd">            &gt;&gt;&gt; tess = Tesseroid(-15, 15, -20, 20, 0, -40)</span>
+<span class="sd">            &gt;&gt;&gt; split = tess.half(lat=False)</span>
+<span class="sd">            &gt;&gt;&gt; print len(split)</span>
+<span class="sd">            4</span>
+<span class="sd">            &gt;&gt;&gt; for t in split:</span>
+<span class="sd">            ...     print t</span>
+<span class="sd">            w:-15 | e:0 | s:-20 | n:20 | top:-20 | bottom:-40</span>
+<span class="sd">            w:-15 | e:0 | s:-20 | n:20 | top:0 | bottom:-20</span>
+<span class="sd">            w:0 | e:15 | s:-20 | n:20 | top:-20 | bottom:-40</span>
+<span class="sd">            w:0 | e:15 | s:-20 | n:20 | top:0 | bottom:-20</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dlon</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">)</span>
+        <span class="n">dlat</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">dh</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span><span class="p">)</span>
+        <span class="n">wests</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">+</span> <span class="n">dlon</span><span class="p">]</span>
+        <span class="n">souths</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">+</span> <span class="n">dlat</span><span class="p">]</span>
+        <span class="n">bottoms</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bottom</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span> <span class="o">+</span> <span class="n">dh</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">lon</span><span class="p">:</span>
+            <span class="n">dlon</span> <span class="o">*=</span> <span class="mi">2</span>
+            <span class="n">wests</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">lat</span><span class="p">:</span>
+            <span class="n">dlat</span> <span class="o">*=</span> <span class="mi">2</span>
+            <span class="n">souths</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">r</span><span class="p">:</span>
+            <span class="n">dh</span> <span class="o">*=</span> <span class="mi">2</span>
+            <span class="n">bottoms</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="n">split</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Tesseroid</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">dlon</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">dlat</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="n">dh</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">wests</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">souths</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">bottoms</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">split</span>
+</div>
+<div class="viewcode-block" id="Tesseroid.split"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.Tesseroid.split">[docs]</a>    <span class="k">def</span> <span class="nf">split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nlon</span><span class="p">,</span> <span class="n">nlat</span><span class="p">,</span> <span class="n">nh</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Split the tesseroid into smaller ones.</span>
+
+<span class="sd">        The smaller tesseroids will share the large one&#39;s props.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * nlon, nlat, nh : int</span>
+<span class="sd">            The number of sections to split in the longitudinal, latitudinal,</span>
+<span class="sd">            and vertical dimensions</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * tesseroids : list</span>
+<span class="sd">            A list of nlon*nlat*nh tesseroids that make up the larger one.</span>
+
+
+<span class="sd">        Examples::</span>
+
+<span class="sd">            &gt;&gt;&gt; tess = Tesseroid(-10, 10, -20, 20, 0, -40, {&#39;density&#39;:2})</span>
+<span class="sd">            &gt;&gt;&gt; split = tess.split(1, 2, 2)</span>
+<span class="sd">            &gt;&gt;&gt; print len(split)</span>
+<span class="sd">            4</span>
+<span class="sd">            &gt;&gt;&gt; for t in split:</span>
+<span class="sd">            ...     print t</span>
+<span class="sd">            w:-10 | e:10 | s:-20 | n:0 | top:-20 | bottom:-40 | density:2</span>
+<span class="sd">            w:-10 | e:10 | s:-20 | n:0 | top:0 | bottom:-20 | density:2</span>
+<span class="sd">            w:-10 | e:10 | s:0 | n:20 | top:-20 | bottom:-40 | density:2</span>
+<span class="sd">            w:-10 | e:10 | s:0 | n:20 | top:0 | bottom:-20 | density:2</span>
+<span class="sd">            &gt;&gt;&gt; tess = Tesseroid(-15, 15, -20, 20, 0, -40)</span>
+<span class="sd">            &gt;&gt;&gt; split = tess.split(3, 1, 1)</span>
+<span class="sd">            &gt;&gt;&gt; print len(split)</span>
+<span class="sd">            3</span>
+<span class="sd">            &gt;&gt;&gt; for t in split:</span>
+<span class="sd">            ...     print t</span>
+<span class="sd">            w:-15 | e:-5 | s:-20 | n:20 | top:0 | bottom:-40</span>
+<span class="sd">            w:-5 | e:5 | s:-20 | n:20 | top:0 | bottom:-40</span>
+<span class="sd">            w:5 | e:15 | s:-20 | n:20 | top:0 | bottom:-40</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">wests</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="n">nlon</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">souths</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">nlat</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">bottoms</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bottom</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">,</span> <span class="n">nh</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">dlon</span> <span class="o">=</span> <span class="n">wests</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">wests</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dlat</span> <span class="o">=</span> <span class="n">souths</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">souths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dh</span> <span class="o">=</span> <span class="n">bottoms</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">bottoms</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">tesseroids</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Tesseroid</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">dlon</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">dlat</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="n">dh</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">wests</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">souths</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">bottoms</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="n">tesseroids</span>
+
+</div></div>
+<div class="viewcode-block" id="Sphere"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.Sphere">[docs]</a><span class="k">class</span> <span class="nc">Sphere</span><span class="p">(</span><span class="n">GeometricElement</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a sphere.</span>
+
+<span class="sd">    .. note:: The coordinate system used is x -&gt; North, y -&gt; East and z -&gt; Down</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * x, y, z : float</span>
+<span class="sd">        The coordinates of the center of the sphere</span>
+<span class="sd">    * radius : float</span>
+<span class="sd">        The radius of the sphere</span>
+<span class="sd">    * props : dict</span>
+<span class="sd">        Physical properties assigned to the prism.</span>
+<span class="sd">        Ex: ``props={&#39;density&#39;:10, &#39;magnetization&#39;:10000}``</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">        &gt;&gt;&gt; s = Sphere(1, 2, 3, 10, {&#39;magnetization&#39;:200})</span>
+<span class="sd">        &gt;&gt;&gt; s.props[&#39;magnetization&#39;]</span>
+<span class="sd">        200</span>
+<span class="sd">        &gt;&gt;&gt; s.addprop(&#39;density&#39;, 20)</span>
+<span class="sd">        &gt;&gt;&gt; print s.props[&#39;density&#39;]</span>
+<span class="sd">        20</span>
+<span class="sd">        &gt;&gt;&gt; print s</span>
+<span class="sd">        x:1 | y:2 | z:3 | radius:10 | density:20 | magnetization:200</span>
+<span class="sd">        &gt;&gt;&gt; s = Sphere(1, 2, 3, 4)</span>
+<span class="sd">        &gt;&gt;&gt; print s</span>
+<span class="sd">        x:1 | y:2 | z:3 | radius:4</span>
+<span class="sd">        &gt;&gt;&gt; s.addprop(&#39;density&#39;, 2670)</span>
+<span class="sd">        &gt;&gt;&gt; print s</span>
+<span class="sd">        x:1 | y:2 | z:3 | radius:4 | density:2670</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">GeometricElement</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a string representation of the sphere.&quot;&quot;&quot;</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;z&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">),</span>
+                 <span class="p">(</span><span class="s">&#39;radius&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)]</span>
+        <span class="n">names</span><span class="o">.</span><span class="n">extend</span><span class="p">((</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s">&#39; | &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">:</span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">names</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="PolygonalPrism"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.PolygonalPrism">[docs]</a><span class="k">class</span> <span class="nc">PolygonalPrism</span><span class="p">(</span><span class="n">GeometricElement</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a 3D prism with polygonal crossection.</span>
+
+<span class="sd">    .. note:: The coordinate system used is x -&gt; North, y -&gt; East and z -&gt; Down</span>
+
+<span class="sd">    .. note:: *vertices* must be **CLOCKWISE** or will give inverse result.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * vertices : list of lists</span>
+<span class="sd">        Coordinates of the vertices. A list of ``[x, y]`` pairs.</span>
+<span class="sd">    * z1, z2 : float</span>
+<span class="sd">        Top and bottom of the prism</span>
+<span class="sd">    * props :  dict</span>
+<span class="sd">        Physical properties assigned to the prism.</span>
+<span class="sd">        Ex: ``props={&#39;density&#39;:10, &#39;magnetization&#39;:10000}``</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">        &gt;&gt;&gt; verts = [[1, 1], [1, 2], [2, 2], [2, 1]]</span>
+<span class="sd">        &gt;&gt;&gt; p = PolygonalPrism(verts, 0, 3, props={&#39;temperature&#39;:25})</span>
+<span class="sd">        &gt;&gt;&gt; p.props[&#39;temperature&#39;]</span>
+<span class="sd">        25</span>
+<span class="sd">        &gt;&gt;&gt; print p.x</span>
+<span class="sd">        [ 1.  1.  2.  2.]</span>
+<span class="sd">        &gt;&gt;&gt; print p.y</span>
+<span class="sd">        [ 1.  2.  2.  1.]</span>
+<span class="sd">        &gt;&gt;&gt; print p.z1, p.z2</span>
+<span class="sd">        0.0 3.0</span>
+<span class="sd">        &gt;&gt;&gt; p.addprop(&#39;density&#39;, 2670)</span>
+<span class="sd">        &gt;&gt;&gt; print p.props[&#39;density&#39;]</span>
+<span class="sd">        2670</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">GeometricElement</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">fromiter</span><span class="p">((</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">fromiter</span><span class="p">((</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z1</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">z1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">z2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nverts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PolygonalPrism.topolygon"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.PolygonalPrism.topolygon">[docs]</a>    <span class="k">def</span> <span class="nf">topolygon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the polygon describing the prism viewed from above.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * polygon : :func:`fatiando.mesher.Polygon`</span>
+<span class="sd">            The polygon</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">            &gt;&gt;&gt; verts = [[1, 1], [1, 2], [2, 2], [2, 1]]</span>
+<span class="sd">            &gt;&gt;&gt; p = PolygonalPrism(verts, 0, 100)</span>
+<span class="sd">            &gt;&gt;&gt; poly = p.topolygon()</span>
+<span class="sd">            &gt;&gt;&gt; print poly.x</span>
+<span class="sd">            [ 1.  1.  2.  2.]</span>
+<span class="sd">            &gt;&gt;&gt; print poly.y</span>
+<span class="sd">            [ 1.  2.  2.  1.]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">verts</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">transpose</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">verts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="PointGrid"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.PointGrid">[docs]</a><span class="k">class</span> <span class="nc">PointGrid</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a regular grid of 3D point sources (spheres of unit volume).</span>
+
+<span class="sd">    Use this as a 1D list of :class:`~fatiando.mesher.Sphere`.</span>
+
+<span class="sd">    Grid points are ordered like a C matrix, first each row in a column, then</span>
+<span class="sd">    change columns. In this case, the x direction (North-South) are the rows</span>
+<span class="sd">    and y (East-West) are the columns.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * area : list = [x1, x2, y1, y2]</span>
+<span class="sd">        The area where the grid will be spread out</span>
+<span class="sd">    * z : float</span>
+<span class="sd">        The z coordinate of the grid (remember, z is positive downward)</span>
+<span class="sd">    * shape : tuple = (nx, ny)</span>
+<span class="sd">        The number of points in the x and y directions</span>
+<span class="sd">    * props :  dict</span>
+<span class="sd">        Physical properties of each point in the grid.</span>
+<span class="sd">        Each key should be the name of a physical property. The corresponding</span>
+<span class="sd">        value should be a list with the values of that particular property for</span>
+<span class="sd">        each point in the grid.</span>
+
+<span class="sd">    Examples::</span>
+
+<span class="sd">        &gt;&gt;&gt; g = PointGrid([0, 10, 2, 6], 200, (2, 3))</span>
+<span class="sd">        &gt;&gt;&gt; g.shape</span>
+<span class="sd">        (2, 3)</span>
+<span class="sd">        &gt;&gt;&gt; g.size</span>
+<span class="sd">        6</span>
+<span class="sd">        &gt;&gt;&gt; g[0].center</span>
+<span class="sd">        array([   0.,    2.,  200.])</span>
+<span class="sd">        &gt;&gt;&gt; g[-1].center</span>
+<span class="sd">        array([  10.,    6.,  200.])</span>
+<span class="sd">        &gt;&gt;&gt; for p in g:</span>
+<span class="sd">        ...     p.center</span>
+<span class="sd">        array([   0.,    2.,  200.])</span>
+<span class="sd">        array([   0.,    4.,  200.])</span>
+<span class="sd">        array([   0.,    6.,  200.])</span>
+<span class="sd">        array([  10.,    2.,  200.])</span>
+<span class="sd">        array([  10.,    4.,  200.])</span>
+<span class="sd">        array([  10.,    6.,  200.])</span>
+<span class="sd">        &gt;&gt;&gt; g.x.reshape(g.shape)</span>
+<span class="sd">        array([[  0.,   0.,   0.],</span>
+<span class="sd">               [ 10.,  10.,  10.]])</span>
+<span class="sd">        &gt;&gt;&gt; g.y.reshape(g.shape)</span>
+<span class="sd">        array([[ 2.,  4.,  6.],</span>
+<span class="sd">               [ 2.,  4.,  6.]])</span>
+<span class="sd">        &gt;&gt;&gt; g.dx, g.dy</span>
+<span class="sd">        (10.0, 2.0)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="nb">object</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="n">area</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span>
+        <span class="k">if</span> <span class="n">props</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">props</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">props</span> <span class="o">=</span> <span class="n">props</span>
+        <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">nx</span><span class="o">*</span><span class="n">ny</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">cbrt</span><span class="p">(</span><span class="mf">3.</span> <span class="o">/</span> <span class="p">(</span><span class="mf">4.</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">gridder</span><span class="o">.</span><span class="n">regular</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+        <span class="c"># The spacing between points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dy</span> <span class="o">=</span> <span class="n">gridder</span><span class="o">.</span><span class="n">spacing</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="ow">or</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s">&#39;grid index out of range&#39;</span><span class="p">)</span>
+        <span class="c"># To walk backwards in the list</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="n">index</span>
+        <span class="n">props</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">index</span><span class="p">]]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">)</span>
+        <span class="n">sphere</span> <span class="o">=</span> <span class="n">Sphere</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span>
+                        <span class="n">props</span><span class="o">=</span><span class="n">props</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sphere</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span>
+        <span class="n">sphere</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">sphere</span>
+
+<div class="viewcode-block" id="PointGrid.addprop"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.PointGrid.addprop">[docs]</a>    <span class="k">def</span> <span class="nf">addprop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add physical property values to the points in the grid.</span>
+
+<span class="sd">        Different physical properties of the grid are stored in a dictionary.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * prop : str</span>
+<span class="sd">            Name of the physical property.</span>
+<span class="sd">        * values :  list or array</span>
+<span class="sd">            Value of this physical property in each point of the grid</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span>
+</div>
+<div class="viewcode-block" id="PointGrid.split"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.PointGrid.split">[docs]</a>    <span class="k">def</span> <span class="nf">split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Divide the grid into subgrids.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Remember that x is the North-South direction and y is East-West.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * shape : tuple = (nx, ny)</span>
+<span class="sd">            Number of subgrids in the x and y directions, respectively.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * subgrids : list</span>
+<span class="sd">            List of :class:`~fatiando.mesher.PointGrid`</span>
+
+<span class="sd">        Examples::</span>
+
+<span class="sd">            &gt;&gt;&gt; g = PointGrid((0, 3, 0, 2), 10, (4, 3))</span>
+<span class="sd">            &gt;&gt;&gt; g.addprop(&#39;bla&#39;, [1,   2,  3,</span>
+<span class="sd">            ...                   4,   5,  6,</span>
+<span class="sd">            ...                   7,   8,  9,</span>
+<span class="sd">            ...                   10, 11, 12])</span>
+<span class="sd">            &gt;&gt;&gt; grids = g.split((2, 3))</span>
+<span class="sd">            &gt;&gt;&gt; for s in grids:</span>
+<span class="sd">            ...     s.props[&#39;bla&#39;]</span>
+<span class="sd">            array([1, 4])</span>
+<span class="sd">            array([2, 5])</span>
+<span class="sd">            array([3, 6])</span>
+<span class="sd">            array([ 7, 10])</span>
+<span class="sd">            array([ 8, 11])</span>
+<span class="sd">            array([ 9, 12])</span>
+<span class="sd">            &gt;&gt;&gt; for s in grids:</span>
+<span class="sd">            ...     s.x</span>
+<span class="sd">            array([ 0.,  1.])</span>
+<span class="sd">            array([ 0.,  1.])</span>
+<span class="sd">            array([ 0.,  1.])</span>
+<span class="sd">            array([ 2.,  3.])</span>
+<span class="sd">            array([ 2.,  3.])</span>
+<span class="sd">            array([ 2.,  3.])</span>
+<span class="sd">            &gt;&gt;&gt; for s in grids:</span>
+<span class="sd">            ...     s.y</span>
+<span class="sd">            array([ 0.,  0.])</span>
+<span class="sd">            array([ 1.,  1.])</span>
+<span class="sd">            array([ 2.,  2.])</span>
+<span class="sd">            array([ 0.,  0.])</span>
+<span class="sd">            array([ 1.,  1.])</span>
+<span class="sd">            array([ 2.,  2.])</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">shape</span>
+        <span class="n">totalx</span><span class="p">,</span> <span class="n">totaly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">if</span> <span class="n">totalx</span> <span class="o">%</span> <span class="n">nx</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">totaly</span> <span class="o">%</span> <span class="n">ny</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s">&#39;Cannot split! nx and ny must be divisible by grid shape&#39;</span><span class="p">)</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">area</span>
+        <span class="n">xs</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">totalx</span><span class="p">)</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">totaly</span><span class="p">)</span>
+        <span class="n">mx</span><span class="p">,</span> <span class="n">my</span> <span class="o">=</span> <span class="p">(</span><span class="n">totalx</span><span class="o">//</span><span class="n">nx</span><span class="p">,</span> <span class="n">totaly</span><span class="o">//</span><span class="n">ny</span><span class="p">)</span>
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="o">*</span><span class="p">(</span><span class="n">mx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dy</span><span class="o">*</span><span class="p">(</span><span class="n">my</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">subs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">xstart</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">xs</span><span class="p">[::</span><span class="n">mx</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">ystart</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ys</span><span class="p">[::</span><span class="n">my</span><span class="p">]):</span>
+                <span class="n">area</span> <span class="o">=</span> <span class="p">[</span><span class="n">xstart</span><span class="p">,</span> <span class="n">xstart</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="n">ystart</span><span class="p">,</span> <span class="n">ystart</span> <span class="o">+</span> <span class="n">dy</span><span class="p">]</span>
+                <span class="n">props</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">:</span>
+                    <span class="n">pmatrix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">p</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+                    <span class="n">props</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">pmatrix</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">mx</span><span class="p">:(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">mx</span><span class="p">,</span>
+                                       <span class="n">j</span><span class="o">*</span><span class="n">my</span><span class="p">:(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">my</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+                <span class="n">subs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PointGrid</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="p">(</span><span class="n">mx</span><span class="p">,</span> <span class="n">my</span><span class="p">),</span> <span class="n">props</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">subs</span>
+
+</div></div>
+<div class="viewcode-block" id="PrismRelief"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.PrismRelief">[docs]</a><span class="k">class</span> <span class="nc">PrismRelief</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a 3D model of a relief (topography) using prisms.</span>
+
+<span class="sd">    Use to generate:</span>
+<span class="sd">    * topographic model</span>
+<span class="sd">    * basin model</span>
+<span class="sd">    * Moho model</span>
+<span class="sd">    * etc</span>
+
+<span class="sd">    PrismRelief can used as list of prisms. It acts as an iteratior (so you</span>
+<span class="sd">    can loop over prisms). It also has a ``__getitem__`` method to access</span>
+<span class="sd">    individual elements in the mesh.</span>
+<span class="sd">    In practice, PrismRelief should be able to be passed to any function that</span>
+<span class="sd">    asks for a list of prisms, like :func:`fatiando.gravmag.prism.gz`.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * ref : float</span>
+<span class="sd">        Reference level. Prisms will have:</span>
+<span class="sd">            * bottom on zref and top on z if z &gt; zref;</span>
+<span class="sd">            * bottom on z and top on zref otherwise.</span>
+<span class="sd">    * dims :  tuple = (dy, dx)</span>
+<span class="sd">        Dimensions of the prisms in the y and x directions</span>
+<span class="sd">    * nodes : list of lists = [x, y, z]</span>
+<span class="sd">        Coordinates of the center of the top face of each prism.x, y, and z are</span>
+<span class="sd">        lists with the x, y and z coordinates on a regular grid.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="n">dims</span><span class="p">,</span> <span class="n">nodes</span><span class="p">):</span>
+        <span class="nb">object</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">nodes</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s">&quot;nodes has x, y, z coordinate arrays of different lengths&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ref</span> <span class="o">=</span> <span class="n">ref</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">=</span> <span class="n">dims</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">props</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c"># The index of the current prism in an iteration. Needed when mesh is</span>
+        <span class="c"># used as an iterator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="c"># To walk backwards in the list</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="n">index</span>
+        <span class="n">xc</span><span class="p">,</span> <span class="n">yc</span><span class="p">,</span> <span class="n">zc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="n">x1</span> <span class="o">=</span> <span class="n">xc</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span>
+        <span class="n">x2</span> <span class="o">=</span> <span class="n">xc</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span>
+        <span class="n">y1</span> <span class="o">=</span> <span class="n">yc</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dy</span>
+        <span class="n">y2</span> <span class="o">=</span> <span class="n">yc</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dy</span>
+        <span class="k">if</span> <span class="n">zc</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="p">:</span>
+            <span class="n">z1</span> <span class="o">=</span> <span class="n">zc</span>
+            <span class="n">z2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">z1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span>
+            <span class="n">z2</span> <span class="o">=</span> <span class="n">zc</span>
+        <span class="n">props</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">index</span><span class="p">]]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Prism</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="n">props</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span>
+        <span class="n">prism</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">prism</span>
+
+<div class="viewcode-block" id="PrismRelief.addprop"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.PrismRelief.addprop">[docs]</a>    <span class="k">def</span> <span class="nf">addprop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add physical property values to the prisms.</span>
+
+<span class="sd">        .. warning:: If the z value of any point in the relief is below the</span>
+<span class="sd">            reference level, its corresponding prism will have the physical</span>
+<span class="sd">            property value with oposite sign than was assigned to it.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * prop : str</span>
+<span class="sd">            Name of the physical property.</span>
+<span class="sd">        * values : list</span>
+<span class="sd">            List or array with the value of this physical property in each</span>
+<span class="sd">            prism of the relief.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">correct</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="p">:</span>
+                <span class="k">return</span> <span class="o">-</span><span class="n">v</span>
+            <span class="k">return</span> <span class="n">v</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">correct</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">values</span><span class="p">)]</span>
+
+</div></div>
+<div class="viewcode-block" id="PrismMesh"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.PrismMesh">[docs]</a><span class="k">class</span> <span class="nc">PrismMesh</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a 3D regular mesh of right rectangular prisms.</span>
+
+<span class="sd">    Prisms are ordered as follows: first layers (z coordinate),</span>
+<span class="sd">    then EW rows (y) and finaly x coordinate (NS).</span>
+
+<span class="sd">    .. note:: Remember that the coordinate system is x-&gt;North, y-&gt;East and</span>
+<span class="sd">        z-&gt;Down</span>
+
+<span class="sd">    Ex: in a mesh with shape ``(3,3,3)`` the 15th element (index 14) has z</span>
+<span class="sd">    index 1 (second layer), y index 1 (second row), and x index 2 (third</span>
+<span class="sd">    element in the column).</span>
+
+<span class="sd">    :class:`~fatiando.mesher.PrismMesh` can used as list of prisms. It acts</span>
+<span class="sd">    as an iteratior (so you can loop over prisms). It also has a</span>
+<span class="sd">    ``__getitem__`` method to access individual elements in the mesh.</span>
+<span class="sd">    In practice, :class:`~fatiando.mesher.PrismMesh` should be able to be</span>
+<span class="sd">    passed to any function that asks for a list of prisms, like</span>
+<span class="sd">    :func:`fatiando.gravmag.prism.gz`.</span>
+
+<span class="sd">    To make the mesh incorporate a topography, use</span>
+<span class="sd">    :meth:`~fatiando.mesher.PrismMesh.carvetopo`</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * bounds : list = [xmin, xmax, ymin, ymax, zmin, zmax]</span>
+<span class="sd">        Boundaries of the mesh.</span>
+<span class="sd">    * shape : tuple = (nz, ny, nx)</span>
+<span class="sd">        Number of prisms in the x, y, and z directions.</span>
+<span class="sd">    * props :  dict</span>
+<span class="sd">        Physical properties of each prism in the mesh.</span>
+<span class="sd">        Each key should be the name of a physical property. The corresponding</span>
+<span class="sd">        value should be a list with the values of that particular property on</span>
+<span class="sd">        each prism of the mesh.</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">        &gt;&gt;&gt; from fatiando.mesher import PrismMesh</span>
+<span class="sd">        &gt;&gt;&gt; mesh = PrismMesh((0, 1, 0, 2, 0, 3), (1, 2, 2))</span>
+<span class="sd">        &gt;&gt;&gt; for p in mesh:</span>
+<span class="sd">        ...     print p</span>
+<span class="sd">        x1:0 | x2:0.5 | y1:0 | y2:1 | z1:0 | z2:3</span>
+<span class="sd">        x1:0.5 | x2:1 | y1:0 | y2:1 | z1:0 | z2:3</span>
+<span class="sd">        x1:0 | x2:0.5 | y1:1 | y2:2 | z1:0 | z2:3</span>
+<span class="sd">        x1:0.5 | x2:1 | y1:1 | y2:2 | z1:0 | z2:3</span>
+<span class="sd">        &gt;&gt;&gt; print mesh[0]</span>
+<span class="sd">        x1:0 | x2:0.5 | y1:0 | y2:1 | z1:0 | z2:3</span>
+<span class="sd">        &gt;&gt;&gt; print mesh[-1]</span>
+<span class="sd">        x1:0.5 | x2:1 | y1:1 | y2:2 | z1:0 | z2:3</span>
+
+<span class="sd">    One with physical properties::</span>
+
+<span class="sd">        &gt;&gt;&gt; props = {&#39;density&#39;:[2670.0, 1000.0]}</span>
+<span class="sd">        &gt;&gt;&gt; mesh = PrismMesh((0, 2, 0, 4, 0, 3), (1, 1, 2), props=props)</span>
+<span class="sd">        &gt;&gt;&gt; for p in mesh:</span>
+<span class="sd">        ...     print p</span>
+<span class="sd">        x1:0 | x2:1 | y1:0 | y2:4 | z1:0 | z2:3 | density:2670</span>
+<span class="sd">        x1:1 | x2:2 | y1:0 | y2:4 | z1:0 | z2:3 | density:1000</span>
+
+<span class="sd">    or equivalently::</span>
+
+<span class="sd">        &gt;&gt;&gt; mesh = PrismMesh((0, 2, 0, 4, 0, 3), (1, 1, 2))</span>
+<span class="sd">        &gt;&gt;&gt; mesh.addprop(&#39;density&#39;, [200, -1000.0])</span>
+<span class="sd">        &gt;&gt;&gt; for p in mesh:</span>
+<span class="sd">        ...     print p</span>
+<span class="sd">        x1:0 | x2:1 | y1:0 | y2:4 | z1:0 | z2:3 | density:200</span>
+<span class="sd">        x1:1 | x2:2 | y1:0 | y2:4 | z1:0 | z2:3 | density:-1000</span>
+
+<span class="sd">    You can use :meth:`~fatiando.mesher.PrismMesh.get_xs` (and similar</span>
+<span class="sd">    methods for y and z) to get the x coordinates of the prisms in the mesh::</span>
+
+<span class="sd">        &gt;&gt;&gt; mesh = PrismMesh((0, 2, 0, 4, 0, 3), (1, 1, 2))</span>
+<span class="sd">        &gt;&gt;&gt; print mesh.get_xs()</span>
+<span class="sd">        [ 0.  1.  2.]</span>
+<span class="sd">        &gt;&gt;&gt; print mesh.get_ys()</span>
+<span class="sd">        [ 0.  4.]</span>
+<span class="sd">        &gt;&gt;&gt; print mesh.get_zs()</span>
+<span class="sd">        [ 0.  3.]</span>
+
+<span class="sd">    The ``shape`` of the mesh must be integer!</span>
+
+<span class="sd">        &gt;&gt;&gt; mesh = PrismMesh((0, 2, 0, 4, 0, 3), (1, 1, 2.5))</span>
+<span class="sd">        Traceback (most recent call last):</span>
+<span class="sd">            ...</span>
+<span class="sd">        AttributeError: Invalid mesh shape (1, 1, 2.5). shape must be integers</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">celltype</span> <span class="o">=</span> <span class="n">Prism</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="nb">object</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">shape</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+                <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nz</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                <span class="s">&#39;Invalid mesh shape {}. shape must be integers&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="n">shape</span><span class="p">)))</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nx</span> <span class="o">*</span> <span class="n">ny</span> <span class="o">*</span> <span class="n">nz</span><span class="p">)</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">bounds</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span><span class="o">/</span><span class="n">nx</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span><span class="o">/</span><span class="n">ny</span>
+        <span class="n">dz</span> <span class="o">=</span> <span class="p">(</span><span class="n">z2</span> <span class="o">-</span> <span class="n">z1</span><span class="p">)</span><span class="o">/</span><span class="n">nz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">shape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span>
+        <span class="k">if</span> <span class="n">props</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">props</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">props</span> <span class="o">=</span> <span class="n">props</span>
+        <span class="c"># The index of the current prism in an iteration. Needed when mesh is</span>
+        <span class="c"># used as an iterator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c"># List of masked prisms. Will return None if trying to access them</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c"># Wether or not to change heights to z coordinate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zdown</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="ow">or</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s">&#39;mesh index out of range&#39;</span><span class="p">)</span>
+        <span class="c"># To walk backwards in the list</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="n">index</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">index</span><span class="o">//</span><span class="p">(</span><span class="n">nx</span><span class="o">*</span><span class="n">ny</span><span class="p">)</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="p">(</span><span class="n">index</span> <span class="o">-</span> <span class="n">k</span><span class="o">*</span><span class="p">(</span><span class="n">nx</span><span class="o">*</span><span class="n">ny</span><span class="p">))</span><span class="o">//</span><span class="n">nx</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="n">index</span> <span class="o">-</span> <span class="n">k</span><span class="o">*</span><span class="p">(</span><span class="n">nx</span><span class="o">*</span><span class="n">ny</span><span class="p">)</span> <span class="o">-</span> <span class="n">j</span><span class="o">*</span><span class="n">nx</span><span class="p">)</span>
+        <span class="n">x1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">i</span>
+        <span class="n">x2</span> <span class="o">=</span> <span class="n">x1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">y1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">j</span>
+        <span class="n">y2</span> <span class="o">=</span> <span class="n">y1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">z1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">k</span>
+        <span class="n">z2</span> <span class="o">=</span> <span class="n">z1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">props</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">index</span><span class="p">]]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">celltype</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="n">props</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span>
+        <span class="n">prism</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">prism</span>
+
+<div class="viewcode-block" id="PrismMesh.addprop"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.PrismMesh.addprop">[docs]</a>    <span class="k">def</span> <span class="nf">addprop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add physical property values to the cells in the mesh.</span>
+
+<span class="sd">        Different physical properties of the mesh are stored in a dictionary.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * prop : str</span>
+<span class="sd">            Name of the physical property.</span>
+<span class="sd">        * values :  list or array</span>
+<span class="sd">            Value of this physical property in each prism of the mesh. For the</span>
+<span class="sd">            ordering of prisms in the mesh see</span>
+<span class="sd">            :class:`~fatiando.mesher.PrismMesh`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span>
+</div>
+<div class="viewcode-block" id="PrismMesh.carvetopo"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.PrismMesh.carvetopo">[docs]</a>    <span class="k">def</span> <span class="nf">carvetopo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Mask (remove) prisms from the mesh that are above the topography.</span>
+
+<span class="sd">        Accessing the ith prism will return None if it was masked (above the</span>
+<span class="sd">        topography).</span>
+<span class="sd">        Also mask prisms outside of the topography grid provided.</span>
+<span class="sd">        The topography height information does not need to be on a regular</span>
+<span class="sd">        grid, it will be interpolated.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * x, y : lists</span>
+<span class="sd">            x and y coordinates of the grid points</span>
+<span class="sd">        * height : list or array</span>
+<span class="sd">            Array with the height of the topography</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span>
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span>
+        <span class="c"># The coordinates of the centers of the cells</span>
+        <span class="n">xc</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dx</span>
+        <span class="c"># Sometimes arange returns more due to rounding</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">xc</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">nx</span><span class="p">:</span>
+            <span class="n">xc</span> <span class="o">=</span> <span class="n">xc</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">yc</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">dy</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dy</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">yc</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">ny</span><span class="p">:</span>
+            <span class="n">yc</span> <span class="o">=</span> <span class="n">yc</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">zc</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">dz</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dz</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">zc</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">nz</span><span class="p">:</span>
+            <span class="n">zc</span> <span class="o">=</span> <span class="n">zc</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">XC</span><span class="p">,</span> <span class="n">YC</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xc</span><span class="p">,</span> <span class="n">yc</span><span class="p">)</span>
+        <span class="n">topo</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">griddata</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">height</span><span class="p">,</span> <span class="p">(</span><span class="n">XC</span><span class="p">,</span> <span class="n">YC</span><span class="p">),</span>
+                                          <span class="n">method</span><span class="o">=</span><span class="s">&#39;cubic&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">zdown</span><span class="p">:</span>
+            <span class="c"># -1 if to transform height into z coordinate</span>
+            <span class="n">topo</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">topo</span>
+        <span class="c"># griddata returns a masked array. If the interpolated point is out of</span>
+        <span class="c"># of the data range, mask will be True. Use this to remove all cells</span>
+        <span class="c"># below a masked topo point (ie, one with no height information)</span>
+        <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">isMA</span><span class="p">(</span><span class="n">topo</span><span class="p">):</span>
+            <span class="n">topo_mask</span> <span class="o">=</span> <span class="n">topo</span><span class="o">.</span><span class="n">mask</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">topo_mask</span> <span class="o">=</span> <span class="p">[</span><span class="bp">False</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">topo</span><span class="p">))]</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">cellz</span> <span class="ow">in</span> <span class="n">zc</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">h</span><span class="p">,</span> <span class="n">masked</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">topo</span><span class="p">,</span> <span class="n">topo_mask</span><span class="p">):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">masked</span> <span class="ow">or</span>
+                        <span class="p">(</span><span class="n">cellz</span> <span class="o">&lt;</span> <span class="n">h</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">zdown</span><span class="p">)</span> <span class="ow">or</span>
+                        <span class="p">(</span><span class="n">cellz</span> <span class="o">&gt;</span> <span class="n">h</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">zdown</span><span class="p">)):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+                <span class="n">c</span> <span class="o">+=</span> <span class="mi">1</span>
+</div>
+<div class="viewcode-block" id="PrismMesh.get_xs"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.PrismMesh.get_xs">[docs]</a>    <span class="k">def</span> <span class="nf">get_xs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return an array with the x coordinates of the prisms in mesh.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span>
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span>
+        <span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">xs</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">xs</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">nx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">xs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">xs</span>
+</div>
+<div class="viewcode-block" id="PrismMesh.get_ys"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.PrismMesh.get_ys">[docs]</a>    <span class="k">def</span> <span class="nf">get_ys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return an array with the y coordinates of the prisms in mesh.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span>
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span>
+        <span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">+</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dy</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ys</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">ny</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ys</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">ys</span>
+</div>
+<div class="viewcode-block" id="PrismMesh.get_zs"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.PrismMesh.get_zs">[docs]</a>    <span class="k">def</span> <span class="nf">get_zs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return an array with the z coordinates of the prisms in mesh.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span>
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span>
+        <span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">zs</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">+</span> <span class="n">dz</span><span class="p">,</span> <span class="n">dz</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">zs</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">nz</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">zs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">zs</span>
+</div>
+<div class="viewcode-block" id="PrismMesh.get_layer"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.PrismMesh.get_layer">[docs]</a>    <span class="k">def</span> <span class="nf">get_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the set of prisms corresponding to the ith layer of the mesh.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * i : int</span>
+<span class="sd">            The index of the layer</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * prisms : list of :class:`~fatiando.mesher.Prism`</span>
+<span class="sd">            The prisms in the ith layer</span>
+
+<span class="sd">        Examples::</span>
+
+<span class="sd">            &gt;&gt;&gt; mesh = PrismMesh((0, 2, 0, 2, 0, 2), (2, 2, 2))</span>
+<span class="sd">            &gt;&gt;&gt; layer = mesh.get_layer(0)</span>
+<span class="sd">            &gt;&gt;&gt; for p in layer:</span>
+<span class="sd">            ...     print p</span>
+<span class="sd">            x1:0 | x2:1 | y1:0 | y2:1 | z1:0 | z2:1</span>
+<span class="sd">            x1:1 | x2:2 | y1:0 | y2:1 | z1:0 | z2:1</span>
+<span class="sd">            x1:0 | x2:1 | y1:1 | y2:2 | z1:0 | z2:1</span>
+<span class="sd">            x1:1 | x2:2 | y1:1 | y2:2 | z1:0 | z2:1</span>
+<span class="sd">            &gt;&gt;&gt; layer = mesh.get_layer(1)</span>
+<span class="sd">            &gt;&gt;&gt; for p in layer:</span>
+<span class="sd">            ...     print p</span>
+<span class="sd">            x1:0 | x2:1 | y1:0 | y2:1 | z1:1 | z2:2</span>
+<span class="sd">            x1:1 | x2:2 | y1:0 | y2:1 | z1:1 | z2:2</span>
+<span class="sd">            x1:0 | x2:1 | y1:1 | y2:2 | z1:1 | z2:2</span>
+<span class="sd">            x1:1 | x2:2 | y1:1 | y2:2 | z1:1 | z2:2</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">nz</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s">&#39;Layer index </span><span class="si">%d</span><span class="s"> is out of range.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">nx</span> <span class="o">*</span> <span class="n">ny</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">nx</span> <span class="o">*</span> <span class="n">ny</span>
+        <span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">layer</span>
+</div>
+<div class="viewcode-block" id="PrismMesh.layers"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.PrismMesh.layers">[docs]</a>    <span class="k">def</span> <span class="nf">layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns an iterator over the layers of the mesh.</span>
+
+<span class="sd">        Examples::</span>
+
+<span class="sd">            &gt;&gt;&gt; mesh = PrismMesh((0, 2, 0, 2, 0, 2), (2, 2, 2))</span>
+<span class="sd">            &gt;&gt;&gt; for layer in mesh.layers():</span>
+<span class="sd">            ...     for p in layer:</span>
+<span class="sd">            ...         print p</span>
+<span class="sd">            x1:0 | x2:1 | y1:0 | y2:1 | z1:0 | z2:1</span>
+<span class="sd">            x1:1 | x2:2 | y1:0 | y2:1 | z1:0 | z2:1</span>
+<span class="sd">            x1:0 | x2:1 | y1:1 | y2:2 | z1:0 | z2:1</span>
+<span class="sd">            x1:1 | x2:2 | y1:1 | y2:2 | z1:0 | z2:1</span>
+<span class="sd">            x1:0 | x2:1 | y1:0 | y2:1 | z1:1 | z2:2</span>
+<span class="sd">            x1:1 | x2:2 | y1:0 | y2:1 | z1:1 | z2:2</span>
+<span class="sd">            x1:0 | x2:1 | y1:1 | y2:2 | z1:1 | z2:2</span>
+<span class="sd">            x1:1 | x2:2 | y1:1 | y2:2 | z1:1 | z2:2</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">nz</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="PrismMesh.dump"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.PrismMesh.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meshfile</span><span class="p">,</span> <span class="n">propfile</span><span class="p">,</span> <span class="n">prop</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        Dump the mesh to a file in the format required by UBC-GIF program</span>
+<span class="sd">        MeshTools3D.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * meshfile : str or file</span>
+<span class="sd">            Output file to save the mesh. Can be a file name or an open file.</span>
+<span class="sd">        * propfile : str or file</span>
+<span class="sd">            Output file to save the physical properties *prop*. Can be a file</span>
+<span class="sd">            name or an open file.</span>
+<span class="sd">        * prop : str</span>
+<span class="sd">            The name of the physical property in the mesh that will be saved to</span>
+<span class="sd">            *propfile*.</span>
+
+<span class="sd">        .. note:: Uses -10000000 as the dummy value for plotting topography</span>
+
+<span class="sd">        Examples:</span>
+
+<span class="sd">            &gt;&gt;&gt; from StringIO import StringIO</span>
+<span class="sd">            &gt;&gt;&gt; meshfile = StringIO()</span>
+<span class="sd">            &gt;&gt;&gt; densfile = StringIO()</span>
+<span class="sd">            &gt;&gt;&gt; mesh = PrismMesh((0, 10, 0, 20, 0, 5), (1, 2, 2))</span>
+<span class="sd">            &gt;&gt;&gt; mesh.addprop(&#39;density&#39;, [1, 2, 3, 4])</span>
+<span class="sd">            &gt;&gt;&gt; mesh.dump(meshfile, densfile, &#39;density&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; print meshfile.getvalue().strip()</span>
+<span class="sd">            2 2 1</span>
+<span class="sd">            0 0 0</span>
+<span class="sd">            2*10</span>
+<span class="sd">            2*5</span>
+<span class="sd">            1*5</span>
+<span class="sd">            &gt;&gt;&gt; print densfile.getvalue().strip()</span>
+<span class="sd">            1.0000</span>
+<span class="sd">            3.0000</span>
+<span class="sd">            2.0000</span>
+<span class="sd">            4.0000</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">prop</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;mesh doesn&#39;t have a &#39;</span><span class="si">%s</span><span class="s">&#39; property.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">prop</span><span class="p">))</span>
+        <span class="n">isstr</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">meshfile</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">isstr</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">meshfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">meshfile</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span>
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span>
+        <span class="n">meshfile</span><span class="o">.</span><span class="n">writelines</span><span class="p">([</span>
+            <span class="s">&quot;</span><span class="si">%d</span><span class="s"> </span><span class="si">%d</span><span class="s"> </span><span class="si">%d</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">nz</span><span class="p">),</span>
+            <span class="s">&quot;</span><span class="si">%g</span><span class="s"> </span><span class="si">%g</span><span class="s"> </span><span class="si">%g</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="o">-</span><span class="n">z1</span><span class="p">),</span>
+            <span class="s">&quot;</span><span class="si">%d</span><span class="s">*</span><span class="si">%g</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">dy</span><span class="p">),</span>
+            <span class="s">&quot;</span><span class="si">%d</span><span class="s">*</span><span class="si">%g</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">dx</span><span class="p">),</span>
+            <span class="s">&quot;</span><span class="si">%d</span><span class="s">*</span><span class="si">%g</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nz</span><span class="p">,</span> <span class="n">dz</span><span class="p">)])</span>
+        <span class="k">if</span> <span class="n">isstr</span><span class="p">:</span>
+            <span class="n">meshfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">prop</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="c"># Replace the masked cells with a dummy value</span>
+        <span class="n">values</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10000000</span>
+        <span class="n">reordered</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s">&#39;F&#39;</span><span class="p">)</span>
+        <span class="n">numpy</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">propfile</span><span class="p">,</span> <span class="n">reordered</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%.4f</span><span class="s">&#39;</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="TesseroidMesh"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.TesseroidMesh">[docs]</a><span class="k">class</span> <span class="nc">TesseroidMesh</span><span class="p">(</span><span class="n">PrismMesh</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a 3D regular mesh of tesseroids.</span>
+
+<span class="sd">    Tesseroids are ordered as follows: first layers (height coordinate),</span>
+<span class="sd">    then N-S rows and finaly E-W.</span>
+
+<span class="sd">    Ex: in a mesh with shape ``(3,3,3)`` the 15th element (index 14) has height</span>
+<span class="sd">    index 1 (second layer), y index 1 (second row), and x index 2 (</span>
+<span class="sd">    third element in the column).</span>
+
+<span class="sd">    This class can used as list of tesseroids. It acts</span>
+<span class="sd">    as an iteratior (so you can loop over tesseroids).</span>
+<span class="sd">    It also has a ``__getitem__``</span>
+<span class="sd">    method to access individual elements in the mesh.</span>
+<span class="sd">    In practice, it should be able to be</span>
+<span class="sd">    passed to any function that asks for a list of tesseroids, like</span>
+<span class="sd">    :func:`fatiando.gravmag.tesseroid.gz`.</span>
+
+<span class="sd">    To make the mesh incorporate a topography, use</span>
+<span class="sd">    :meth:`~fatiando.mesher.TesseroidMesh.carvetopo`</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * bounds : list = [w, e, s, n, top, bottom]</span>
+<span class="sd">        Boundaries of the mesh. ``w, e, s, n`` in degrees, ``top`` and</span>
+<span class="sd">        ``bottom`` are heights (positive upward) and in meters.</span>
+<span class="sd">    * shape : tuple = (nr, nlat, nlon)</span>
+<span class="sd">        Number of tesseroids in the radial, latitude, and longitude directions.</span>
+<span class="sd">    * props :  dict</span>
+<span class="sd">        Physical properties of each tesseroid in the mesh.</span>
+<span class="sd">        Each key should be the name of a physical property. The corresponding</span>
+<span class="sd">        value should be a list with the values of that particular property on</span>
+<span class="sd">        each tesseroid of the mesh.</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">        &gt;&gt;&gt; from fatiando.mesher import TesseroidMesh</span>
+<span class="sd">        &gt;&gt;&gt; mesh = TesseroidMesh((0, 1, 0, 2, 3, 0), (1, 2, 2))</span>
+<span class="sd">        &gt;&gt;&gt; for p in mesh:</span>
+<span class="sd">        ...     print p</span>
+<span class="sd">        w:0 | e:0.5 | s:0 | n:1 | top:3 | bottom:0</span>
+<span class="sd">        w:0.5 | e:1 | s:0 | n:1 | top:3 | bottom:0</span>
+<span class="sd">        w:0 | e:0.5 | s:1 | n:2 | top:3 | bottom:0</span>
+<span class="sd">        w:0.5 | e:1 | s:1 | n:2 | top:3 | bottom:0</span>
+<span class="sd">        &gt;&gt;&gt; print mesh[0]</span>
+<span class="sd">        w:0 | e:0.5 | s:0 | n:1 | top:3 | bottom:0</span>
+<span class="sd">        &gt;&gt;&gt; print mesh[-1]</span>
+<span class="sd">        w:0.5 | e:1 | s:1 | n:2 | top:3 | bottom:0</span>
+
+<span class="sd">    One with physical properties::</span>
+
+<span class="sd">        &gt;&gt;&gt; props = {&#39;density&#39;:[2670.0, 1000.0]}</span>
+<span class="sd">        &gt;&gt;&gt; mesh = TesseroidMesh((0, 2, 0, 4, 3, 0), (1, 1, 2), props=props)</span>
+<span class="sd">        &gt;&gt;&gt; for p in mesh:</span>
+<span class="sd">        ...     print p</span>
+<span class="sd">        w:0 | e:1 | s:0 | n:4 | top:3 | bottom:0 | density:2670</span>
+<span class="sd">        w:1 | e:2 | s:0 | n:4 | top:3 | bottom:0 | density:1000</span>
+
+<span class="sd">    or equivalently::</span>
+
+<span class="sd">        &gt;&gt;&gt; mesh = TesseroidMesh((0, 2, 0, 4, 3, 0), (1, 1, 2))</span>
+<span class="sd">        &gt;&gt;&gt; mesh.addprop(&#39;density&#39;, [200, -1000.0])</span>
+<span class="sd">        &gt;&gt;&gt; for p in mesh:</span>
+<span class="sd">        ...     print p</span>
+<span class="sd">        w:0 | e:1 | s:0 | n:4 | top:3 | bottom:0 | density:200</span>
+<span class="sd">        w:1 | e:2 | s:0 | n:4 | top:3 | bottom:0 | density:-1000</span>
+
+<span class="sd">    You can use :meth:`~fatiando.mesher.PrismMesh.get_xs` (and similar</span>
+<span class="sd">    methods for y and z) to get the x coordinates of the tesseroidss in the</span>
+<span class="sd">    mesh::</span>
+
+<span class="sd">        &gt;&gt;&gt; mesh = TesseroidMesh((0, 2, 0, 4, 3, 0), (1, 1, 2))</span>
+<span class="sd">        &gt;&gt;&gt; print mesh.get_xs()</span>
+<span class="sd">        [ 0.  1.  2.]</span>
+<span class="sd">        &gt;&gt;&gt; print mesh.get_ys()</span>
+<span class="sd">        [ 0.  4.]</span>
+<span class="sd">        &gt;&gt;&gt; print mesh.get_zs()</span>
+<span class="sd">        [ 3.  0.]</span>
+
+<span class="sd">    You can iterate over the layers of the mesh::</span>
+
+<span class="sd">        &gt;&gt;&gt; mesh = TesseroidMesh((0, 2, 0, 2, 2, 0), (2, 2, 2))</span>
+<span class="sd">        &gt;&gt;&gt; for layer in mesh.layers():</span>
+<span class="sd">        ...     for p in layer:</span>
+<span class="sd">        ...         print p</span>
+<span class="sd">        w:0 | e:1 | s:0 | n:1 | top:2 | bottom:1</span>
+<span class="sd">        w:1 | e:2 | s:0 | n:1 | top:2 | bottom:1</span>
+<span class="sd">        w:0 | e:1 | s:1 | n:2 | top:2 | bottom:1</span>
+<span class="sd">        w:1 | e:2 | s:1 | n:2 | top:2 | bottom:1</span>
+<span class="sd">        w:0 | e:1 | s:0 | n:1 | top:1 | bottom:0</span>
+<span class="sd">        w:1 | e:2 | s:0 | n:1 | top:1 | bottom:0</span>
+<span class="sd">        w:0 | e:1 | s:1 | n:2 | top:1 | bottom:0</span>
+<span class="sd">        w:1 | e:2 | s:1 | n:2 | top:1 | bottom:0</span>
+
+<span class="sd">    The ``shape`` of the mesh must be integer!</span>
+
+<span class="sd">        &gt;&gt;&gt; mesh = TesseroidMesh((0, 2, 0, 4, 0, 3), (1, 1, 2.5))</span>
+<span class="sd">        Traceback (most recent call last):</span>
+<span class="sd">            ...</span>
+<span class="sd">        AttributeError: Invalid mesh shape (1, 1, 2.5). shape must be integers</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">celltype</span> <span class="o">=</span> <span class="n">Tesseroid</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">PrismMesh</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zdown</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dump</span> <span class="o">=</span> <span class="bp">None</span>
+
+</div>
+<div class="viewcode-block" id="extract"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.extract">[docs]</a><span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">prisms</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract the values of a physical property from the cells in a list.</span>
+
+<span class="sd">    If a cell is ``None`` or doesn&#39;t have the physical property, a value of</span>
+<span class="sd">    ``None`` will be put in it&#39;s place.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * prop : str</span>
+<span class="sd">        The name of the physical property to extract</span>
+<span class="sd">    * cells : list</span>
+<span class="sd">        A list of cells (e.g., :class:`~fatiando.mesher.Prism`,</span>
+<span class="sd">        :class:`~fatiando.mesher.PolygonalPrism`, etc)</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * values : array</span>
+<span class="sd">        The extracted values</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">        &gt;&gt;&gt; cells = [Prism(1, 2, 3, 4, 5, 6, {&#39;foo&#39;:1}),</span>
+<span class="sd">        ...          Prism(1, 2, 3, 4, 5, 6, {&#39;foo&#39;:10}),</span>
+<span class="sd">        ...          None,</span>
+<span class="sd">        ...          Prism(1, 2, 3, 4, 5, 6, {&#39;bar&#39;:2000})]</span>
+<span class="sd">        &gt;&gt;&gt; print extract(&#39;foo&#39;, cells)</span>
+<span class="sd">        [1, 10, None, None]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">getprop</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">prop</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">props</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">getprop</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">prisms</span><span class="p">]</span>
+
+</div>
+<div class="viewcode-block" id="vfilter"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.vfilter">[docs]</a><span class="k">def</span> <span class="nf">vfilter</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">cells</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Remove cells whose physical property value falls outside a given range.</span>
+
+<span class="sd">    If a cell is `None` or doesn&#39;t have the physical property, it will be not</span>
+<span class="sd">    be included in the result.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * vmin : float</span>
+<span class="sd">        Minimum value</span>
+<span class="sd">    * vmax : float</span>
+<span class="sd">        Maximum value</span>
+<span class="sd">    * prop : str</span>
+<span class="sd">        The name of the physical property used to filter</span>
+<span class="sd">    * cells : list</span>
+<span class="sd">        A list of cells (e.g., :class:`~fatiando.mesher.Prism`,</span>
+<span class="sd">        :class:`~fatiando.mesher.PolygonalPrism`, etc)</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * filtered : list</span>
+<span class="sd">        The cells that fall within the desired range</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">        &gt;&gt;&gt; cells = [Prism(1, 2, 3, 4, 5, 6, {&#39;foo&#39;:1}),</span>
+<span class="sd">        ...          Prism(1, 2, 3, 4, 5, 6, {&#39;foo&#39;:20}),</span>
+<span class="sd">        ...          Prism(1, 2, 3, 4, 5, 6, {&#39;foo&#39;:3}),</span>
+<span class="sd">        ...          None,</span>
+<span class="sd">        ...          Prism(1, 2, 3, 4, 5, 6, {&#39;foo&#39;:4}),</span>
+<span class="sd">        ...          Prism(1, 2, 3, 4, 5, 6, {&#39;foo&#39;:200}),</span>
+<span class="sd">        ...          Prism(1, 2, 3, 4, 5, 6, {&#39;bar&#39;:1000})]</span>
+<span class="sd">        &gt;&gt;&gt; for cell in vfilter(0, 10, &#39;foo&#39;, cells):</span>
+<span class="sd">        ...     print cell</span>
+<span class="sd">        x1:1 | x2:2 | y1:3 | y2:4 | z1:5 | z2:6 | foo:1</span>
+<span class="sd">        x1:1 | x2:2 | y1:3 | y2:4 | z1:5 | z2:6 | foo:3</span>
+<span class="sd">        x1:1 | x2:2 | y1:3 | y2:4 | z1:5 | z2:6 | foo:4</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">isin</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">prop</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">props</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">prop</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">vmin</span> <span class="ow">or</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="n">vmax</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cells</span> <span class="k">if</span> <span class="n">isin</span><span class="p">(</span><span class="n">c</span><span class="p">)]</span>
+
+</div>
+<div class="viewcode-block" id="vremove"><a class="viewcode-back" href="../../api/mesher.html#fatiando.gravmag.harvester.vremove">[docs]</a><span class="k">def</span> <span class="nf">vremove</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">cells</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Remove the cells with a given physical property value.</span>
+
+<span class="sd">    If a cell is `None` it will be not be included in the result.</span>
+
+<span class="sd">    If a cell doesn&#39;t have the physical property, it will be included in the</span>
+<span class="sd">    result.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * value : float</span>
+<span class="sd">        The value of the physical property to remove. If the physical property</span>
+<span class="sd">        is a vector, will compare the norm of the vector to **value**.</span>
+<span class="sd">    * prop : str</span>
+<span class="sd">        The name of the physical property to remove</span>
+<span class="sd">    * cells : list</span>
+<span class="sd">        A list of cells (e.g., :class:`~fatiando.mesher.Prism`,</span>
+<span class="sd">        :class:`~fatiando.mesher.PolygonalPrism`, etc)</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * removed : list</span>
+<span class="sd">        A list of cells that have *prop* != *value*</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">        &gt;&gt;&gt; cells = [Prism(1, 2, 3, 4, 5, 6, {&#39;foo&#39;:1}),</span>
+<span class="sd">        ...          Prism(1, 2, 3, 4, 5, 6, {&#39;foo&#39;:20}),</span>
+<span class="sd">        ...          Prism(1, 2, 3, 4, 5, 6, {&#39;foo&#39;:3}),</span>
+<span class="sd">        ...          None,</span>
+<span class="sd">        ...          Prism(1, 2, 3, 4, 5, 6, {&#39;foo&#39;:1}),</span>
+<span class="sd">        ...          Prism(1, 2, 3, 4, 5, 6, {&#39;foo&#39;:200}),</span>
+<span class="sd">        ...          Prism(1, 2, 3, 4, 5, 6, {&#39;bar&#39;:1000})]</span>
+<span class="sd">        &gt;&gt;&gt; for cell in vremove(1, &#39;foo&#39;, cells):</span>
+<span class="sd">        ...     print cell</span>
+<span class="sd">        x1:1 | x2:2 | y1:3 | y2:4 | z1:5 | z2:6 | foo:20</span>
+<span class="sd">        x1:1 | x2:2 | y1:3 | y2:4 | z1:5 | z2:6 | foo:3</span>
+<span class="sd">        x1:1 | x2:2 | y1:3 | y2:4 | z1:5 | z2:6 | foo:200</span>
+<span class="sd">        x1:1 | x2:2 | y1:3 | y2:4 | z1:5 | z2:6 | bar:1000</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">keep</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="n">prop</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">props</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">prop</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cells</span> <span class="k">if</span> <span class="n">keep</span><span class="p">(</span><span class="n">c</span><span class="p">)]</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

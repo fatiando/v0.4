@@ -1,0 +1,467 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fatiando.gravmag.normal_gravity &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><img src="../../../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../install.html">Installing</a></li>
+                <li><a href="../../../docs.html">Documentation</a></li>
+                <li><a href="../../../cookbook.html">Cookbook</a></li>
+                <li><a href="../../../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for fatiando.gravmag.normal_gravity</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Gravity of ellipsoid models and common reductions (Bouguer, free-air)</span>
+
+<span class="sd">**Reference ellipsoids**</span>
+
+<span class="sd">This module uses instances of</span>
+<span class="sd">:class:`~fatiando.gravmag.normal_gravity.ReferenceEllipsoid` to store the</span>
+<span class="sd">physical constants of ellipsoids.</span>
+<span class="sd">To create a new ellipsoid, just instantiate ``ReferenceEllipsoid`` and give it</span>
+<span class="sd">the semimajor axis ``a``, the flattening ``f``, the geocentric gravitational</span>
+<span class="sd">constant ``GM``, and the angular velocity ``omega``.</span>
+<span class="sd">All  other quantities, like the gravity at the poles and equator,</span>
+<span class="sd">eccentricities, etc, are computed by the class from these 4 parameters.</span>
+
+<span class="sd">Available ellipsoids:</span>
+
+<span class="sd">* ``WGS84`` (values taken from Hofmann-Wellenhof and Moritz, 2005)::</span>
+
+<span class="sd">    &gt;&gt;&gt; from fatiando.gravmag.normal_gravity import WGS84</span>
+<span class="sd">    &gt;&gt;&gt; print(WGS84.name)</span>
+<span class="sd">    World Geodetic System 1984</span>
+<span class="sd">    &gt;&gt;&gt; print(&#39;{:.0f}&#39;.format(WGS84.a))</span>
+<span class="sd">    6378137</span>
+<span class="sd">    &gt;&gt;&gt; print(&#39;{:.17f}&#39;.format(WGS84.f))</span>
+<span class="sd">    0.00335281066474748</span>
+<span class="sd">    &gt;&gt;&gt; print(&#39;{:.10g}&#39;.format(WGS84.GM))</span>
+<span class="sd">    3.986004418e+14</span>
+<span class="sd">    &gt;&gt;&gt; print(&#39;{:.7g}&#39;.format(WGS84.omega))</span>
+<span class="sd">    7.292115e-05</span>
+<span class="sd">    &gt;&gt;&gt; print(&#39;{:.4f}&#39;.format(WGS84.b))</span>
+<span class="sd">    6356752.3142</span>
+<span class="sd">    &gt;&gt;&gt; print(&#39;{:.8f}&#39;.format(WGS84.E)) # Linear eccentricity</span>
+<span class="sd">    521854.00842339</span>
+<span class="sd">    &gt;&gt;&gt; print(&#39;{:.15f}&#39;.format(WGS84.e_prime)) # second eccentricity</span>
+<span class="sd">    0.082094437949696</span>
+<span class="sd">    &gt;&gt;&gt; print(&#39;{:.10f}&#39;.format(WGS84.gamma_a)) # gravity at the equator</span>
+<span class="sd">    9.7803253359</span>
+<span class="sd">    &gt;&gt;&gt; print(&#39;{:.11f}&#39;.format(WGS84.gamma_b)) # gravity at the pole</span>
+<span class="sd">    9.83218493786</span>
+<span class="sd">    &gt;&gt;&gt; print(&#39;{:.14f}&#39;.format(WGS84.m))</span>
+<span class="sd">    0.00344978650684</span>
+
+
+<span class="sd">**Normal gravity**</span>
+
+<span class="sd">* :func:`~fatiando.gravmag.normal_gravity.gamma_somigliana`: compute the normal</span>
+<span class="sd">  gravity using the Somigliana formula (Hofmann-Wellenhof and Moritz, 2005).</span>
+<span class="sd">  Calculated **on** the ellipsoid.</span>
+<span class="sd">* :func:`~fatiando.gravmag.normal_gravity.gamma_somigliana_free_air`: compute</span>
+<span class="sd">  normal gravity at a height using the Somigliana formula plus the free-air</span>
+<span class="sd">  correction :math:`-0.3086H\ mGal/m`.</span>
+<span class="sd">* :func:`~fatiando.gravmag.normal_gravity.gamma_closed_form`: compute normal</span>
+<span class="sd">  gravity using the closed form expression from Li and Gotze (2001). Can</span>
+<span class="sd">  compute anywhere (on, above, under the ellipsoid).</span>
+
+<span class="sd">**Bouguer**</span>
+
+<span class="sd">* :func:`~fatiando.gravmag.normal_gravity.bouguer_plate`: compute the</span>
+<span class="sd">  gravitational attraction of an infinite plate (Bouguer plate). Calculated</span>
+<span class="sd">  **on top** of the plate.</span>
+
+<span class="sd">You can use :mod:`fatiando.gravmag.prism` and :mod:`fatiando.gravmag.tesseroid`</span>
+<span class="sd">to calculate the terrain effect for a better correction.</span>
+
+<span class="sd">**References**</span>
+
+<span class="sd">Hofmann-Wellenhof, B. and H. Moritz, 2005, Physical Geodesy,</span>
+<span class="sd">Springer-Verlag Wien, ISBN-13: 978-3-211-23584-3</span>
+
+<span class="sd">Li, X. and H. J. Gotze, 2001, Tutorial: Ellipsoid, geoid, gravity, geodesy,</span>
+<span class="sd">and geophysics, Geophysics, 66(6), p. 1660-1668, doi: 10.1190/1.1487109</span>
+
+<span class="sd">----</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">..constants</span> <span class="kn">import</span> <span class="n">G</span>
+
+
+<div class="viewcode-block" id="ReferenceEllipsoid"><a class="viewcode-back" href="../../../api/gravmag.normal_gravity.html#fatiando.gravmag.normal_gravity.ReferenceEllipsoid">[docs]</a><span class="k">class</span> <span class="nc">ReferenceEllipsoid</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A generic reference ellipsoid.</span>
+
+<span class="sd">    It stores the physical constants defining the ellipsoid and has properties</span>
+<span class="sd">    for computing other (derived) quantities.</span>
+
+<span class="sd">    All quantities are expected and returned in SI units.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * a : float</span>
+<span class="sd">        The semimajor axis (the largest one, at the equator). In meters.</span>
+<span class="sd">    * f : float</span>
+<span class="sd">        The flattening. Adimensional.</span>
+<span class="sd">    * GM : float</span>
+<span class="sd">        The geocentric gravitational constant of the earth, including the</span>
+<span class="sd">        atmosphere. In :math:`m^3 s^{-2}`.</span>
+<span class="sd">    * omega : float</span>
+<span class="sd">        The angular velocity of the earth. In :math:`rad s^{-1}`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">GM</span><span class="p">,</span> <span class="n">omega</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_a</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_f</span> <span class="o">=</span> <span class="n">f</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_GM</span> <span class="o">=</span> <span class="n">GM</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_omega</span> <span class="o">=</span> <span class="n">omega</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">&quot;Semimajor axis&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">&quot;Flattening&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">GM</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">&quot;Geocentric gravitational constant (including the atmosphere)&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_GM</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">omega</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">&quot;Angular velocity&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omega</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">b</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">&quot;Semiminor axis&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">E</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">&quot;Linear eccentricity&quot;</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">e_prime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">&quot;Second eccentricity&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">r&quot;:math:`\omega^2 a^2 b / (GM)`&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">omega</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">GM</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">gamma_a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">&quot;Normal gravity at the equator&quot;</span>
+        <span class="n">bE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">E</span>
+        <span class="n">atanEb</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">q0</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">bE</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">atanEb</span> <span class="o">-</span> <span class="mi">3</span><span class="o">*</span><span class="n">bE</span><span class="p">)</span>
+        <span class="n">q0prime</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">bE</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">bE</span><span class="o">*</span><span class="n">atanEb</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">GM</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">m</span> <span class="o">-</span> <span class="n">m</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">e_prime</span><span class="o">*</span><span class="n">q0prime</span><span class="o">/</span><span class="p">(</span><span class="mi">6</span><span class="o">*</span><span class="n">q0</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">gamma_b</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">&quot;Normal gravity at the poles&quot;</span>
+        <span class="n">bE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">E</span>
+        <span class="n">atanEb</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">q0</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">bE</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">atanEb</span> <span class="o">-</span> <span class="mi">3</span><span class="o">*</span><span class="n">bE</span><span class="p">)</span>
+        <span class="n">q0prime</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">bE</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">bE</span><span class="o">*</span><span class="n">atanEb</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">GM</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">e_prime</span><span class="o">*</span><span class="n">q0prime</span><span class="o">/</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">q0</span><span class="p">))</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">**</span><span class="mi">2</span>
+
+</div>
+<span class="n">WGS84</span> <span class="o">=</span> <span class="n">ReferenceEllipsoid</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">6378137</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mf">298.257223563</span><span class="p">,</span> <span class="n">GM</span><span class="o">=</span><span class="mf">3986004.418e8</span><span class="p">,</span>
+                           <span class="n">omega</span><span class="o">=</span><span class="mf">7292115e-11</span><span class="p">,</span>
+                           <span class="n">name</span><span class="o">=</span><span class="s">&quot;World Geodetic System 1984&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="gamma_somigliana"><a class="viewcode-back" href="../../../api/gravmag.normal_gravity.html#fatiando.gravmag.normal_gravity.gamma_somigliana">[docs]</a><span class="k">def</span> <span class="nf">gamma_somigliana</span><span class="p">(</span><span class="n">latitude</span><span class="p">,</span> <span class="n">ellipsoid</span><span class="o">=</span><span class="n">WGS84</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate the normal gravity by using Somigliana&#39;s formula.</span>
+
+<span class="sd">    This formula computes normal gravity **on** the ellipsoid (height = 0).</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * latitude : float or numpy array</span>
+<span class="sd">        The latitude where the normal gravity will be computed (in degrees)</span>
+<span class="sd">    * ellipsoid : :class:`~fatiando.gravmag.normal_gravity.ReferenceEllipsoid`</span>
+<span class="sd">        The reference ellipsoid used.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * gamma : float or numpy array</span>
+<span class="sd">        The computed normal gravity (in mGal).</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">lat</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">latitude</span><span class="p">)</span>
+    <span class="n">sin2</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">cos2</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">top</span> <span class="o">=</span> <span class="p">((</span><span class="n">ellipsoid</span><span class="o">.</span><span class="n">a</span><span class="o">*</span><span class="n">ellipsoid</span><span class="o">.</span><span class="n">gamma_a</span><span class="p">)</span><span class="o">*</span><span class="n">cos2</span>
+           <span class="o">+</span> <span class="p">(</span><span class="n">ellipsoid</span><span class="o">.</span><span class="n">b</span><span class="o">*</span><span class="n">ellipsoid</span><span class="o">.</span><span class="n">gamma_b</span><span class="p">)</span><span class="o">*</span><span class="n">sin2</span><span class="p">)</span>
+    <span class="n">bottom</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ellipsoid</span><span class="o">.</span><span class="n">a</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">cos2</span> <span class="o">+</span> <span class="n">ellipsoid</span><span class="o">.</span><span class="n">b</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">sin2</span><span class="p">)</span>
+    <span class="n">gamma</span> <span class="o">=</span> <span class="n">top</span><span class="o">/</span><span class="n">bottom</span>
+    <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">si2mgal</span><span class="p">(</span><span class="n">gamma</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="gamma_somigliana_free_air"><a class="viewcode-back" href="../../../api/gravmag.normal_gravity.html#fatiando.gravmag.normal_gravity.gamma_somigliana_free_air">[docs]</a><span class="k">def</span> <span class="nf">gamma_somigliana_free_air</span><span class="p">(</span><span class="n">latitude</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">ellipsoid</span><span class="o">=</span><span class="n">WGS84</span><span class="p">):</span>
+    <span class="sd">r&#39;&#39;&#39;</span>
+<span class="sd">    Calculate the normal gravity at a height using Somigliana&#39;s formula and the</span>
+<span class="sd">    free-air correction.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * latitude : float or numpy array</span>
+<span class="sd">        The latitude where the normal gravity will be computed (in degrees)</span>
+<span class="sd">    * height : float or numpy array</span>
+<span class="sd">        The height of computation (in meters). Should be ellipsoidal</span>
+<span class="sd">        (geometric) heights for geophysical purposes.</span>
+<span class="sd">    * ellipsoid : :class:`~fatiando.gravmag.normal_gravity.ReferenceEllipsoid`</span>
+<span class="sd">        The reference ellipsoid used.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * gamma : float or numpy array</span>
+<span class="sd">        The computed normal gravity (in mGal).</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">fa</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.3086</span><span class="o">*</span><span class="n">height</span>
+    <span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma_somigliana</span><span class="p">(</span><span class="n">latitude</span><span class="p">,</span> <span class="n">ellipsoid</span><span class="o">=</span><span class="n">ellipsoid</span><span class="p">)</span> <span class="o">+</span> <span class="n">fa</span>
+    <span class="k">return</span> <span class="n">gamma</span>
+
+</div>
+<div class="viewcode-block" id="gamma_closed_form"><a class="viewcode-back" href="../../../api/gravmag.normal_gravity.html#fatiando.gravmag.normal_gravity.gamma_closed_form">[docs]</a><span class="k">def</span> <span class="nf">gamma_closed_form</span><span class="p">(</span><span class="n">latitude</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">ellipsoid</span><span class="o">=</span><span class="n">WGS84</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate normal gravity at a height using the closed form expression of</span>
+<span class="sd">    Li and Gotze (2001).</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * latitude : float or numpy array</span>
+<span class="sd">        The latitude where the normal gravity will be computed (in degrees)</span>
+<span class="sd">    * height : float or numpy array</span>
+<span class="sd">        The height of computation (in meters). Should be ellipsoidal</span>
+<span class="sd">        (geometric) heights for geophysical purposes.</span>
+<span class="sd">    * ellipsoid : :class:`~fatiando.gravmag.normal_gravity.ReferenceEllipsoid`</span>
+<span class="sd">        The reference ellipsoid used.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * gamma : float or numpy array</span>
+<span class="sd">        The computed normal gravity (in mGal).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">E2</span> <span class="o">=</span> <span class="n">ellipsoid</span><span class="o">.</span><span class="n">E</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">bE</span> <span class="o">=</span> <span class="n">ellipsoid</span><span class="o">.</span><span class="n">b</span><span class="o">/</span><span class="n">ellipsoid</span><span class="o">.</span><span class="n">E</span>
+    <span class="n">atanEb</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="n">ellipsoid</span><span class="o">.</span><span class="n">E</span><span class="p">,</span> <span class="n">ellipsoid</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">lat</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">latitude</span><span class="p">)</span>
+    <span class="n">coslat</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span>
+    <span class="n">sinlat</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span>
+    <span class="n">tanlat</span> <span class="o">=</span> <span class="n">sinlat</span><span class="o">/</span><span class="n">coslat</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">ellipsoid</span><span class="o">.</span><span class="n">b</span><span class="o">*</span><span class="n">tanlat</span><span class="p">,</span> <span class="n">ellipsoid</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">sinbeta</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span>
+    <span class="n">cosbeta</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span>
+    <span class="n">zl2</span> <span class="o">=</span> <span class="p">(</span><span class="n">ellipsoid</span><span class="o">.</span><span class="n">b</span><span class="o">*</span><span class="n">sinbeta</span> <span class="o">+</span> <span class="n">height</span><span class="o">*</span><span class="n">sinlat</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">rl2</span> <span class="o">=</span> <span class="p">(</span><span class="n">ellipsoid</span><span class="o">.</span><span class="n">a</span><span class="o">*</span><span class="n">cosbeta</span> <span class="o">+</span> <span class="n">height</span><span class="o">*</span><span class="n">coslat</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="p">(</span><span class="n">rl2</span> <span class="o">-</span> <span class="n">zl2</span><span class="p">)</span><span class="o">/</span><span class="n">E2</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="p">(</span><span class="n">rl2</span> <span class="o">+</span> <span class="n">zl2</span><span class="p">)</span><span class="o">/</span><span class="n">E2</span>
+    <span class="n">cosbetal</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">R</span><span class="p">)</span> <span class="o">-</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.25</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">R</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">D</span><span class="p">))</span>
+    <span class="n">cosbetal2</span> <span class="o">=</span> <span class="n">cosbetal</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">sinbetal2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">cosbetal2</span>
+    <span class="n">bl</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">rl2</span> <span class="o">+</span> <span class="n">zl2</span> <span class="o">-</span> <span class="n">E2</span><span class="o">*</span><span class="n">cosbetal2</span><span class="p">)</span>
+    <span class="n">bl2</span> <span class="o">=</span> <span class="n">bl</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">blE</span> <span class="o">=</span> <span class="n">bl</span><span class="o">/</span><span class="n">ellipsoid</span><span class="o">.</span><span class="n">E</span>
+    <span class="n">atanEbl</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">ellipsoid</span><span class="o">.</span><span class="n">E</span><span class="p">,</span> <span class="n">bl</span><span class="p">)</span>
+    <span class="n">q0</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">bE</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">atanEb</span> <span class="o">-</span> <span class="mi">3</span><span class="o">*</span><span class="n">bE</span><span class="p">)</span>
+    <span class="n">q0l</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">blE</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">blE</span><span class="o">*</span><span class="n">atanEbl</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">bl2</span> <span class="o">+</span> <span class="n">E2</span><span class="o">*</span><span class="n">sinbetal2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">bl2</span> <span class="o">+</span> <span class="n">E2</span><span class="p">))</span>
+    <span class="n">omega2</span> <span class="o">=</span> <span class="n">ellipsoid</span><span class="o">.</span><span class="n">omega</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">a2</span> <span class="o">=</span> <span class="n">ellipsoid</span><span class="o">.</span><span class="n">a</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">part1</span> <span class="o">=</span> <span class="n">ellipsoid</span><span class="o">.</span><span class="n">GM</span><span class="o">/</span><span class="p">(</span><span class="n">bl2</span> <span class="o">+</span> <span class="n">E2</span><span class="p">)</span>
+    <span class="n">part2</span> <span class="o">=</span> <span class="o">-</span><span class="n">cosbetal2</span><span class="o">*</span><span class="n">bl</span><span class="o">*</span><span class="n">ellipsoid</span><span class="o">.</span><span class="n">omega</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">part3</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">sinbetal2</span> <span class="o">-</span> <span class="mi">1</span><span class="o">/</span><span class="mi">6</span>
+    <span class="n">part4</span> <span class="o">=</span> <span class="n">a2</span><span class="o">*</span><span class="n">ellipsoid</span><span class="o">.</span><span class="n">E</span><span class="o">*</span><span class="n">q0l</span><span class="o">*</span><span class="n">omega2</span><span class="o">/</span><span class="p">((</span><span class="n">bl2</span> <span class="o">+</span> <span class="n">E2</span><span class="p">)</span><span class="o">*</span><span class="n">q0</span><span class="p">)</span>
+    <span class="n">gamma</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">si2mgal</span><span class="p">((</span><span class="n">part1</span> <span class="o">+</span> <span class="n">part2</span> <span class="o">+</span> <span class="n">part3</span><span class="o">*</span><span class="n">part4</span><span class="p">)</span><span class="o">/</span><span class="n">W</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">gamma</span>
+
+</div>
+<div class="viewcode-block" id="bouguer_plate"><a class="viewcode-back" href="../../../api/gravmag.normal_gravity.html#fatiando.gravmag.normal_gravity.bouguer_plate">[docs]</a><span class="k">def</span> <span class="nf">bouguer_plate</span><span class="p">(</span><span class="n">topography</span><span class="p">,</span> <span class="n">density_rock</span><span class="o">=</span><span class="mi">2670</span><span class="p">,</span> <span class="n">density_water</span><span class="o">=</span><span class="mi">1040</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the gravitational effect of an infinite Bouguer plate.</span>
+
+<span class="sd">    .. note:: The effect is calculated **on top** of the plate.</span>
+
+<span class="sd">    Uses the famous :math:`g_{BG} = 2 \pi G \rho t` formula, where t is the</span>
+<span class="sd">    height of the topography. On water (i.e., t &lt; 0), uses</span>
+<span class="sd">    :math:`g_{BG} = 2 \pi G (\rho_{water} - \rho_{rock})\times (-t)`.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * topography : float or numpy array</span>
+<span class="sd">        The height of topography (in meters).</span>
+<span class="sd">    * density_rock : float</span>
+<span class="sd">        The density of crustal rocks</span>
+<span class="sd">    * density_water : float</span>
+<span class="sd">        The density of ocean water</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * g_bouguer : float or array</span>
+<span class="sd">        The computed gravitational effect of the Bouguer plate</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">topography</span><span class="p">)</span>
+    <span class="n">g_bg</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">g_bg</span><span class="p">[</span><span class="n">t</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">G</span><span class="o">*</span><span class="n">density_rock</span><span class="o">*</span><span class="n">t</span><span class="p">[</span><span class="n">t</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">g_bg</span><span class="p">[</span><span class="n">t</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">G</span><span class="o">*</span><span class="p">(</span><span class="n">density_water</span> <span class="o">-</span> <span class="n">density_rock</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="n">t</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">g_bg</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">si2mgal</span><span class="p">(</span><span class="n">g_bg</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">g_bg</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">g_bg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">g_bg</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+.. _cookbook_seismic_srtomo_sharp:
+
+Seismic: 2D straight-ray tomography using sharpness (total variation) regularization
+=====================================================================================
+
+
+**Download** source code: :download:`seismic_srtomo_sharp.py<../_static/cookbook/seismic_srtomo_sharp.py>`
+
+.. literalinclude:: ../_static/cookbook/seismic_srtomo_sharp.py
+    :language: python

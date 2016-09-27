@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_harvester_tensor:
+
+GravMag: 3D gravity gradient inversion by planting anomalous densities using ``harvester`` (with non-targeted sources)
+=======================================================================================================================
+
+
+**Download** source code: :download:`gravmag_harvester_tensor.py<../_static/cookbook/gravmag_harvester_tensor.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_harvester_tensor.py
+    :language: python

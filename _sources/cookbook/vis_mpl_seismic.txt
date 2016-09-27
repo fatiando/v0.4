@@ -1,0 +1,10 @@
+.. _cookbook_vis_mpl_seismic:
+
+Seismic: plotting a seismic section from a SEGY
+================================================
+
+
+**Download** source code: :download:`vis_mpl_seismic.py<../_static/cookbook/vis_mpl_seismic.py>`
+
+.. literalinclude:: ../_static/cookbook/vis_mpl_seismic.py
+    :language: python

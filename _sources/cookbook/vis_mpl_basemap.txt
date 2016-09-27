@@ -1,0 +1,10 @@
+.. _cookbook_vis_mpl_basemap:
+
+Vis: Plot a map using the Orthographic map projection and filled contours
+==========================================================================
+
+
+**Download** source code: :download:`vis_mpl_basemap.py<../_static/cookbook/vis_mpl_basemap.py>`
+
+.. literalinclude:: ../_static/cookbook/vis_mpl_basemap.py
+    :language: python

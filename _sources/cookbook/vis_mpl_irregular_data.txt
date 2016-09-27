@@ -1,0 +1,10 @@
+.. _cookbook_vis_mpl_irregular_data:
+
+Vis: Plotting irregularly sampled map data
+===========================================
+
+
+**Download** source code: :download:`vis_mpl_irregular_data.py<../_static/cookbook/vis_mpl_irregular_data.py>`
+
+.. literalinclude:: ../_static/cookbook/vis_mpl_irregular_data.py
+    :language: python

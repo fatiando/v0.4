@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_tensor_polyprism:
+
+GravMag: Generate synthetic gradient tensor data from polygonal prisms
+=======================================================================
+
+
+**Download** source code: :download:`gravmag_tensor_polyprism.py<../_static/cookbook/gravmag_tensor_polyprism.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_tensor_polyprism.py
+    :language: python

@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_euler_classic_moving_window:
+
+GravMag: Classic 3D Euler deconvolution of magnetic data using a moving window
+===============================================================================
+
+
+**Download** source code: :download:`gravmag_euler_classic_moving_window.py<../_static/cookbook/gravmag_euler_classic_moving_window.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_euler_classic_moving_window.py
+    :language: python

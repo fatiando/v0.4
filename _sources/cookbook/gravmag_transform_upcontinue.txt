@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_transform_upcontinue:
+
+GravMag: Upward continuation of noisy gz data
+==============================================
+
+
+**Download** source code: :download:`gravmag_transform_upcontinue.py<../_static/cookbook/gravmag_transform_upcontinue.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_transform_upcontinue.py
+    :language: python

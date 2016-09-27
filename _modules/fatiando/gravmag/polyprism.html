@@ -1,0 +1,955 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fatiando.gravmag.polyprism &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><img src="../../../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../install.html">Installing</a></li>
+                <li><a href="../../../docs.html">Documentation</a></li>
+                <li><a href="../../../cookbook.html">Cookbook</a></li>
+                <li><a href="../../../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for fatiando.gravmag.polyprism</h1><div class="highlight"><pre>
+<span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">Calculate the potential fields of the 3D prism with polygonal crossection using</span>
+<span class="sd">the formula of Plouff (1976).</span>
+
+<span class="sd">**Gravity**</span>
+
+<span class="sd">First and second derivatives of the gravitational potential:</span>
+
+<span class="sd">* :func:`~fatiando.gravmag.polyprism.gz`</span>
+<span class="sd">* :func:`~fatiando.gravmag.polyprism.gxx`</span>
+<span class="sd">* :func:`~fatiando.gravmag.polyprism.gxy`</span>
+<span class="sd">* :func:`~fatiando.gravmag.polyprism.gxz`</span>
+<span class="sd">* :func:`~fatiando.gravmag.polyprism.gyy`</span>
+<span class="sd">* :func:`~fatiando.gravmag.polyprism.gyz`</span>
+<span class="sd">* :func:`~fatiando.gravmag.polyprism.gzz`</span>
+
+<span class="sd">**Magnetic**</span>
+
+<span class="sd">There are functions to calculate the total-field anomaly and the 3 components</span>
+<span class="sd">of magnetic induction:</span>
+
+<span class="sd">* :func:`~fatiando.gravmag.polyprism.tf`</span>
+<span class="sd">* :func:`~fatiando.gravmag.polyprism.bx`</span>
+<span class="sd">* :func:`~fatiando.gravmag.polyprism.by`</span>
+<span class="sd">* :func:`~fatiando.gravmag.polyprism.bz`</span>
+
+<span class="sd">**Auxiliary Functions**</span>
+
+<span class="sd">Calculates the second derivatives of the function</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">    \phi(x,y,z) = \int\int\int \frac{1}{r}</span>
+<span class="sd">                  \mathrm{d}\nu \mathrm{d}\eta \mathrm{d}\zeta</span>
+
+<span class="sd">with respect to the variables :math:`x`, :math:`y`, and :math:`z`.</span>
+<span class="sd">In this equation,</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">    r = \sqrt{(x - \nu)^2 + (y - \eta)^2 + (z - \zeta)^2}</span>
+
+<span class="sd">and :math:`\nu`, :math:`\eta`, :math:`\zeta` are the Cartesian</span>
+<span class="sd">coordinates of an element inside the volume of a 3D prism with</span>
+<span class="sd">polygonal crossection. These second derivatives are used to calculate</span>
+<span class="sd">the total field anomaly and the gravity gradient tensor</span>
+<span class="sd">components produced by a 3D prism with polygonal crossection.</span>
+
+<span class="sd">* :func:`~fatiando.gravmag.polyprism.kernelxx`</span>
+<span class="sd">* :func:`~fatiando.gravmag.polyprism.kernelxy`</span>
+<span class="sd">* :func:`~fatiando.gravmag.polyprism.kernelxz`</span>
+<span class="sd">* :func:`~fatiando.gravmag.polyprism.kernelyy`</span>
+<span class="sd">* :func:`~fatiando.gravmag.polyprism.kernelyz`</span>
+<span class="sd">* :func:`~fatiando.gravmag.polyprism.kernelzz`</span>
+
+<span class="sd">**References**</span>
+
+<span class="sd">Plouff, D. , 1976, Gravity and magnetic fields of polygonal prisms and</span>
+<span class="sd">applications to magnetic terrain corrections, Geophysics, 41(4), 727-741.</span>
+
+<span class="sd">----</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">arctan2</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">sqrt</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">..constants</span> <span class="kn">import</span> <span class="n">SI2MGAL</span><span class="p">,</span> <span class="n">SI2EOTVOS</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">CM</span><span class="p">,</span> <span class="n">T2NT</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_polyprism</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">_polyprism</span> <span class="o">=</span> <span class="bp">None</span>
+
+
+<div class="viewcode-block" id="tf"><a class="viewcode-back" href="../../../api/gravmag.polyprism.html#fatiando.gravmag.polyprism.tf">[docs]</a><span class="k">def</span> <span class="nf">tf</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">prisms</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="n">pmag</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the total-field anomaly of polygonal prisms.</span>
+
+<span class="sd">    .. note:: The coordinate system of the input parameters is to be</span>
+<span class="sd">        x -&gt; North, y -&gt; East and z -&gt; Down.</span>
+
+<span class="sd">    .. note:: Input units are SI. Output is in nT</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * xp, yp, zp : arrays</span>
+<span class="sd">        Arrays with the x, y, and z coordinates of the computation points.</span>
+<span class="sd">    * prisms : list of :class:`fatiando.mesher.PolygonalPrism`</span>
+<span class="sd">        The model used to calculate the total field anomaly.</span>
+<span class="sd">        Prisms without the physical property ``&#39;magnetization&#39;`` will</span>
+<span class="sd">        be ignored.</span>
+<span class="sd">    * inc : float</span>
+<span class="sd">        The inclination of the regional field (in degrees)</span>
+<span class="sd">    * dec : float</span>
+<span class="sd">        The declination of the regional field (in degrees)</span>
+<span class="sd">    * pmag : [mx, my, mz] or None</span>
+<span class="sd">        A magnetization vector. If not None, will use this value instead of the</span>
+<span class="sd">        ``&#39;magnetization&#39;`` property of the prisms. Use this, e.g., for</span>
+<span class="sd">        sensitivity matrix building.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The field calculated on xp, yp, zp</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">yp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">zp</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Input arrays xp, yp, and zp must have same shape!&quot;</span><span class="p">)</span>
+    <span class="c"># Calculate the 3 components of the unit vector in the direction of the</span>
+    <span class="c"># regional field</span>
+    <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">fz</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">dircos</span><span class="p">(</span><span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pmag</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pmag</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pmag</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">pmx</span><span class="p">,</span> <span class="n">pmy</span><span class="p">,</span> <span class="n">pmz</span> <span class="o">=</span> <span class="n">pmag</span> <span class="o">*</span> <span class="n">fx</span><span class="p">,</span> <span class="n">pmag</span> <span class="o">*</span> <span class="n">fy</span><span class="p">,</span> <span class="n">pmag</span> <span class="o">*</span> <span class="n">fz</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pmx</span><span class="p">,</span> <span class="n">pmy</span><span class="p">,</span> <span class="n">pmz</span> <span class="o">=</span> <span class="n">pmag</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xp</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">prism</span> <span class="ow">in</span> <span class="n">prisms</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">prism</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;magnetization&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span>
+                             <span class="ow">and</span> <span class="n">pmag</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">pmag</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">mag</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;magnetization&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mag</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mag</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="n">mx</span><span class="p">,</span> <span class="n">my</span><span class="p">,</span> <span class="n">mz</span> <span class="o">=</span> <span class="n">mag</span> <span class="o">*</span> <span class="n">fx</span><span class="p">,</span> <span class="n">mag</span> <span class="o">*</span> <span class="n">fy</span><span class="p">,</span> <span class="n">mag</span> <span class="o">*</span> <span class="n">fz</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mx</span><span class="p">,</span> <span class="n">my</span><span class="p">,</span> <span class="n">mz</span> <span class="o">=</span> <span class="n">mag</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mx</span><span class="p">,</span> <span class="n">my</span><span class="p">,</span> <span class="n">mz</span> <span class="o">=</span> <span class="n">pmx</span><span class="p">,</span> <span class="n">pmy</span><span class="p">,</span> <span class="n">pmz</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">z2</span>
+        <span class="n">_polyprism</span><span class="o">.</span><span class="n">tf</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">mx</span><span class="p">,</span> <span class="n">my</span><span class="p">,</span> <span class="n">mz</span><span class="p">,</span> <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">fz</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">*=</span> <span class="n">CM</span> <span class="o">*</span> <span class="n">T2NT</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="bx"><a class="viewcode-back" href="../../../api/gravmag.polyprism.html#fatiando.gravmag.polyprism.bx">[docs]</a><span class="k">def</span> <span class="nf">bx</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">prisms</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the x component of the magnetic induction produced by 3D</span>
+<span class="sd">    prisms with polygonal crosssection.</span>
+
+<span class="sd">    .. note:: Input units are SI. Output is in nT</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * xp, yp, zp : arrays</span>
+<span class="sd">        The x, y, and z coordinates where the anomaly will be calculated</span>
+<span class="sd">    * prisms : list of :class:`fatiando.mesher.PolygonalPrism`</span>
+<span class="sd">        The model used to calculate the total field anomaly.</span>
+<span class="sd">        Prisms without the physical property ``&#39;magnetization&#39;`` will</span>
+<span class="sd">        be ignored. The ``&#39;magnetization&#39;`` must be a vector.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * bx: array</span>
+<span class="sd">        The x component of the magnetic induction</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">yp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">zp</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Input arrays xp, yp, and zp must have same shape!&quot;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xp</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">prism</span> <span class="ow">in</span> <span class="n">prisms</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">prism</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;magnetization&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="c"># Get the magnetization vector components</span>
+        <span class="n">mx</span><span class="p">,</span> <span class="n">my</span><span class="p">,</span> <span class="n">mz</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;magnetization&#39;</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">z2</span>
+        <span class="n">_polyprism</span><span class="o">.</span><span class="n">bx</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">mx</span><span class="p">,</span> <span class="n">my</span><span class="p">,</span> <span class="n">mz</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">*=</span> <span class="n">CM</span> <span class="o">*</span> <span class="n">T2NT</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="by"><a class="viewcode-back" href="../../../api/gravmag.polyprism.html#fatiando.gravmag.polyprism.by">[docs]</a><span class="k">def</span> <span class="nf">by</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">prisms</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the y component of the magnetic induction produced by 3D</span>
+<span class="sd">    prisms with polygonal crosssection.</span>
+
+<span class="sd">    .. note:: Input units are SI. Output is in nT</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * xp, yp, zp : arrays</span>
+<span class="sd">        The x, y, and z coordinates where the anomaly will be calculated</span>
+<span class="sd">    * prisms : list of :class:`fatiando.mesher.PolygonalPrism`</span>
+<span class="sd">        The model used to calculate the total field anomaly.</span>
+<span class="sd">        Prisms without the physical property ``&#39;magnetization&#39;`` will</span>
+<span class="sd">        be ignored. The ``&#39;magnetization&#39;`` must be a vector.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * by: array</span>
+<span class="sd">        The y component of the magnetic induction</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">yp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">zp</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Input arrays xp, yp, and zp must have same shape!&quot;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xp</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">prism</span> <span class="ow">in</span> <span class="n">prisms</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">prism</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;magnetization&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="c"># Get the magnetization vector components</span>
+        <span class="n">mx</span><span class="p">,</span> <span class="n">my</span><span class="p">,</span> <span class="n">mz</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;magnetization&#39;</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">z2</span>
+        <span class="n">_polyprism</span><span class="o">.</span><span class="n">by</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">mx</span><span class="p">,</span> <span class="n">my</span><span class="p">,</span> <span class="n">mz</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">*=</span> <span class="n">CM</span> <span class="o">*</span> <span class="n">T2NT</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="bz"><a class="viewcode-back" href="../../../api/gravmag.polyprism.html#fatiando.gravmag.polyprism.bz">[docs]</a><span class="k">def</span> <span class="nf">bz</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">prisms</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the z component of the magnetic induction produced by 3D</span>
+<span class="sd">    prisms with polygonal crosssection.</span>
+
+<span class="sd">    .. note:: Input units are SI. Output is in nT</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * xp, yp, zp : arrays</span>
+<span class="sd">        The x, y, and z coordinates where the anomaly will be calculated</span>
+<span class="sd">    * prisms : list of :class:`fatiando.mesher.PolygonalPrism`</span>
+<span class="sd">        The model used to calculate the total field anomaly.</span>
+<span class="sd">        Prisms without the physical property ``&#39;magnetization&#39;`` will</span>
+<span class="sd">        be ignored. The ``&#39;magnetization&#39;`` must be a vector.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * bz: array</span>
+<span class="sd">        The z component of the magnetic induction</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">yp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">zp</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Input arrays xp, yp, and zp must have same shape!&quot;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xp</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">prism</span> <span class="ow">in</span> <span class="n">prisms</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">prism</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;magnetization&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="c"># Get the magnetization vector components</span>
+        <span class="n">mx</span><span class="p">,</span> <span class="n">my</span><span class="p">,</span> <span class="n">mz</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;magnetization&#39;</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">z2</span>
+        <span class="n">_polyprism</span><span class="o">.</span><span class="n">bz</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">mx</span><span class="p">,</span> <span class="n">my</span><span class="p">,</span> <span class="n">mz</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">*=</span> <span class="n">CM</span> <span class="o">*</span> <span class="n">T2NT</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="gz"><a class="viewcode-back" href="../../../api/gravmag.polyprism.html#fatiando.gravmag.polyprism.gz">[docs]</a><span class="k">def</span> <span class="nf">gz</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">prisms</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the :math:`g_{z}` gravity acceleration component.</span>
+
+<span class="sd">    .. note:: The coordinate system of the input parameters is to be</span>
+<span class="sd">        x -&gt; North, y -&gt; East and z -&gt; Down.</span>
+
+<span class="sd">    .. note:: All input values in SI units and output in mGal!</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * xp, yp, zp : arrays</span>
+<span class="sd">        The x, y, and z coordinates of the computation points.</span>
+<span class="sd">    * prisms : list of :class:`fatiando.mesher.PolygonalPrism`</span>
+<span class="sd">        The model used to calculate the field.</span>
+<span class="sd">        Prisms must have the physical property ``&#39;density&#39;`` will be</span>
+<span class="sd">        ignored.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The effect calculated on the computation points.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">yp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">zp</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Input arrays xp, yp, and zp must have same shape!&quot;</span><span class="p">)</span>
+    <span class="n">dummy</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xp</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">prism</span> <span class="ow">in</span> <span class="n">prisms</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">prism</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="s">&#39;density&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">z2</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;density&#39;</span><span class="p">]</span>
+        <span class="n">_polyprism</span><span class="o">.</span><span class="n">gz</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">*=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">SI2MGAL</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="gxx"><a class="viewcode-back" href="../../../api/gravmag.polyprism.html#fatiando.gravmag.polyprism.gxx">[docs]</a><span class="k">def</span> <span class="nf">gxx</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">prisms</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the :math:`g_{xx}` gravity gradient tensor component.</span>
+
+<span class="sd">    .. note:: The coordinate system of the input parameters is to be</span>
+<span class="sd">        x -&gt; North, y -&gt; East and z -&gt; Down.</span>
+
+<span class="sd">    .. note:: All input values in SI units and output in Eotvos!</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * xp, yp, zp : arrays</span>
+<span class="sd">        The x, y, and z coordinates of the computation points.</span>
+<span class="sd">    * prisms : list of :class:`fatiando.mesher.PolygonalPrism`</span>
+<span class="sd">        The model used to calculate the field.</span>
+<span class="sd">        Prisms must have the physical property ``&#39;density&#39;`` will be</span>
+<span class="sd">        ignored.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The effect calculated on the computation points.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">yp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">zp</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Input arrays xp, yp, and zp must have same shape!&quot;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xp</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">prism</span> <span class="ow">in</span> <span class="n">prisms</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">prism</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="s">&#39;density&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;density&#39;</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">z2</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;density&#39;</span><span class="p">]</span>
+        <span class="n">_polyprism</span><span class="o">.</span><span class="n">gxx</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">*=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">SI2EOTVOS</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="gxy"><a class="viewcode-back" href="../../../api/gravmag.polyprism.html#fatiando.gravmag.polyprism.gxy">[docs]</a><span class="k">def</span> <span class="nf">gxy</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">prisms</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the :math:`g_{xy}` gravity gradient tensor component.</span>
+
+<span class="sd">    .. note:: The coordinate system of the input parameters is to be</span>
+<span class="sd">        x -&gt; North, y -&gt; East and z -&gt; Down.</span>
+
+<span class="sd">    .. note:: All input values in SI units and output in Eotvos!</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * xp, yp, zp : arrays</span>
+<span class="sd">        The x, y, and z coordinates of the computation points.</span>
+<span class="sd">    * prisms : list of :class:`fatiando.mesher.PolygonalPrism`</span>
+<span class="sd">        The model used to calculate the field.</span>
+<span class="sd">        Prisms must have the physical property ``&#39;density&#39;`` will be</span>
+<span class="sd">        ignored.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The effect calculated on the computation points.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">yp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">zp</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Input arrays xp, yp, and zp must have same shape!&quot;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xp</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">prism</span> <span class="ow">in</span> <span class="n">prisms</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">prism</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="s">&#39;density&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;density&#39;</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">z2</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;density&#39;</span><span class="p">]</span>
+        <span class="n">_polyprism</span><span class="o">.</span><span class="n">gxy</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">*=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">SI2EOTVOS</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="gxz"><a class="viewcode-back" href="../../../api/gravmag.polyprism.html#fatiando.gravmag.polyprism.gxz">[docs]</a><span class="k">def</span> <span class="nf">gxz</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">prisms</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the :math:`g_{xz}` gravity gradient tensor component.</span>
+
+<span class="sd">    .. note:: The coordinate system of the input parameters is to be</span>
+<span class="sd">        x -&gt; North, y -&gt; East and z -&gt; Down.</span>
+
+<span class="sd">    .. note:: All input values in SI units and output in Eotvos!</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * xp, yp, zp : arrays</span>
+<span class="sd">        The x, y, and z coordinates of the computation points.</span>
+<span class="sd">    * prisms : list of :class:`fatiando.mesher.PolygonalPrism`</span>
+<span class="sd">        The model used to calculate the field.</span>
+<span class="sd">        Prisms must have the physical property ``&#39;density&#39;`` will be</span>
+<span class="sd">        ignored.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The effect calculated on the computation points.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">yp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">zp</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Input arrays xp, yp, and zp must have same shape!&quot;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xp</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">prism</span> <span class="ow">in</span> <span class="n">prisms</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">prism</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="s">&#39;density&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;density&#39;</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">z2</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;density&#39;</span><span class="p">]</span>
+        <span class="n">_polyprism</span><span class="o">.</span><span class="n">gxz</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">*=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">SI2EOTVOS</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="gyy"><a class="viewcode-back" href="../../../api/gravmag.polyprism.html#fatiando.gravmag.polyprism.gyy">[docs]</a><span class="k">def</span> <span class="nf">gyy</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">prisms</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the :math:`g_{yy}` gravity gradient tensor component.</span>
+
+<span class="sd">    .. note:: The coordinate system of the input parameters is to be</span>
+<span class="sd">        x -&gt; North, y -&gt; East and z -&gt; Down.</span>
+
+<span class="sd">    .. note:: All input values in SI units and output in Eotvos!</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * xp, yp, zp : arrays</span>
+<span class="sd">        The x, y, and z coordinates of the computation points.</span>
+<span class="sd">    * prisms : list of :class:`fatiando.mesher.PolygonalPrism`</span>
+<span class="sd">        The model used to calculate the field.</span>
+<span class="sd">        Prisms must have the physical property ``&#39;density&#39;`` will be</span>
+<span class="sd">        ignored.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The effect calculated on the computation points.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">yp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">zp</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Input arrays xp, yp, and zp must have same shape!&quot;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xp</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">prism</span> <span class="ow">in</span> <span class="n">prisms</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">prism</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="s">&#39;density&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;density&#39;</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">z2</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;density&#39;</span><span class="p">]</span>
+        <span class="n">_polyprism</span><span class="o">.</span><span class="n">gyy</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">*=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">SI2EOTVOS</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="gyz"><a class="viewcode-back" href="../../../api/gravmag.polyprism.html#fatiando.gravmag.polyprism.gyz">[docs]</a><span class="k">def</span> <span class="nf">gyz</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">prisms</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the :math:`g_{yz}` gravity gradient tensor component.</span>
+
+<span class="sd">    .. note:: The coordinate system of the input parameters is to be</span>
+<span class="sd">        x -&gt; North, y -&gt; East and z -&gt; Down.</span>
+
+<span class="sd">    .. note:: All input values in SI units and output in Eotvos!</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * xp, yp, zp : arrays</span>
+<span class="sd">        The x, y, and z coordinates of the computation points.</span>
+<span class="sd">    * prisms : list of :class:`fatiando.mesher.PolygonalPrism`</span>
+<span class="sd">        The model used to calculate the field.</span>
+<span class="sd">        Prisms must have the physical property ``&#39;density&#39;`` will be</span>
+<span class="sd">        ignored.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The effect calculated on the computation points.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">yp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">zp</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Input arrays xp, yp, and zp must have same shape!&quot;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xp</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">prism</span> <span class="ow">in</span> <span class="n">prisms</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">prism</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="s">&#39;density&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;density&#39;</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">z2</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;density&#39;</span><span class="p">]</span>
+        <span class="n">_polyprism</span><span class="o">.</span><span class="n">gyz</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">*=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">SI2EOTVOS</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="gzz"><a class="viewcode-back" href="../../../api/gravmag.polyprism.html#fatiando.gravmag.polyprism.gzz">[docs]</a><span class="k">def</span> <span class="nf">gzz</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">prisms</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the :math:`g_{zz}` gravity gradient tensor component.</span>
+
+<span class="sd">    .. note:: The coordinate system of the input parameters is to be</span>
+<span class="sd">        x -&gt; North, y -&gt; East and z -&gt; Down.</span>
+
+<span class="sd">    .. note:: All input values in SI units and output in Eotvos!</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * xp, yp, zp : arrays</span>
+<span class="sd">        The x, y, and z coordinates of the computation points.</span>
+<span class="sd">    * prisms : list of :class:`fatiando.mesher.PolygonalPrism`</span>
+<span class="sd">        The model used to calculate the field.</span>
+<span class="sd">        Prisms must have the physical property ``&#39;density&#39;`` will be</span>
+<span class="sd">        ignored.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The effect calculated on the computation points.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">yp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">zp</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Input arrays xp, yp, and zp must have same shape!&quot;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xp</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">prism</span> <span class="ow">in</span> <span class="n">prisms</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">prism</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="s">&#39;density&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;density&#39;</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">z2</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;density&#39;</span><span class="p">]</span>
+        <span class="n">_polyprism</span><span class="o">.</span><span class="n">gzz</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">*=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">SI2EOTVOS</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="kernelxx"><a class="viewcode-back" href="../../../api/gravmag.polyprism.html#fatiando.gravmag.polyprism.kernelxx">[docs]</a><span class="k">def</span> <span class="nf">kernelxx</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">prism</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the function</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \frac{\partial^2 \phi(x,y,z)}{\partial x^2},</span>
+
+<span class="sd">    where</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \phi(x,y,z) = \int \int \int \frac{1}{r}</span>
+<span class="sd">                      \mathrm{d}\nu \mathrm{d}\eta \mathrm{d}\zeta</span>
+
+<span class="sd">    and</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        r = \sqrt{(x - \nu)^2 + (y - \eta)^2 + (z - \zeta)^2}.</span>
+
+<span class="sd">    .. note:: The coordinate system of the input parameters is to be</span>
+<span class="sd">        x -&gt; North, y -&gt; East and z -&gt; Down.</span>
+
+<span class="sd">    .. note:: All input and output values in SI!</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * xp, yp, zp : arrays</span>
+<span class="sd">        The x, y, and z coordinates of the computation points.</span>
+<span class="sd">    * prisms : object of :class:`fatiando.mesher.PolygonalPrism`</span>
+<span class="sd">        The model used to calculate the function.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The effect calculated on the computation points.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">yp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">zp</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Input arrays xp, yp, and zp must have same shape!&quot;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xp</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">y</span>
+    <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">z2</span>
+    <span class="n">_polyprism</span><span class="o">.</span><span class="n">gxx</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="kernelxy"><a class="viewcode-back" href="../../../api/gravmag.polyprism.html#fatiando.gravmag.polyprism.kernelxy">[docs]</a><span class="k">def</span> <span class="nf">kernelxy</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">prism</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the function</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \frac{\partial^2 \phi(x,y,z)}{\partial x \partial y},</span>
+
+<span class="sd">    where</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \phi(x,y,z) = \int \int \int \frac{1}{r}</span>
+<span class="sd">                      \mathrm{d}\nu \mathrm{d}\eta \mathrm{d}\zeta</span>
+
+<span class="sd">    and</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        r = \sqrt{(x - \nu)^2 + (y - \eta)^2 + (z - \zeta)^2}.</span>
+
+<span class="sd">    .. note:: The coordinate system of the input parameters is to be</span>
+<span class="sd">        x -&gt; North, y -&gt; East and z -&gt; Down.</span>
+
+<span class="sd">    .. note:: All input and output values in SI!</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * xp, yp, zp : arrays</span>
+<span class="sd">        The x, y, and z coordinates of the computation points.</span>
+<span class="sd">    * prisms : object of :class:`fatiando.mesher.PolygonalPrism`</span>
+<span class="sd">        The model used to calculate the function.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The effect calculated on the computation points.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">yp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">zp</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Input arrays xp, yp, and zp must have same shape!&quot;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xp</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">y</span>
+    <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">z2</span>
+    <span class="n">_polyprism</span><span class="o">.</span><span class="n">gxy</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="kernelxz"><a class="viewcode-back" href="../../../api/gravmag.polyprism.html#fatiando.gravmag.polyprism.kernelxz">[docs]</a><span class="k">def</span> <span class="nf">kernelxz</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">prism</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the function</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \frac{\partial^2 \phi(x,y,z)}{\partial x \partial z},</span>
+
+<span class="sd">    where</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \phi(x,y,z) = \int \int \int \frac{1}{r}</span>
+<span class="sd">                      \mathrm{d}\nu \mathrm{d}\eta \mathrm{d}\zeta</span>
+
+<span class="sd">    and</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        r = \sqrt{(x - \nu)^2 + (y - \eta)^2 + (z - \zeta)^2}.</span>
+
+<span class="sd">    .. note:: The coordinate system of the input parameters is to be</span>
+<span class="sd">        x -&gt; North, y -&gt; East and z -&gt; Down.</span>
+
+<span class="sd">    .. note:: All input and output values in SI!</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * xp, yp, zp : arrays</span>
+<span class="sd">        The x, y, and z coordinates of the computation points.</span>
+<span class="sd">    * prisms : object of :class:`fatiando.mesher.PolygonalPrism`</span>
+<span class="sd">        The model used to calculate the function.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The effect calculated on the computation points.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">yp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">zp</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Input arrays xp, yp, and zp must have same shape!&quot;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xp</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">y</span>
+    <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">z2</span>
+    <span class="n">_polyprism</span><span class="o">.</span><span class="n">gxz</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="kernelyy"><a class="viewcode-back" href="../../../api/gravmag.polyprism.html#fatiando.gravmag.polyprism.kernelyy">[docs]</a><span class="k">def</span> <span class="nf">kernelyy</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">prism</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the function</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \frac{\partial^2 \phi(x,y,z)}{\partial y^2},</span>
+
+<span class="sd">    where</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \phi(x,y,z) = \int \int \int \frac{1}{r}</span>
+<span class="sd">                      \mathrm{d}\nu \mathrm{d}\eta \mathrm{d}\zeta</span>
+
+<span class="sd">    and</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        r = \sqrt{(x - \nu)^2 + (y - \eta)^2 + (z - \zeta)^2}.</span>
+
+<span class="sd">    .. note:: The coordinate system of the input parameters is to be</span>
+<span class="sd">        x -&gt; North, y -&gt; East and z -&gt; Down.</span>
+
+<span class="sd">    .. note:: All input and output values in SI!</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * xp, yp, zp : arrays</span>
+<span class="sd">        The x, y, and z coordinates of the computation points.</span>
+<span class="sd">    * prisms : object of :class:`fatiando.mesher.PolygonalPrism`</span>
+<span class="sd">        The model used to calculate the function.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The effect calculated on the computation points.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">yp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">zp</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Input arrays xp, yp, and zp must have same shape!&quot;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xp</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">y</span>
+    <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">z2</span>
+    <span class="n">_polyprism</span><span class="o">.</span><span class="n">gyy</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="kernelyz"><a class="viewcode-back" href="../../../api/gravmag.polyprism.html#fatiando.gravmag.polyprism.kernelyz">[docs]</a><span class="k">def</span> <span class="nf">kernelyz</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">prism</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the function</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \frac{\partial^2 \phi(x,y,z)}{\partial y \partial z},</span>
+
+<span class="sd">    where</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \phi(x,y,z) = \int \int \int \frac{1}{r}</span>
+<span class="sd">                      \mathrm{d}\nu \mathrm{d}\eta \mathrm{d}\zeta</span>
+
+<span class="sd">    and</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        r = \sqrt{(x - \nu)^2 + (y - \eta)^2 + (z - \zeta)^2}.</span>
+
+<span class="sd">    .. note:: The coordinate system of the input parameters is to be</span>
+<span class="sd">        x -&gt; North, y -&gt; East and z -&gt; Down.</span>
+
+<span class="sd">    .. note:: All input and output values in SI!</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * xp, yp, zp : arrays</span>
+<span class="sd">        The x, y, and z coordinates of the computation points.</span>
+<span class="sd">    * prisms : object of :class:`fatiando.mesher.PolygonalPrism`</span>
+<span class="sd">        The model used to calculate the function.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The effect calculated on the computation points.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">yp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">zp</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Input arrays xp, yp, and zp must have same shape!&quot;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xp</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">y</span>
+    <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">z2</span>
+    <span class="n">_polyprism</span><span class="o">.</span><span class="n">gyz</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="kernelzz"><a class="viewcode-back" href="../../../api/gravmag.polyprism.html#fatiando.gravmag.polyprism.kernelzz">[docs]</a><span class="k">def</span> <span class="nf">kernelzz</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">prism</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the function</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \frac{\partial^2 \phi(x,y,z)}{\partial z^2},</span>
+
+<span class="sd">    where</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \phi(x,y,z) = \int \int \int \frac{1}{r}</span>
+<span class="sd">                      \mathrm{d}\nu \mathrm{d}\eta \mathrm{d}\zeta</span>
+
+<span class="sd">    and</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        r = \sqrt{(x - \nu)^2 + (y - \eta)^2 + (z - \zeta)^2}.</span>
+
+<span class="sd">    .. note:: The coordinate system of the input parameters is to be</span>
+<span class="sd">        x -&gt; North, y -&gt; East and z -&gt; Down.</span>
+
+<span class="sd">    .. note:: All input and output values in SI!</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * xp, yp, zp : arrays</span>
+<span class="sd">        The x, y, and z coordinates of the computation points.</span>
+<span class="sd">    * prisms : object of :class:`fatiando.mesher.PolygonalPrism`</span>
+<span class="sd">        The model used to calculate the function.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * res : array</span>
+<span class="sd">        The effect calculated on the computation points.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">yp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">zp</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Input arrays xp, yp, and zp must have same shape!&quot;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xp</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">y</span>
+    <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="n">prism</span><span class="o">.</span><span class="n">z2</span>
+    <span class="n">_polyprism</span><span class="o">.</span><span class="n">gzz</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

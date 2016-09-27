@@ -1,0 +1,1096 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Forward modeling with tesseroids (fatiando.gravmag.tesseroid) &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Gravity and magnetics (fatiando.gravmag)" href="gravmag.html" />
+    <link rel="next" title="Forward modeling with 2D polygons (fatiando.gravmag.talwani)" href="gravmag.talwani.html" />
+    <link rel="prev" title="Forward modeling with spheres (fatiando.gravmag.sphere)" href="gravmag.sphere.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../install.html">Installing</a></li>
+                <li><a href="../docs.html">Documentation</a></li>
+                <li><a href="../cookbook.html">Cookbook</a></li>
+                <li><a href="../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="module-fatiando.gravmag.tesseroid">
+<span id="forward-modeling-with-tesseroids-fatiando-gravmag-tesseroid"></span><span id="fatiando-gravmag-tesseroid"></span><h1>Forward modeling with tesseroids (<code class="docutils literal"><span class="pre">fatiando.gravmag.tesseroid</span></code>)<a class="headerlink" href="#module-fatiando.gravmag.tesseroid" title="Permalink to this headline">¶</a></h1>
+<p>Calculates the potential fields of a tesseroid (spherical prism).</p>
+<p>Functions in this module calculate the gravitational fields of a tesseroid with
+respect to the local North-oriented coordinate system of the computation point.
+See the figure below.</p>
+<div class="row">
+<div class="col-md-3">
+</div>
+<div class="col-md-6"><div class="figure align-center" id="id1">
+<a class="reference internal image-reference" href="../_images/tesseroid-coord-sys.png"><img alt="A tesseroid in a geocentric coordinate system" src="../_images/tesseroid-coord-sys.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-text">A tesseroid in a geocentric coordinate system (X, Y, Z). Point P is a
+computation point with associated local North-oriented coordinate system
+(x, y, z).
+Image by L. Uieda (doi:<a class="reference external" href="http://dx.doi.org/10.6084/m9.figshare.1495525">10.6084/m9.figshare.1495525</a>).</span></p>
+</div>
+</div>
+<div class="col-md-3">
+</div>
+</div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Coordinate systems</p>
+<p class="last">The gravitational attraction
+and gravity gradient tensor
+are calculated with respect to
+the local coordinate system of the computation point.
+This system has <strong>x -&gt; North</strong>, <strong>y -&gt; East</strong>, <strong>z -&gt; up</strong>
+(radial direction).</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The <span class="math">\(g_z\)</span> component is an <strong>exception</strong> to this.
+In order to conform with the regular convention
+of z-axis pointing toward the center of the Earth,
+<strong>this component only</strong> is calculated with <strong>z -&gt; Down</strong>.
+This way, gravity anomalies of
+tesseroids with positive density
+are positive, not negative.</p>
+</div>
+<div class="section" id="gravity">
+<h2>Gravity<a class="headerlink" href="#gravity" title="Permalink to this headline">¶</a></h2>
+<p>Forward modeling of gravitational fields is performed by functions:
+<a class="reference internal" href="#fatiando.gravmag.tesseroid.potential" title="fatiando.gravmag.tesseroid.potential"><code class="xref py py-func docutils literal"><span class="pre">potential</span></code></a>,
+<a class="reference internal" href="#fatiando.gravmag.tesseroid.gx" title="fatiando.gravmag.tesseroid.gx"><code class="xref py py-func docutils literal"><span class="pre">gx</span></code></a>,
+<a class="reference internal" href="#fatiando.gravmag.tesseroid.gy" title="fatiando.gravmag.tesseroid.gy"><code class="xref py py-func docutils literal"><span class="pre">gy</span></code></a>,
+<a class="reference internal" href="#fatiando.gravmag.tesseroid.gz" title="fatiando.gravmag.tesseroid.gz"><code class="xref py py-func docutils literal"><span class="pre">gz</span></code></a>,
+<a class="reference internal" href="#fatiando.gravmag.tesseroid.gxx" title="fatiando.gravmag.tesseroid.gxx"><code class="xref py py-func docutils literal"><span class="pre">gxx</span></code></a>,
+<a class="reference internal" href="#fatiando.gravmag.tesseroid.gxy" title="fatiando.gravmag.tesseroid.gxy"><code class="xref py py-func docutils literal"><span class="pre">gxy</span></code></a>,
+<a class="reference internal" href="#fatiando.gravmag.tesseroid.gxz" title="fatiando.gravmag.tesseroid.gxz"><code class="xref py py-func docutils literal"><span class="pre">gxz</span></code></a>,
+<a class="reference internal" href="#fatiando.gravmag.tesseroid.gyy" title="fatiando.gravmag.tesseroid.gyy"><code class="xref py py-func docutils literal"><span class="pre">gyy</span></code></a>,
+<a class="reference internal" href="#fatiando.gravmag.tesseroid.gyz" title="fatiando.gravmag.tesseroid.gyz"><code class="xref py py-func docutils literal"><span class="pre">gyz</span></code></a>,
+<a class="reference internal" href="#fatiando.gravmag.tesseroid.gzz" title="fatiando.gravmag.tesseroid.gzz"><code class="xref py py-func docutils literal"><span class="pre">gzz</span></code></a></p>
+<p>The gravitational fields are calculated using the formula of Grombein et al.
+(2013):</p>
+<div class="math">
+\[V(r,\phi,\lambda) = G \rho
+    \displaystyle\int_{\lambda_1}^{\lambda_2}
+    \displaystyle\int_{\phi_1}^{\phi_2}
+    \displaystyle\int_{r_1}^{r_2}
+    \frac{1}{\ell} \kappa \ d r' d \phi' d \lambda'\]</div>
+<div class="math">
+\[g_{\alpha}(r,\phi,\lambda) = G \rho
+    \displaystyle\int_{\lambda_1}^{\lambda_2}
+    \displaystyle\int_{\phi_1}^{\phi_2} \displaystyle\int_{r_1}^{r_2}
+    \frac{\Delta_{\alpha}}{\ell^3} \kappa \ d r' d \phi' d \lambda'
+    \ \ \alpha \in \{x,y,z\}\]</div>
+<div class="math">
+\[g_{\alpha\beta}(r,\phi,\lambda) = G \rho
+    \displaystyle\int_{\lambda_1}^{\lambda_2}
+    \displaystyle\int_{\phi_1}^{\phi_2} \displaystyle\int_{r_1}^{r_2}
+    I_{\alpha\beta}({r'}, {\phi'}, {\lambda'} )
+    \ d r' d \phi' d \lambda'
+    \ \ \alpha,\beta \in \{x,y,z\}\]</div>
+<div class="math">
+\[I_{\alpha\beta}({r'}, {\phi'}, {\lambda'}) =
+    \left(
+        \frac{3\Delta_{\alpha} \Delta_{\beta}}{\ell^5} -
+        \frac{\delta_{\alpha\beta}}{\ell^3}
+    \right)
+    \kappa\
+    \ \ \alpha,\beta \in \{x,y,z\}\]</div>
+<p>where <span class="math">\(\rho\)</span> is density,
+<span class="math">\(\{x, y, z\}\)</span> correspond to the local coordinate system
+of the computation point P,
+<span class="math">\(\delta_{\alpha\beta}\)</span> is the <a class="reference external" href="http://en.wikipedia.org/wiki/Kronecker_delta">Kronecker delta</a>, and</p>
+<div class="math">
+\[ \begin{eqnarray*}
+     \Delta_x &=& r' K_{\phi} \\
+     \Delta_y &=& r' \cos \phi' \sin(\lambda' - \lambda) \\
+     \Delta_z &=& r' \cos \psi - r\\
+     \ell &=& \sqrt{r'^2 + r^2 - 2 r' r \cos \psi} \\
+     \cos\psi &=& \sin\phi\sin\phi' + \cos\phi\cos\phi'
+                  \cos(\lambda' - \lambda) \\
+     K_{\phi} &=& \cos\phi\sin\phi' - \sin\phi\cos\phi'
+                  \cos(\lambda' - \lambda)\\
+     \kappa &=& {r'}^2 \cos \phi'
+ \end{eqnarray*}\]</div><p><span class="math">\(\phi\)</span> is latitude,
+<span class="math">\(\lambda\)</span> is longitude, and
+<span class="math">\(r\)</span> is radius.</p>
+<div class="section" id="numerical-integration">
+<h3>Numerical integration<a class="headerlink" href="#numerical-integration" title="Permalink to this headline">¶</a></h3>
+<p>The above integrals are solved using the Gauss-Legendre Quadrature rule
+(Asgharzadeh et al., 2007;
+Wild-Pfeiffer, 2008):</p>
+<div class="math">
+\[g_{\alpha\beta}(r,\phi,\lambda) \approx G \rho
+    \frac{(\lambda_2 - \lambda_1)(\phi_2 - \phi_1)(r_2 - r_1)}{8}
+    \displaystyle\sum_{k=1}^{N^{\lambda}}
+    \displaystyle\sum_{j=1}^{N^{\phi}}
+    \displaystyle\sum_{i=1}^{N^r}
+    W^r_i W^{\phi}_j W^{\lambda}_k
+    I_{\alpha\beta}({r'}_i, {\phi'}_j, {\lambda'}_k )
+    \ \alpha,\beta \in \{1,2,3\}\]</div>
+<p>where <span class="math">\(W_i^r\)</span>, <span class="math">\(W_j^{\phi}\)</span>, and <span class="math">\(W_k^{\lambda}\)</span>
+are weighting coefficients
+and <span class="math">\(N^r\)</span>, <span class="math">\(N^{\phi}\)</span>, and <span class="math">\(N^{\lambda}\)</span>
+are the number of quadrature nodes
+(i.e., the order of the quadrature),
+for the radius, latitude, and longitude, respectively.</p>
+<p>Accurate numerical integration is achieved by an adaptive discretization
+algorithm. The one implemented here is a modified version of Li et al (2011).
+The adaptive discretization keeps the integration error below 0.1%.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The integration error may be larger than this if the computation
+points are closer than 1 km of the tesseroids. This effect is more
+significant in the gravity gradient components.</p>
+</div>
+</div>
+<div class="section" id="references">
+<h3>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h3>
+<p>Asgharzadeh, M. F., R. R. B. von Frese, H. R. Kim, T. E. Leftwich,
+and J. W. Kim (2007),
+Spherical prism gravity effects by Gauss-Legendre quadrature integration,
+Geophysical Journal International, 169(1), 1-11,
+doi:10.1111/j.1365-246X.2007.03214.x.</p>
+<p>Grombein, T.; Seitz, K.; Heck, B. (2013), Optimized formulas for the
+gravitational field of a tesseroid, Journal of Geodesy,
+doi: 10.1007/s00190-013-0636-1</p>
+<p>Li, Z., T. Hao, Y. Xu, and Y. Xu (2011), An efficient and adaptive approach for
+modeling gravity effects in spherical coordinates, Journal of Applied
+Geophysics, 73(3), 221-231, doi:10.1016/j.jappgeo.2011.01.004.</p>
+<p>Wild-Pfeiffer, F. (2008),
+A comparison of different mass elements for use in gravity gradiometry,
+Journal of Geodesy, 82(10), 637-653, doi:10.1007/s00190-008-0219-8.</p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="fatiando.gravmag.tesseroid.gx">
+<code class="descclassname">fatiando.gravmag.tesseroid.</code><code class="descname">gx</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>height</em>, <em>model</em>, <em>dens=None</em>, <em>ratio=1.6</em>, <em>engine='default'</em>, <em>njobs=1</em>, <em>pool=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/tesseroid.html#gx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.tesseroid.gx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the North component of the gravitational attraction.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Tesseroids with dimensions &lt; 10 cm will be ignored to avoid
+numerical errors.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>lon, lat, height <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">Arrays with the longitude, latitude and height coordinates of the
+computation points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>model <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Tesseroid" title="fatiando.mesher.Tesseroid"><code class="xref py py-class docutils literal"><span class="pre">Tesseroid</span></code></a></span></dt>
+<dd><p class="first last">The density model used to calculate the gravitational effect.
+Tesseroids must have the property <code class="docutils literal"><span class="pre">'density'</span></code>. Those that don&#8217;t have
+this property will be ignored in the computations. Elements that are
+None will also be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">If not None, will use this value instead of the <code class="docutils literal"><span class="pre">'density'</span></code> property
+of the tesseroids. Use this, e.g., for sensitivity matrix building.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>ratio <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Will divide each tesseroid until the distance between it and the
+computation points is &lt; ratio*size of tesseroid. Used to guarantee the
+accuracy of the numerical integration.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>engine <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">What implementation to use. If <code class="docutils literal"><span class="pre">'numba'</span></code> will use the numba library
+implementation for greater speed. If <code class="docutils literal"><span class="pre">'numpy'</span></code> will use a pure Python
++ numpy version (~100x slower). If <code class="docutils literal"><span class="pre">'default'</span></code>, will use numba if it
+is installed, and numpy if it is not.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>njobs <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Split the computation into <em>njobs</em> parts and run it in parallel using
+<code class="docutils literal"><span class="pre">multiprocessing</span></code>. If <code class="docutils literal"><span class="pre">njobs=1</span></code> will run the computation in serial.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">None or multiprocessing.Pool object</span></dt>
+<dd><p class="first last">If not None, will use this pool to run the computation in parallel
+instead of creating a new one. You must still specify <em>njobs</em> as the
+number of processes in the pool. Use this to avoid spawning processes
+on each call to this functions, which can have significant overhead.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The calculated field in mGal</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.tesseroid.gxx">
+<code class="descclassname">fatiando.gravmag.tesseroid.</code><code class="descname">gxx</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>height</em>, <em>model</em>, <em>dens=None</em>, <em>ratio=8</em>, <em>engine='default'</em>, <em>njobs=1</em>, <em>pool=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/tesseroid.html#gxx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.tesseroid.gxx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the xx component of the gravity gradient tensor.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Tesseroids with dimensions &lt; 10 cm will be ignored to avoid
+numerical errors.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>lon, lat, height <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">Arrays with the longitude, latitude and height coordinates of the
+computation points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>model <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Tesseroid" title="fatiando.mesher.Tesseroid"><code class="xref py py-class docutils literal"><span class="pre">Tesseroid</span></code></a></span></dt>
+<dd><p class="first last">The density model used to calculate the gravitational effect.
+Tesseroids must have the property <code class="docutils literal"><span class="pre">'density'</span></code>. Those that don&#8217;t have
+this property will be ignored in the computations. Elements that are
+None will also be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">If not None, will use this value instead of the <code class="docutils literal"><span class="pre">'density'</span></code> property
+of the tesseroids. Use this, e.g., for sensitivity matrix building.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>ratio <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Will divide each tesseroid until the distance between it and the
+computation points is &lt; ratio*size of tesseroid. Used to guarantee the
+accuracy of the numerical integration.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>engine <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">What implementation to use. If <code class="docutils literal"><span class="pre">'numba'</span></code> will use the numba library
+implementation for greater speed. If <code class="docutils literal"><span class="pre">'numpy'</span></code> will use a pure Python
++ numpy version (~100x slower). If <code class="docutils literal"><span class="pre">'default'</span></code>, will use numba if it
+is installed, and numpy if it is not.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>njobs <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Split the computation into <em>njobs</em> parts and run it in parallel using
+<code class="docutils literal"><span class="pre">multiprocessing</span></code>. If <code class="docutils literal"><span class="pre">njobs=1</span></code> will run the computation in serial.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">None or multiprocessing.Pool object</span></dt>
+<dd><p class="first last">If not None, will use this pool to run the computation in parallel
+instead of creating a new one. You must still specify <em>njobs</em> as the
+number of processes in the pool. Use this to avoid spawning processes
+on each call to this functions, which can have significant overhead.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The calculated field in Eotvos</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.tesseroid.gxy">
+<code class="descclassname">fatiando.gravmag.tesseroid.</code><code class="descname">gxy</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>height</em>, <em>model</em>, <em>dens=None</em>, <em>ratio=8</em>, <em>engine='default'</em>, <em>njobs=1</em>, <em>pool=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/tesseroid.html#gxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.tesseroid.gxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the xy component of the gravity gradient tensor.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Tesseroids with dimensions &lt; 10 cm will be ignored to avoid
+numerical errors.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>lon, lat, height <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">Arrays with the longitude, latitude and height coordinates of the
+computation points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>model <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Tesseroid" title="fatiando.mesher.Tesseroid"><code class="xref py py-class docutils literal"><span class="pre">Tesseroid</span></code></a></span></dt>
+<dd><p class="first last">The density model used to calculate the gravitational effect.
+Tesseroids must have the property <code class="docutils literal"><span class="pre">'density'</span></code>. Those that don&#8217;t have
+this property will be ignored in the computations. Elements that are
+None will also be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">If not None, will use this value instead of the <code class="docutils literal"><span class="pre">'density'</span></code> property
+of the tesseroids. Use this, e.g., for sensitivity matrix building.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>ratio <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Will divide each tesseroid until the distance between it and the
+computation points is &lt; ratio*size of tesseroid. Used to guarantee the
+accuracy of the numerical integration.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>engine <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">What implementation to use. If <code class="docutils literal"><span class="pre">'numba'</span></code> will use the numba library
+implementation for greater speed. If <code class="docutils literal"><span class="pre">'numpy'</span></code> will use a pure Python
++ numpy version (~100x slower). If <code class="docutils literal"><span class="pre">'default'</span></code>, will use numba if it
+is installed, and numpy if it is not.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>njobs <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Split the computation into <em>njobs</em> parts and run it in parallel using
+<code class="docutils literal"><span class="pre">multiprocessing</span></code>. If <code class="docutils literal"><span class="pre">njobs=1</span></code> will run the computation in serial.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">None or multiprocessing.Pool object</span></dt>
+<dd><p class="first last">If not None, will use this pool to run the computation in parallel
+instead of creating a new one. You must still specify <em>njobs</em> as the
+number of processes in the pool. Use this to avoid spawning processes
+on each call to this functions, which can have significant overhead.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The calculated field in Eotvos</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.tesseroid.gxz">
+<code class="descclassname">fatiando.gravmag.tesseroid.</code><code class="descname">gxz</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>height</em>, <em>model</em>, <em>dens=None</em>, <em>ratio=8</em>, <em>engine='default'</em>, <em>njobs=1</em>, <em>pool=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/tesseroid.html#gxz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.tesseroid.gxz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the xz component of the gravity gradient tensor.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Tesseroids with dimensions &lt; 10 cm will be ignored to avoid
+numerical errors.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>lon, lat, height <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">Arrays with the longitude, latitude and height coordinates of the
+computation points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>model <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Tesseroid" title="fatiando.mesher.Tesseroid"><code class="xref py py-class docutils literal"><span class="pre">Tesseroid</span></code></a></span></dt>
+<dd><p class="first last">The density model used to calculate the gravitational effect.
+Tesseroids must have the property <code class="docutils literal"><span class="pre">'density'</span></code>. Those that don&#8217;t have
+this property will be ignored in the computations. Elements that are
+None will also be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">If not None, will use this value instead of the <code class="docutils literal"><span class="pre">'density'</span></code> property
+of the tesseroids. Use this, e.g., for sensitivity matrix building.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>ratio <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Will divide each tesseroid until the distance between it and the
+computation points is &lt; ratio*size of tesseroid. Used to guarantee the
+accuracy of the numerical integration.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>engine <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">What implementation to use. If <code class="docutils literal"><span class="pre">'numba'</span></code> will use the numba library
+implementation for greater speed. If <code class="docutils literal"><span class="pre">'numpy'</span></code> will use a pure Python
++ numpy version (~100x slower). If <code class="docutils literal"><span class="pre">'default'</span></code>, will use numba if it
+is installed, and numpy if it is not.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>njobs <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Split the computation into <em>njobs</em> parts and run it in parallel using
+<code class="docutils literal"><span class="pre">multiprocessing</span></code>. If <code class="docutils literal"><span class="pre">njobs=1</span></code> will run the computation in serial.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">None or multiprocessing.Pool object</span></dt>
+<dd><p class="first last">If not None, will use this pool to run the computation in parallel
+instead of creating a new one. You must still specify <em>njobs</em> as the
+number of processes in the pool. Use this to avoid spawning processes
+on each call to this functions, which can have significant overhead.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The calculated field in Eotvos</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.tesseroid.gy">
+<code class="descclassname">fatiando.gravmag.tesseroid.</code><code class="descname">gy</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>height</em>, <em>model</em>, <em>dens=None</em>, <em>ratio=1.6</em>, <em>engine='default'</em>, <em>njobs=1</em>, <em>pool=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/tesseroid.html#gy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.tesseroid.gy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the East component of the gravitational attraction.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Tesseroids with dimensions &lt; 10 cm will be ignored to avoid
+numerical errors.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>lon, lat, height <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">Arrays with the longitude, latitude and height coordinates of the
+computation points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>model <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Tesseroid" title="fatiando.mesher.Tesseroid"><code class="xref py py-class docutils literal"><span class="pre">Tesseroid</span></code></a></span></dt>
+<dd><p class="first last">The density model used to calculate the gravitational effect.
+Tesseroids must have the property <code class="docutils literal"><span class="pre">'density'</span></code>. Those that don&#8217;t have
+this property will be ignored in the computations. Elements that are
+None will also be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">If not None, will use this value instead of the <code class="docutils literal"><span class="pre">'density'</span></code> property
+of the tesseroids. Use this, e.g., for sensitivity matrix building.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>ratio <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Will divide each tesseroid until the distance between it and the
+computation points is &lt; ratio*size of tesseroid. Used to guarantee the
+accuracy of the numerical integration.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>engine <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">What implementation to use. If <code class="docutils literal"><span class="pre">'numba'</span></code> will use the numba library
+implementation for greater speed. If <code class="docutils literal"><span class="pre">'numpy'</span></code> will use a pure Python
++ numpy version (~100x slower). If <code class="docutils literal"><span class="pre">'default'</span></code>, will use numba if it
+is installed, and numpy if it is not.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>njobs <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Split the computation into <em>njobs</em> parts and run it in parallel using
+<code class="docutils literal"><span class="pre">multiprocessing</span></code>. If <code class="docutils literal"><span class="pre">njobs=1</span></code> will run the computation in serial.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">None or multiprocessing.Pool object</span></dt>
+<dd><p class="first last">If not None, will use this pool to run the computation in parallel
+instead of creating a new one. You must still specify <em>njobs</em> as the
+number of processes in the pool. Use this to avoid spawning processes
+on each call to this functions, which can have significant overhead.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The calculated field in mGal</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.tesseroid.gyy">
+<code class="descclassname">fatiando.gravmag.tesseroid.</code><code class="descname">gyy</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>height</em>, <em>model</em>, <em>dens=None</em>, <em>ratio=8</em>, <em>engine='default'</em>, <em>njobs=1</em>, <em>pool=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/tesseroid.html#gyy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.tesseroid.gyy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the yy component of the gravity gradient tensor.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Tesseroids with dimensions &lt; 10 cm will be ignored to avoid
+numerical errors.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>lon, lat, height <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">Arrays with the longitude, latitude and height coordinates of the
+computation points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>model <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Tesseroid" title="fatiando.mesher.Tesseroid"><code class="xref py py-class docutils literal"><span class="pre">Tesseroid</span></code></a></span></dt>
+<dd><p class="first last">The density model used to calculate the gravitational effect.
+Tesseroids must have the property <code class="docutils literal"><span class="pre">'density'</span></code>. Those that don&#8217;t have
+this property will be ignored in the computations. Elements that are
+None will also be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">If not None, will use this value instead of the <code class="docutils literal"><span class="pre">'density'</span></code> property
+of the tesseroids. Use this, e.g., for sensitivity matrix building.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>ratio <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Will divide each tesseroid until the distance between it and the
+computation points is &lt; ratio*size of tesseroid. Used to guarantee the
+accuracy of the numerical integration.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>engine <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">What implementation to use. If <code class="docutils literal"><span class="pre">'numba'</span></code> will use the numba library
+implementation for greater speed. If <code class="docutils literal"><span class="pre">'numpy'</span></code> will use a pure Python
++ numpy version (~100x slower). If <code class="docutils literal"><span class="pre">'default'</span></code>, will use numba if it
+is installed, and numpy if it is not.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>njobs <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Split the computation into <em>njobs</em> parts and run it in parallel using
+<code class="docutils literal"><span class="pre">multiprocessing</span></code>. If <code class="docutils literal"><span class="pre">njobs=1</span></code> will run the computation in serial.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">None or multiprocessing.Pool object</span></dt>
+<dd><p class="first last">If not None, will use this pool to run the computation in parallel
+instead of creating a new one. You must still specify <em>njobs</em> as the
+number of processes in the pool. Use this to avoid spawning processes
+on each call to this functions, which can have significant overhead.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The calculated field in Eotvos</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.tesseroid.gyz">
+<code class="descclassname">fatiando.gravmag.tesseroid.</code><code class="descname">gyz</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>height</em>, <em>model</em>, <em>dens=None</em>, <em>ratio=8</em>, <em>engine='default'</em>, <em>njobs=1</em>, <em>pool=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/tesseroid.html#gyz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.tesseroid.gyz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the yz component of the gravity gradient tensor.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Tesseroids with dimensions &lt; 10 cm will be ignored to avoid
+numerical errors.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>lon, lat, height <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">Arrays with the longitude, latitude and height coordinates of the
+computation points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>model <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Tesseroid" title="fatiando.mesher.Tesseroid"><code class="xref py py-class docutils literal"><span class="pre">Tesseroid</span></code></a></span></dt>
+<dd><p class="first last">The density model used to calculate the gravitational effect.
+Tesseroids must have the property <code class="docutils literal"><span class="pre">'density'</span></code>. Those that don&#8217;t have
+this property will be ignored in the computations. Elements that are
+None will also be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">If not None, will use this value instead of the <code class="docutils literal"><span class="pre">'density'</span></code> property
+of the tesseroids. Use this, e.g., for sensitivity matrix building.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>ratio <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Will divide each tesseroid until the distance between it and the
+computation points is &lt; ratio*size of tesseroid. Used to guarantee the
+accuracy of the numerical integration.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>engine <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">What implementation to use. If <code class="docutils literal"><span class="pre">'numba'</span></code> will use the numba library
+implementation for greater speed. If <code class="docutils literal"><span class="pre">'numpy'</span></code> will use a pure Python
++ numpy version (~100x slower). If <code class="docutils literal"><span class="pre">'default'</span></code>, will use numba if it
+is installed, and numpy if it is not.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>njobs <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Split the computation into <em>njobs</em> parts and run it in parallel using
+<code class="docutils literal"><span class="pre">multiprocessing</span></code>. If <code class="docutils literal"><span class="pre">njobs=1</span></code> will run the computation in serial.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">None or multiprocessing.Pool object</span></dt>
+<dd><p class="first last">If not None, will use this pool to run the computation in parallel
+instead of creating a new one. You must still specify <em>njobs</em> as the
+number of processes in the pool. Use this to avoid spawning processes
+on each call to this functions, which can have significant overhead.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The calculated field in Eotvos</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.tesseroid.gz">
+<code class="descclassname">fatiando.gravmag.tesseroid.</code><code class="descname">gz</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>height</em>, <em>model</em>, <em>dens=None</em>, <em>ratio=1.6</em>, <em>engine='default'</em>, <em>njobs=1</em>, <em>pool=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/tesseroid.html#gz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.tesseroid.gz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the radial component of the gravitational attraction.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">In order to conform with the regular convention of positive density
+giving positive gz values, <strong>this component only</strong> is calculated
+with <strong>z axis -&gt; Down</strong>.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Tesseroids with dimensions &lt; 10 cm will be ignored to avoid
+numerical errors.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>lon, lat, height <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">Arrays with the longitude, latitude and height coordinates of the
+computation points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>model <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Tesseroid" title="fatiando.mesher.Tesseroid"><code class="xref py py-class docutils literal"><span class="pre">Tesseroid</span></code></a></span></dt>
+<dd><p class="first last">The density model used to calculate the gravitational effect.
+Tesseroids must have the property <code class="docutils literal"><span class="pre">'density'</span></code>. Those that don&#8217;t have
+this property will be ignored in the computations. Elements that are
+None will also be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">If not None, will use this value instead of the <code class="docutils literal"><span class="pre">'density'</span></code> property
+of the tesseroids. Use this, e.g., for sensitivity matrix building.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>ratio <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Will divide each tesseroid until the distance between it and the
+computation points is &lt; ratio*size of tesseroid. Used to guarantee the
+accuracy of the numerical integration.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>engine <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">What implementation to use. If <code class="docutils literal"><span class="pre">'numba'</span></code> will use the numba library
+implementation for greater speed. If <code class="docutils literal"><span class="pre">'numpy'</span></code> will use a pure Python
++ numpy version (~100x slower). If <code class="docutils literal"><span class="pre">'default'</span></code>, will use numba if it
+is installed, and numpy if it is not.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>njobs <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Split the computation into <em>njobs</em> parts and run it in parallel using
+<code class="docutils literal"><span class="pre">multiprocessing</span></code>. If <code class="docutils literal"><span class="pre">njobs=1</span></code> will run the computation in serial.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">None or multiprocessing.Pool object</span></dt>
+<dd><p class="first last">If not None, will use this pool to run the computation in parallel
+instead of creating a new one. You must still specify <em>njobs</em> as the
+number of processes in the pool. Use this to avoid spawning processes
+on each call to this functions, which can have significant overhead.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The calculated field in mGal</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.tesseroid.gzz">
+<code class="descclassname">fatiando.gravmag.tesseroid.</code><code class="descname">gzz</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>height</em>, <em>model</em>, <em>dens=None</em>, <em>ratio=8</em>, <em>engine='default'</em>, <em>njobs=1</em>, <em>pool=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/tesseroid.html#gzz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.tesseroid.gzz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the zz component of the gravity gradient tensor.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Tesseroids with dimensions &lt; 10 cm will be ignored to avoid
+numerical errors.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>lon, lat, height <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">Arrays with the longitude, latitude and height coordinates of the
+computation points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>model <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Tesseroid" title="fatiando.mesher.Tesseroid"><code class="xref py py-class docutils literal"><span class="pre">Tesseroid</span></code></a></span></dt>
+<dd><p class="first last">The density model used to calculate the gravitational effect.
+Tesseroids must have the property <code class="docutils literal"><span class="pre">'density'</span></code>. Those that don&#8217;t have
+this property will be ignored in the computations. Elements that are
+None will also be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">If not None, will use this value instead of the <code class="docutils literal"><span class="pre">'density'</span></code> property
+of the tesseroids. Use this, e.g., for sensitivity matrix building.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>ratio <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Will divide each tesseroid until the distance between it and the
+computation points is &lt; ratio*size of tesseroid. Used to guarantee the
+accuracy of the numerical integration.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>engine <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">What implementation to use. If <code class="docutils literal"><span class="pre">'numba'</span></code> will use the numba library
+implementation for greater speed. If <code class="docutils literal"><span class="pre">'numpy'</span></code> will use a pure Python
++ numpy version (~100x slower). If <code class="docutils literal"><span class="pre">'default'</span></code>, will use numba if it
+is installed, and numpy if it is not.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>njobs <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Split the computation into <em>njobs</em> parts and run it in parallel using
+<code class="docutils literal"><span class="pre">multiprocessing</span></code>. If <code class="docutils literal"><span class="pre">njobs=1</span></code> will run the computation in serial.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">None or multiprocessing.Pool object</span></dt>
+<dd><p class="first last">If not None, will use this pool to run the computation in parallel
+instead of creating a new one. You must still specify <em>njobs</em> as the
+number of processes in the pool. Use this to avoid spawning processes
+on each call to this functions, which can have significant overhead.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The calculated field in Eotvos</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.tesseroid.potential">
+<code class="descclassname">fatiando.gravmag.tesseroid.</code><code class="descname">potential</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>height</em>, <em>model</em>, <em>dens=None</em>, <em>ratio=1</em>, <em>engine='default'</em>, <em>njobs=1</em>, <em>pool=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/tesseroid.html#potential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.tesseroid.potential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the gravitational potential due to a tesseroid model.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Tesseroids with dimensions &lt; 10 cm will be ignored to avoid
+numerical errors.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>lon, lat, height <span class="classifier-delimiter">:</span> <span class="classifier">arrays</span></dt>
+<dd><p class="first last">Arrays with the longitude, latitude and height coordinates of the
+computation points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>model <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference internal" href="mesher.html#fatiando.mesher.Tesseroid" title="fatiando.mesher.Tesseroid"><code class="xref py py-class docutils literal"><span class="pre">Tesseroid</span></code></a></span></dt>
+<dd><p class="first last">The density model used to calculate the gravitational effect.
+Tesseroids must have the property <code class="docutils literal"><span class="pre">'density'</span></code>. Those that don&#8217;t have
+this property will be ignored in the computations. Elements that are
+None will also be ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dens <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">If not None, will use this value instead of the <code class="docutils literal"><span class="pre">'density'</span></code> property
+of the tesseroids. Use this, e.g., for sensitivity matrix building.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>ratio <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Will divide each tesseroid until the distance between it and the
+computation points is &lt; ratio*size of tesseroid. Used to guarantee the
+accuracy of the numerical integration.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>engine <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">What implementation to use. If <code class="docutils literal"><span class="pre">'numba'</span></code> will use the numba library
+implementation for greater speed. If <code class="docutils literal"><span class="pre">'numpy'</span></code> will use a pure Python
++ numpy version (~100x slower). If <code class="docutils literal"><span class="pre">'default'</span></code>, will use numba if it
+is installed, and numpy if it is not.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>njobs <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Split the computation into <em>njobs</em> parts and run it in parallel using
+<code class="docutils literal"><span class="pre">multiprocessing</span></code>. If <code class="docutils literal"><span class="pre">njobs=1</span></code> will run the computation in serial.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>pool <span class="classifier-delimiter">:</span> <span class="classifier">None or multiprocessing.Pool object</span></dt>
+<dd><p class="first last">If not None, will use this pool to run the computation in parallel
+instead of creating a new one. You must still specify <em>njobs</em> as the
+number of processes in the pool. Use this to avoid spawning processes
+on each call to this functions, which can have significant overhead.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>res <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd><p class="first last">The calculated field in SI units</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="../_sources/api/gravmag.tesseroid.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

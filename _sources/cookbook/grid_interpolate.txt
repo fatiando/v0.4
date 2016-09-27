@@ -1,0 +1,10 @@
+.. _cookbook_grid_interpolate:
+
+Gridding: Grid irregularly sampled data.
+=========================================
+
+
+**Download** source code: :download:`grid_interpolate.py<../_static/cookbook/grid_interpolate.py>`
+
+.. literalinclude:: ../_static/cookbook/grid_interpolate.py
+    :language: python

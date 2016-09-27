@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_tensor_prism_noisy:
+
+GravMag: Generate noise-corrupted gravity gradient tensor data
+===============================================================
+
+
+**Download** source code: :download:`gravmag_tensor_prism_noisy.py<../_static/cookbook/gravmag_tensor_prism_noisy.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_tensor_prism_noisy.py
+    :language: python

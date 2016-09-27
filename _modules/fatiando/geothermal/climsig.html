@@ -1,0 +1,380 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fatiando.geothermal.climsig &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><img src="../../../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../install.html">Installing</a></li>
+                <li><a href="../../../docs.html">Documentation</a></li>
+                <li><a href="../../../cookbook.html">Cookbook</a></li>
+                <li><a href="../../../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for fatiando.geothermal.climsig</h1><div class="highlight"><pre>
+<span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">Modeling and inversion of temperature residuals measured in wells due to</span>
+<span class="sd">temperature perturbations in the surface.</span>
+
+<span class="sd">Perturbations can be of two kinds: **abrupt** or **linear**.</span>
+
+<span class="sd">Forward modeling of these types of changes is done with functions:</span>
+
+<span class="sd">* :func:`~fatiando.geothermal.climsig.abrupt`</span>
+<span class="sd">* :func:`~fatiando.geothermal.climsig.linear`</span>
+
+<span class="sd">Assumeing that the temperature perturbation was abrupt. The residual</span>
+<span class="sd">temperature at a depth :math:`z_i` in the well at a time :math:`t` after the</span>
+<span class="sd">perturbation is given by</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">    T_i(z_i) = A \left[1 - \mathrm{erf}\left(</span>
+<span class="sd">    \frac{z_i}{\sqrt{4\lambda t}}\right)\right]</span>
+
+<span class="sd">where :math:`A` is the amplitude of the perturbation, :math:`\lambda` is the</span>
+<span class="sd">thermal diffusivity of the medium, and :math:`\mathrm{erf}` is the error</span>
+<span class="sd">function.</span>
+
+<span class="sd">For the case of a linear change, the temperature is</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">    T_i(z_i) = A \left[</span>
+<span class="sd">    \left(1 + 2\frac{z_i^2}{4\lambda t}\right)</span>
+<span class="sd">    \mathrm{erfc}\left(\frac{z_i}{\sqrt{4\lambda t}}\right) -</span>
+<span class="sd">    \frac{2}{\sqrt{\pi}}\left(\frac{z_i}{\sqrt{4\lambda t}}\right)</span>
+<span class="sd">    \mathrm{exp}\left(-\frac{z_i^2}{4\lambda t}\right)</span>
+<span class="sd">    \right]</span>
+
+<span class="sd">Given the temperature measured at different depths, we can **invert** for the</span>
+<span class="sd">amplitude and age of the change. The available inversion solvers are:</span>
+
+<span class="sd">* :class:`~fatiando.geothermal.climsig.SingleChange`: inverts for the</span>
+<span class="sd">  parameters of a single temperature change. Can use both abrupt and linear</span>
+<span class="sd">  models.</span>
+
+
+<span class="sd">----</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">future.builtins</span> <span class="kn">import</span> <span class="nb">super</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.special</span>
+
+<span class="kn">from</span> <span class="nn">..inversion</span> <span class="kn">import</span> <span class="n">Misfit</span>
+<span class="kn">from</span> <span class="nn">..constants</span> <span class="kn">import</span> <span class="n">THERMAL_DIFFUSIVITY_YEAR</span>
+
+
+<div class="viewcode-block" id="linear"><a class="viewcode-back" href="../../../api/geothermal.climsig.html#fatiando.geothermal.climsig.linear">[docs]</a><span class="k">def</span> <span class="nf">linear</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">diffus</span><span class="o">=</span><span class="n">THERMAL_DIFFUSIVITY_YEAR</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the residual temperature profile in depth due to a linear</span>
+<span class="sd">    temperature perturbation.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * amp : float</span>
+<span class="sd">        Amplitude of the perturbation (in C)</span>
+<span class="sd">    * age : float</span>
+<span class="sd">        Time since the perturbation occured (in years)</span>
+<span class="sd">    * zp : array</span>
+<span class="sd">        The depths of computation points along the well (in meters)</span>
+<span class="sd">    * diffus : float</span>
+<span class="sd">        Thermal diffusivity of the medium (in m^2/year)</span>
+
+<span class="sd">    See the default values for the thermal diffusivity in</span>
+<span class="sd">    :mod:`fatiando.constants`.</span>
+
+<span class="sd">    Returns</span>
+
+<span class="sd">    * temp : array</span>
+<span class="sd">        The residual temperatures measured along the well</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">zp</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">4.</span> <span class="o">*</span> <span class="n">diffus</span> <span class="o">*</span> <span class="n">age</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="p">((</span><span class="mf">1.</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">tmp</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">erfc</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+                 <span class="o">-</span> <span class="mf">2.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">*</span> <span class="n">tmp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">tmp</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="abrupt"><a class="viewcode-back" href="../../../api/geothermal.climsig.html#fatiando.geothermal.climsig.abrupt">[docs]</a><span class="k">def</span> <span class="nf">abrupt</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">diffus</span><span class="o">=</span><span class="n">THERMAL_DIFFUSIVITY_YEAR</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the residual temperature profile in depth due to an abrupt</span>
+<span class="sd">    temperature perturbation.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * amp : float</span>
+<span class="sd">        Amplitude of the perturbation (in C)</span>
+<span class="sd">    * age : float</span>
+<span class="sd">        Time since the perturbation occured (in years)</span>
+<span class="sd">    * zp : array</span>
+<span class="sd">        Arry with the depths of computation points along the well (in meters)</span>
+<span class="sd">    * diffus : float</span>
+<span class="sd">        Thermal diffusivity of the medium (in m^2/year)</span>
+
+<span class="sd">    See the default values for the thermal diffusivity in</span>
+<span class="sd">    :mod:`fatiando.constants`.</span>
+
+<span class="sd">    Returns</span>
+
+<span class="sd">    * temp : array</span>
+<span class="sd">        The residual temperatures measured along the well</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">amp</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">erf</span><span class="p">(</span><span class="n">zp</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">4.</span> <span class="o">*</span> <span class="n">diffus</span> <span class="o">*</span> <span class="n">age</span><span class="p">)))</span>
+
+</div>
+<div class="viewcode-block" id="SingleChange"><a class="viewcode-back" href="../../../api/geothermal.climsig.html#fatiando.geothermal.climsig.SingleChange">[docs]</a><span class="k">class</span> <span class="nc">SingleChange</span><span class="p">(</span><span class="n">Misfit</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Invert the well temperature data for a single change in temperature.</span>
+
+<span class="sd">    The parameters of the change are its amplitude and age.</span>
+
+<span class="sd">    See the docstring of :mod:`fatiando.geothermal.climsig` for more</span>
+<span class="sd">    information and examples.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * temp : array</span>
+<span class="sd">        The temperature profile</span>
+<span class="sd">    * zp : array</span>
+<span class="sd">        Depths along the profile</span>
+<span class="sd">    * mode : string</span>
+<span class="sd">        The type of change: ``&#39;abrupt&#39;`` for an abrupt change, ``&#39;linear&#39;`` for</span>
+<span class="sd">        a linear change.</span>
+<span class="sd">    * diffus : float</span>
+<span class="sd">        Thermal diffusivity of the medium (in m^2/year)</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The recommended solver for this inverse problem is the</span>
+<span class="sd">        Levemberg-Marquardt method. Since this is a non-linear problem, set the</span>
+<span class="sd">        desired method and initial solution using the</span>
+<span class="sd">        :meth:`~fatiando.inversion.base.FitMixin.config` method.</span>
+<span class="sd">        See the example bellow.</span>
+
+<span class="sd">    Example with synthetic data:</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; zp = np.arange(0, 100, 1)</span>
+<span class="sd">        &gt;&gt;&gt; # For an ABRUPT change</span>
+<span class="sd">        &gt;&gt;&gt; amp = 2</span>
+<span class="sd">        &gt;&gt;&gt; age = 100 # Uses years to avoid overflows</span>
+<span class="sd">        &gt;&gt;&gt; temp = abrupt(amp, age, zp)</span>
+<span class="sd">        &gt;&gt;&gt; # Run the inversion for the amplitude and time</span>
+<span class="sd">        &gt;&gt;&gt; # This is a non-linear problem, so use the Levemberg-Marquardt</span>
+<span class="sd">        &gt;&gt;&gt; # algorithm with an initial estimate</span>
+<span class="sd">        &gt;&gt;&gt; solver = SingleChange(temp, zp, mode=&#39;abrupt&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; _ = solver.config(&#39;levmarq&#39;, initial=[1, 1]).fit()</span>
+<span class="sd">        &gt;&gt;&gt; amp_, age_ = solver.estimate_</span>
+<span class="sd">        &gt;&gt;&gt; print(&quot;amp: {:.2f}  age: {:.2f}&quot;.format(amp_, age_))</span>
+<span class="sd">        amp: 2.00  age: 100.00</span>
+<span class="sd">        &gt;&gt;&gt; # For a LINEAR change</span>
+<span class="sd">        &gt;&gt;&gt; amp = 3.45</span>
+<span class="sd">        &gt;&gt;&gt; age = 52.5</span>
+<span class="sd">        &gt;&gt;&gt; temp = linear(amp, age, zp)</span>
+<span class="sd">        &gt;&gt;&gt; solver = SingleChange(temp, zp, mode=&#39;linear&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; _ = solver.config(&#39;levmarq&#39;, initial=[1, 1]).fit()</span>
+<span class="sd">        &gt;&gt;&gt; amp_, age_ = solver.estimate_</span>
+<span class="sd">        &gt;&gt;&gt; print(&quot;amp: {:.2f}  age: {:.2f}&quot;.format(amp_, age_))</span>
+<span class="sd">        amp: 3.45  age: 52.50</span>
+
+<span class="sd">    Notes:</span>
+
+<span class="sd">    For **abrupt** changes, derivatives with respect to the amplitude and age</span>
+<span class="sd">    are calculated using the formula</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \frac{\partial T_i}{\partial A} = 1 - \mathrm{erf}\left(</span>
+<span class="sd">        \frac{z_i}{\sqrt{4\lambda t}}\right)</span>
+
+<span class="sd">    and</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \frac{\partial T_i}{\partial t} = \frac{A}{t\sqrt{\pi}}</span>
+<span class="sd">        \left(\frac{z_i}{\sqrt{4\lambda t}}\right)</span>
+<span class="sd">        \exp\left[-\left(\frac{z_i}{\sqrt{4\lambda t}}\right)^2\right]</span>
+
+<span class="sd">    respectively.</span>
+
+<span class="sd">    For **linear** changes, derivatives with respect to the age are calculated</span>
+<span class="sd">    using a 2-point finite difference approximation. Derivatives with respect</span>
+<span class="sd">    to amplitude are calculate using the formula</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \frac{\partial T_i}{\partial A} =</span>
+<span class="sd">        \left(1 + 2\frac{z_i^2}{4\lambda t}\right)</span>
+<span class="sd">        \mathrm{erfc}\left(\frac{z_i}{\sqrt{4\lambda t}}\right) -</span>
+<span class="sd">        \frac{2}{\sqrt{\pi}}\left(\frac{z_i}{\sqrt{4\lambda t}}\right)</span>
+<span class="sd">        \mathrm{exp}\left(-\frac{z_i^2}{4\lambda t}\right)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">zp</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">diffus</span><span class="o">=</span><span class="n">THERMAL_DIFFUSIVITY_YEAR</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">zp</span><span class="p">),</span> <span class="s">&quot;temp and zp must be of same length&quot;</span>
+        <span class="k">assert</span> <span class="n">mode</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;abrupt&#39;</span><span class="p">,</span> <span class="s">&#39;linear&#39;</span><span class="p">],</span> \
+            <span class="s">&quot;Invalid mode: {}. Must be &#39;abrupt&#39; or &#39;linear&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">temp</span><span class="p">,</span> <span class="n">nparams</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">islinear</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zp</span> <span class="o">=</span> <span class="n">zp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffus</span> <span class="o">=</span> <span class="n">diffus</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
+
+    <span class="k">def</span> <span class="nf">predicted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="n">amp</span><span class="p">,</span> <span class="n">age</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;abrupt&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">abrupt</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffus</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;linear&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">linear</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffus</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">jacobian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="n">amp</span><span class="p">,</span> <span class="n">age</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="n">jac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">ndata</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nparams</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;abrupt&#39;</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">zp</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">diffus</span><span class="o">*</span><span class="n">age</span><span class="p">)</span>
+            <span class="n">jac</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">abrupt</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffus</span><span class="p">)</span>
+            <span class="n">jac</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">amp</span><span class="o">*</span><span class="n">tmp</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">tmp</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">*</span><span class="n">age</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;linear&#39;</span><span class="p">:</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="mf">0.5</span>
+            <span class="n">at_p</span> <span class="o">=</span> <span class="n">linear</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffus</span><span class="p">)</span>
+            <span class="n">jac</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">linear</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffus</span><span class="p">)</span>
+            <span class="n">jac</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">linear</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">age</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffus</span><span class="p">)</span>
+                <span class="o">-</span> <span class="n">linear</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">age</span> <span class="o">-</span> <span class="n">delta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffus</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">delta</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jac</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

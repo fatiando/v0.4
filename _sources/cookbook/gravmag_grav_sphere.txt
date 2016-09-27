@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_grav_sphere:
+
+GravMag: Forward modeling of the gravity anomaly and gravity gradient tensor using model
+=========================================================================================
+
+
+**Download** source code: :download:`gravmag_grav_sphere.py<../_static/cookbook/gravmag_grav_sphere.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_grav_sphere.py
+    :language: python

@@ -1,0 +1,754 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Optimization routines (fatiando.inversion.optimization) &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Inverse problems framework (fatiando.inversion)" href="inversion.html" />
+    <link rel="next" title="Developer guide" href="../develop.html" />
+    <link rel="prev" title="Base classes for internal use (fatiando.inversion.base)" href="inversion.base.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../install.html">Installing</a></li>
+                <li><a href="../docs.html">Documentation</a></li>
+                <li><a href="../cookbook.html">Cookbook</a></li>
+                <li><a href="../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="module-fatiando.inversion.optimization">
+<span id="optimization-routines-fatiando-inversion-optimization"></span><span id="fatiando-inversion-optimization"></span><h1>Optimization routines (<code class="docutils literal"><span class="pre">fatiando.inversion.optimization</span></code>)<a class="headerlink" href="#module-fatiando.inversion.optimization" title="Permalink to this headline">¶</a></h1>
+<p>Methods to optimize a given objective function.</p>
+<p>All solvers are Python iterators. This means that should be used in a <code class="docutils literal"><span class="pre">for</span></code>
+loop, like so:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">solver</span> <span class="o">=</span> <span class="n">newton</span><span class="p">(</span><span class="n">hess_func</span><span class="p">,</span> <span class="n">grad_func</span><span class="p">,</span> <span class="n">value_func</span><span class="p">,</span> <span class="n">initial</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">stats</span> <span class="ow">in</span> <span class="n">solver</span><span class="p">:</span>
+    <span class="o">...</span> <span class="n">do</span> <span class="n">something</span> <span class="ow">or</span> <span class="s">&#39;continue&#39;</span> <span class="n">to</span> <span class="n">step</span> <span class="n">through</span> <span class="n">the</span> <span class="n">iterations</span> <span class="o">...</span>
+    <span class="c"># &#39;p&#39; is the current estimate for the parameter vector at the &#39;i&#39;th</span>
+    <span class="c"># iteration.</span>
+    <span class="c"># &#39;stats&#39; is a dictionary with some information about the optimization</span>
+    <span class="c"># process so far (number of attempted steps, value of objective</span>
+    <span class="c"># function per step, total number of iterations so far, etc).</span>
+<span class="c"># At the end, &#39;p&#39; is the final estimate and &#39;stats&#39; will contain the</span>
+<span class="c"># statistics for the whole iteration process.</span>
+</pre></div>
+</div>
+<p><strong>Gradient descent</strong></p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.inversion.optimization.linear" title="fatiando.inversion.optimization.linear"><code class="xref py py-func docutils literal"><span class="pre">linear</span></code></a>: Solver for a linear problem</li>
+<li><a class="reference internal" href="#fatiando.inversion.optimization.newton" title="fatiando.inversion.optimization.newton"><code class="xref py py-func docutils literal"><span class="pre">newton</span></code></a>: Newton&#8217;s method</li>
+<li><a class="reference internal" href="#fatiando.inversion.optimization.levmarq" title="fatiando.inversion.optimization.levmarq"><code class="xref py py-func docutils literal"><span class="pre">levmarq</span></code></a>: Levemberg-Marquardt
+algorithm</li>
+<li><a class="reference internal" href="#fatiando.inversion.optimization.steepest" title="fatiando.inversion.optimization.steepest"><code class="xref py py-func docutils literal"><span class="pre">steepest</span></code></a>: Steepest Descent method</li>
+</ul>
+<p><strong>Heuristic methods</strong></p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.inversion.optimization.acor" title="fatiando.inversion.optimization.acor"><code class="xref py py-func docutils literal"><span class="pre">acor</span></code></a>: ACO-R: Ant Colony Optimization
+for Continuous Domains (Socha and Dorigo, 2008)</li>
+</ul>
+<p><strong>References</strong></p>
+<p>Socha, K., and M. Dorigo (2008), Ant colony optimization for continuous
+domains, European Journal of Operational Research, 185(3), 1155-1173,
+doi:10.1016/j.ejor.2006.06.046.</p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="fatiando.inversion.optimization.acor">
+<code class="descclassname">fatiando.inversion.optimization.</code><code class="descname">acor</code><span class="sig-paren">(</span><em>value</em>, <em>bounds</em>, <em>nparams</em>, <em>nants=None</em>, <em>archive_size=None</em>, <em>maxit=1000</em>, <em>diverse=0.5</em>, <em>evap=0.85</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/optimization.html#acor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.optimization.acor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimize the objective function using ACO-R.</p>
+<p>ACO-R stands for Ant Colony Optimization for Continuous Domains (Socha and
+Dorigo, 2008).</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>value <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
+<dd><p class="first last">Returns the value of the objective function at a given parameter vector</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>bounds <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">The bounds of the search space. If only two values are given, will
+interpret as the minimum and maximum, respectively, for all parameters.
+Alternatively, you can given a minimum and maximum for each parameter,
+e.g., for a problem with 3 parameters you could give
+<cite>bounds = [min1, max1, min2, max2, min3, max3]</cite>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>nparams <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The number of parameters that the objective function takes.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>nants <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The number of ants to use in the search. Defaults to the number of
+parameters.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>archive_size <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The number of solutions to keep in the solution archive. Defaults to
+10 x nants</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>maxit <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The number of iterations to run.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>diverse <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Scalar from 0 to 1, non-inclusive, that controls how much better
+solutions are favored when constructing new ones.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>evap <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The pheromone evaporation rate (evap &gt; 0). Controls how spread out the
+search is.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>seed <span class="classifier-delimiter">:</span> <span class="classifier">None or int</span></dt>
+<dd><p class="first last">Seed for the random number generator.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Yields:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>i, estimate, stats:</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>i <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The current iteration number</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>estimate <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The current best estimated parameter vector</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>stats <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first">Statistics about the optimization so far. Keys:</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">stf</span></dt>
+<dd><p class="first last">The name of the optimization algorithm</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>iterations <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The total number of iterations so far</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>objective <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">Value of the objective function corresponding to the best
+estimate per iteration.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.inversion.optimization.levmarq">
+<code class="descclassname">fatiando.inversion.optimization.</code><code class="descname">levmarq</code><span class="sig-paren">(</span><em>hessian</em>, <em>gradient</em>, <em>value</em>, <em>initial</em>, <em>maxit=30</em>, <em>maxsteps=20</em>, <em>lamb=10</em>, <em>dlamb=2</em>, <em>tol=1e-05</em>, <em>precondition=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/optimization.html#levmarq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.optimization.levmarq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimize an objective function using the Levemberg-Marquardt algorithm.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>hessian <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
+<dd><p class="first last">A function that returns the Hessian matrix of the objective function
+when given a parameter vector.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>gradient <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
+<dd><p class="first last">A function that returns the gradient vector of the objective function
+when given a parameter vector.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>value <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
+<dd><p class="first last">A function that returns the value of the objective function evaluated
+at a given parameter vector.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>initial <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The initial estimate for the gradient descent.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>maxit <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The maximum number of iterations allowed.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>maxsteps <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The maximum number of times to try to take a step before giving up.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>lamb <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Initial amount of step regularization. The larger this is, the more the
+algorithm will resemble Steepest Descent in the initial iterations.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dlamb <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Factor by which <em>lamb</em> is divided or multiplied when taking steps.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>tol <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The convergence criterion. The lower it is, the more steps are
+permitted.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>precondition <span class="classifier-delimiter">:</span> <span class="classifier">True or False</span></dt>
+<dd><p class="first last">If True, will use Jacobi preconditioning.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Yields:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>i, estimate, stats:</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>i <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The current iteration number</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>estimate <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The current estimated parameter vector</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>stats <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first">Statistics about the optimization so far. Keys:</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">The name of the optimization method</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>iterations <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The total number of iterations so far</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>objective <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">Value of the objective function per iteration. First value
+corresponds to the inital estimate</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>step_attempts <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">Number of attempts at taking a step per iteration. First number
+is zero, reflecting the initial estimate.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.inversion.optimization.linear">
+<code class="descclassname">fatiando.inversion.optimization.</code><code class="descname">linear</code><span class="sig-paren">(</span><em>hessian</em>, <em>gradient</em>, <em>precondition=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/optimization.html#linear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.optimization.linear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the parameter vector that minimizes a linear objective function.</p>
+<p>The parameter vector <span class="math">\(\bar{p}\)</span> that minimizes this objective
+function <span class="math">\(\phi\)</span> is the one that solves the linear system</p>
+<div class="math">
+\[\bar{\bar{H}} \bar{p} = -\bar{g}\]</div>
+<p>where <span class="math">\(\bar{\bar{H}}\)</span> is the Hessian matrix of <span class="math">\(\phi\)</span> and
+<span class="math">\(\bar{g}\)</span> is the gradient vector of <span class="math">\(\phi\)</span>.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>hessian <span class="classifier-delimiter">:</span> <span class="classifier">2d-array</span></dt>
+<dd><p class="first last">The Hessian matrix of the objective function.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>gradient <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The gradient vector of the objective function.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>precondition <span class="classifier-delimiter">:</span> <span class="classifier">True or False</span></dt>
+<dd><p class="first last">If True, will use Jacobi preconditioning.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Yields:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>i, estimate, stats:</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>i <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The current iteration number</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>estimate <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The current estimated parameter vector</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>stats <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">Statistics about the optimization so far</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Linear solvers have only a single step, so <code class="docutils literal"><span class="pre">i</span></code> will be 0 and <code class="docutils literal"><span class="pre">stats</span></code>
+will only have the method name.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.inversion.optimization.newton">
+<code class="descclassname">fatiando.inversion.optimization.</code><code class="descname">newton</code><span class="sig-paren">(</span><em>hessian</em>, <em>gradient</em>, <em>value</em>, <em>initial</em>, <em>maxit=30</em>, <em>tol=1e-05</em>, <em>precondition=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/optimization.html#newton"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.optimization.newton" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimize an objective function using Newton&#8217;s method.</p>
+<p>Newton&#8217;s method searches for the minimum of an objective function
+<span class="math">\(\phi(\bar{p})\)</span> by successively incrementing the initial estimate.
+The increment is the solution of the linear system</p>
+<div class="math">
+\[\bar{\bar{H}}(\bar{p}^k) \bar{\Delta p}^k = -\bar{g}(\bar{p}^k)\]</div>
+<p>where <span class="math">\(\bar{\bar{H}}\)</span> is the Hessian matrix of <span class="math">\(\phi\)</span> and
+<span class="math">\(\bar{g}\)</span> is the gradient vector of <span class="math">\(\phi\)</span>. Both are evaluated
+at the previous estimate <span class="math">\(\bar{p}^k\)</span>.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>hessian <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
+<dd><p class="first last">A function that returns the Hessian matrix of the objective function
+when given a parameter vector.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>gradient <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
+<dd><p class="first last">A function that returns the gradient vector of the objective function
+when given a parameter vector.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>value <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
+<dd><p class="first last">A function that returns the value of the objective function evaluated
+at a given parameter vector.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>initial <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The initial estimate for the gradient descent.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>maxit <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The maximum number of iterations allowed.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>tol <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The convergence criterion. The lower it is, the more steps are
+permitted.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>precondition <span class="classifier-delimiter">:</span> <span class="classifier">True or False</span></dt>
+<dd><p class="first last">If True, will use Jacobi preconditioning.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<p>Yields:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>i, estimate, stats:</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>i <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The current iteration number</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>estimate <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The current estimated parameter vector</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>stats <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first">Statistics about the optimization so far. Keys:</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">The name of the optimization method</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>iterations <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The total number of iterations  so far</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>objective <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">Value of the objective function per iteration. First value
+corresponds to the inital estimate</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.inversion.optimization.steepest">
+<code class="descclassname">fatiando.inversion.optimization.</code><code class="descname">steepest</code><span class="sig-paren">(</span><em>gradient</em>, <em>value</em>, <em>initial</em>, <em>maxit=1000</em>, <em>linesearch=True</em>, <em>maxsteps=30</em>, <em>beta=0.1</em>, <em>tol=1e-05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/optimization.html#steepest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.optimization.steepest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimize an objective function using the Steepest Descent method.</p>
+<p>The increment to the initial estimate of the parameter vector
+<span class="math">\(\bar{p}\)</span> is calculated by (Kelley, 1999)</p>
+<div class="math">
+\[\Delta\bar{p} = -\lambda\bar{g}\]</div>
+<p>where <span class="math">\(\lambda\)</span> is the step size and <span class="math">\(\bar{g}\)</span> is the gradient
+vector.</p>
+<p>The step size can be determined thought a line search algorithm using the
+Armijo rule (Kelley, 1999). In this case,</p>
+<div class="math">
+\[\lambda = \beta^m\]</div>
+<p>where <span class="math">\(1 &gt; \beta &gt; 0\)</span> and <span class="math">\(m \ge 0\)</span> is an integer that controls
+the step size. The line search finds the smallest <span class="math">\(m\)</span> that satisfies
+the Armijo rule</p>
+<div class="math">
+\[\begin{split}\phi(\bar{p} + \Delta\bar{p}) - \Gamma(\bar{p}) &lt;
+\alpha\beta^m ||\bar{g}(\bar{p})||^2\end{split}\]</div>
+<p>where <span class="math">\(\phi(\bar{p})\)</span> is the objective function evaluated at
+<span class="math">\(\bar{p}\)</span> and <span class="math">\(\alpha = 10^{-4}\)</span>.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>gradient <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
+<dd><p class="first last">A function that returns the gradient vector of the objective function
+when given a parameter vector.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>value <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
+<dd><p class="first last">A function that returns the value of the objective function evaluated
+at a given parameter vector.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>initial <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The initial estimate for the gradient descent.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>maxit <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The maximum number of iterations allowed.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>linesearch <span class="classifier-delimiter">:</span> <span class="classifier">True or False</span></dt>
+<dd><p class="first last">Whether or not to perform the line search to determine an optimal step
+size.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>maxsteps <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The maximum number of times to try to take a step before giving up.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>beta <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The base factor used to determine the step size in line search
+algorithm. Must be 1 &gt; beta &gt; 0.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>tol <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The convergence criterion. The lower it is, the more steps are
+permitted.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Yields:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>i, estimate, stats:</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>i <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The current iteration number</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>estimate <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The current estimated parameter vector</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>stats <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first">Statistics about the optimization so far. Keys:</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">stf</span></dt>
+<dd><p class="first last">The name of the optimization algorithm</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>iterations <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The total number of iterations so far</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>objective <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">Value of the objective function per iteration. First value
+corresponds to the inital estimate</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>step_attempts <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">Number of attempts at taking a step per iteration. First number
+is zero, reflecting the initial estimate. Will be empty if
+<code class="docutils literal"><span class="pre">linesearch==False</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>References:</p>
+<p>Kelley, C. T., 1999, Iterative methods for optimization: Raleigh: SIAM.</p>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="../_sources/api/inversion.optimization.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

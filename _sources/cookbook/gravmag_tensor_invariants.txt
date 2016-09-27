@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_tensor_invariants:
+
+GravMag: Calculate the gravity gradient tensor invariants
+==========================================================
+
+
+**Download** source code: :download:`gravmag_tensor_invariants.py<../_static/cookbook/gravmag_tensor_invariants.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_tensor_invariants.py
+    :language: python

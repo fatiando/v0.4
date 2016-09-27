@@ -1,0 +1,1105 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fatiando.seismic.wavefd &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><img src="../../../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../install.html">Installing</a></li>
+                <li><a href="../../../docs.html">Documentation</a></li>
+                <li><a href="../../../cookbook.html">Cookbook</a></li>
+                <li><a href="../../../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for fatiando.seismic.wavefd</h1><div class="highlight"><pre>
+<span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">Finite difference solution of the 2D wave equation for isotropic media.</span>
+
+<span class="sd">* :func:`~fatiando.seismic.wavefd.elastic_psv`: Simulates the coupled P and SV</span>
+<span class="sd">  elastic waves using the Parsimonious Staggered Grid method of Luo and</span>
+<span class="sd">  Schuster (1990)</span>
+<span class="sd">* :func:`~fatiando.seismic.wavefd.elastic_sh`: Simulates SH elastic waves using</span>
+<span class="sd">  the Equivalent Staggered Grid method of Di Bartolo et al. (2012)</span>
+<span class="sd">* :func:`~fatiando.seismic.wavefd.scalar`: Simulates scalar waves using simple</span>
+<span class="sd">  explicit finite differences scheme</span>
+
+<span class="sd">**Sources**</span>
+
+<span class="sd">* :class:`~fatiando.seismic.wavefd.MexHatSource`: Mexican hat wavelet source</span>
+<span class="sd">* :class:`~fatiando.seismic.wavefd.SinSqrSource`: Sine squared source</span>
+<span class="sd">* :class:`~fatiando.seismic.wavefd.GaussSource`: Gauss derivative source</span>
+<span class="sd">* :func:`~fatiando.seismic.wavefd.blast_source`: A source blasting in all</span>
+<span class="sd">  directions</span>
+
+<span class="sd">**Auxiliary functions**</span>
+
+<span class="sd">* :func:`~fatiando.seismic.wavefd.lame_lamb`: Calculate the lambda Lame</span>
+<span class="sd">  parameter</span>
+<span class="sd">* :func:`~fatiando.seismic.wavefd.lame_mu`: Calculate the mu Lame parameter</span>
+<span class="sd">* :func:`~fatiando.seismic.wavefd.xz2ps`: Convert x and z displacements to</span>
+<span class="sd">  representations of P and S waves</span>
+<span class="sd">* :func:`~fatiando.seismic.wavefd.maxdt`: Calculate the maximum time step for</span>
+<span class="sd">  elastic wave simulations</span>
+<span class="sd">* :func:`~fatiando.seismic.wavefd.scalar_maxdt`: Calculate the maximum time</span>
+<span class="sd">  step for a scalar wave simulation</span>
+
+<span class="sd">**Theory**</span>
+
+<span class="sd">A good place to start is the equation of motion for elastic isotropic materials</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">    \partial_j \tau_{ij} - \rho \partial_t^2 u_i = -f_i</span>
+
+<span class="sd">where :math:`\tau_{ij}` is the stress tensor, :math:`\rho` the density,</span>
+<span class="sd">:math:`u_i` the displacement (particle motion) and :math:`f_i` is the source</span>
+<span class="sd">term.</span>
+<span class="sd">But what I&#39;m interested in modeling are the displacements in x, y and z.</span>
+<span class="sd">They are what is recorded by the seismometers.</span>
+<span class="sd">Luckily, I can use Hooke&#39;s law to write the stress tensor as a function of the</span>
+<span class="sd">displacements</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">    \tau_{ij} = \lambda\delta_{ij}\partial_k u_k +</span>
+<span class="sd">    \mu(\partial_i u_j + \partial_j u_i)</span>
+
+<span class="sd">where :math:`\lambda` and :math:`\mu` are the Lame parameters and</span>
+<span class="sd">:math:`\delta_{ij}` is the Kronecker delta.</span>
+<span class="sd">Just as a reminder, in tensor notation, :math:`\partial_k u_k` is the divergent</span>
+<span class="sd">of :math:`\mathbf{u}`. Free indices (not :math:`i,j`) represent a summation.</span>
+
+<span class="sd">In a 2D medium, there is no variation in one of the directions.</span>
+<span class="sd">So I&#39;ll choose the y direction for this purpose, so all y-derivatives cancel</span>
+<span class="sd">out.</span>
+<span class="sd">Looking at the second component of the equation of motion</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">    \partial_x\tau_{xy} + \underbrace{\partial_y\tau_{yy}}_{0} +</span>
+<span class="sd">    \partial_z\tau_{yz}  -  \rho \partial_t^2 u_y = -f_y</span>
+
+<span class="sd">Substituting the stress formula in the above equation yields</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">    \partial_x\mu\partial_x u_y  + \partial_z\mu\partial_z u_y</span>
+<span class="sd">    - \rho\partial_t^2 u_y = -f_y</span>
+
+<span class="sd">which is the wave equation for horizontally polarized S waves, i.e. SH waves.</span>
+<span class="sd">This equation is solved here using the Equivalent Staggered Grid (ESG) method</span>
+<span class="sd">of Di Bartolo et al. (2012).</span>
+<span class="sd">This method was developed for acoustic (pressure) waves but can be applied</span>
+<span class="sd">without modification to SH waves.</span>
+
+<span class="sd">Canceling the y derivatives in the first and third components of the equation</span>
+<span class="sd">of motion</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">    \partial_x\tau_{xx} + \partial_z\tau_{xz} - \rho \partial_t^2 u_x = -f_x</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">    \partial_x\tau_{xz} + \partial_z\tau_{zz} - \rho \partial_t^2 u_z = -f_z</span>
+
+<span class="sd">And the corresponding stress components are</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">    \tau_{xx} = (\lambda + 2\mu)\partial_x u_x + \lambda\partial_z u_z</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">    \tau_{zz} = (\lambda + 2\mu)\partial_z u_z + \lambda\partial_x u_x</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">    \tau_{xz} = \mu( \partial_x u_z + \partial_z u_x)</span>
+
+<span class="sd">This means that the displacements in x and z are coupled and must be solved</span>
+<span class="sd">together.</span>
+<span class="sd">This equation describes the motion of pressure (P) and vertically polarized S</span>
+<span class="sd">waves (SV).</span>
+<span class="sd">The method used here to solve these equations is the Parsimonious Staggered</span>
+<span class="sd">Grid (PSG) of Luo and Schuster (1990).</span>
+
+
+<span class="sd">**References**</span>
+
+<span class="sd">Di Bartolo, L., C. Dors, and W. J. Mansur (2012), A new family of</span>
+<span class="sd">finite-difference schemes to solve the heterogeneous acoustic wave equation,</span>
+<span class="sd">Geophysics, 77(5), T187-T199, doi:10.1190/geo2011-0345.1.</span>
+
+<span class="sd">Luo, Y., and G. Schuster (1990), Parsimonious staggered grid</span>
+<span class="sd">finite-differencing of the wave equation, Geophysical Research Letters, 17(2),</span>
+<span class="sd">155-158, doi:10.1029/GL017i002p00155.</span>
+
+<span class="sd">----</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse.linalg</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">fatiando.seismic._wavefd</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">not_implemented</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="s">&quot;Couldn&#39;t load C coded extension module.&quot;</span><span class="p">)</span>
+    <span class="n">_apply_damping</span> <span class="o">=</span> <span class="n">not_implemented</span>
+    <span class="n">_step_elastic_sh</span> <span class="o">=</span> <span class="n">not_implemented</span>
+    <span class="n">_step_elastic_psv</span> <span class="o">=</span> <span class="n">not_implemented</span>
+    <span class="n">_xz2ps</span> <span class="o">=</span> <span class="n">not_implemented</span>
+    <span class="n">_nonreflexive_sh_boundary_conditions</span> <span class="o">=</span> <span class="n">not_implemented</span>
+    <span class="n">_nonreflexive_psv_boundary_conditions</span> <span class="o">=</span> <span class="n">not_implemented</span>
+    <span class="n">_step_scalar</span> <span class="o">=</span> <span class="n">not_implemented</span>
+    <span class="n">_reflexive_scalar_boundary_conditions</span> <span class="o">=</span> <span class="n">not_implemented</span>
+
+
+<div class="viewcode-block" id="MexHatSource"><a class="viewcode-back" href="../../../api/seismic.wavefd.html#fatiando.seismic.wavefd.MexHatSource">[docs]</a><span class="k">class</span> <span class="nc">MexHatSource</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    A wave source that vibrates as a Mexican hat (Ricker) wavelet.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \psi(t) = A(1 - 2 \pi^2 f^2 t^2)exp(-\pi^2 f^2 t^2)</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * x, z : float</span>
+<span class="sd">        The x, z coordinates of the source</span>
+<span class="sd">    * area : [xmin, xmax, zmin, zmax]</span>
+<span class="sd">        The area bounding the finite difference simulation</span>
+<span class="sd">    * shape : (nz, nx)</span>
+<span class="sd">        The number of nodes in the finite difference grid</span>
+<span class="sd">    * amp : float</span>
+<span class="sd">        The amplitude of the source (:math:`A`)</span>
+<span class="sd">    * frequency : float</span>
+<span class="sd">        The peak frequency of the wavelet</span>
+<span class="sd">    * delay : float</span>
+<span class="sd">        The delay before the source starts</span>
+
+<span class="sd">        .. note:: If you want the source to start with amplitude close to 0,</span>
+<span class="sd">            use ``delay = 3.5/frequency``.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">nz</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">shape</span>
+        <span class="n">dz</span><span class="p">,</span> <span class="n">dx</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">area</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span> <span class="o">/</span> <span class="p">(</span><span class="n">nz</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">sum</span><span class="p">(</span><span class="n">area</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">z</span> <span class="o">-</span> <span class="n">area</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="n">dz</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">j</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">area</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">dx</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="n">amp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span> <span class="o">=</span> <span class="n">frequency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f2</span> <span class="o">=</span> <span class="n">frequency</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">delay</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+        <span class="n">t2</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">pi2</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">amp</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">f2</span> <span class="o">*</span> <span class="n">t2</span><span class="p">)</span> <span class="o">*</span> \
+            <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">pi2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">f2</span> <span class="o">*</span> <span class="n">t2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">psi</span>
+
+<div class="viewcode-block" id="MexHatSource.coords"><a class="viewcode-back" href="../../../api/seismic.wavefd.html#fatiando.seismic.wavefd.MexHatSource.coords">[docs]</a>    <span class="k">def</span> <span class="nf">coords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the x, z coordinates of the source.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * (x, z) : tuple</span>
+<span class="sd">            The x, z coordinates</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MexHatSource.indexes"><a class="viewcode-back" href="../../../api/seismic.wavefd.html#fatiando.seismic.wavefd.MexHatSource.indexes">[docs]</a>    <span class="k">def</span> <span class="nf">indexes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the i,j coordinates of the source in the finite difference grid.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * (i,j) : tuple</span>
+<span class="sd">            The i,j coordinates</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">j</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="SinSqrSource"><a class="viewcode-back" href="../../../api/seismic.wavefd.html#fatiando.seismic.wavefd.SinSqrSource">[docs]</a><span class="k">class</span> <span class="nc">SinSqrSource</span><span class="p">(</span><span class="n">MexHatSource</span><span class="p">):</span>
+
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    A wave source that vibrates as a sine squared function.</span>
+
+<span class="sd">    This source vibrates for a time equal to one period (T).</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \psi(t) = A\sin\left(t\frac{2\pi}{T}\right)^2</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * x, z : float</span>
+<span class="sd">        The x, z coordinates of the source</span>
+<span class="sd">    * area : [xmin, xmax, zmin, zmax]</span>
+<span class="sd">        The area bounding the finite difference simulation</span>
+<span class="sd">    * shape : (nz, nx)</span>
+<span class="sd">        The number of nodes in the finite difference grid</span>
+<span class="sd">    * amp : float</span>
+<span class="sd">        The amplitude of the source (:math:`A`)</span>
+<span class="sd">    * frequency : float</span>
+<span class="sd">        The frequency of the source</span>
+<span class="sd">    * delay : float</span>
+<span class="sd">        The delay before the source starts</span>
+
+<span class="sd">        .. note:: If you want the source to start with amplitude close to 0,</span>
+<span class="sd">            use ``delay = 3.5/frequency``.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SinSqrSource</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span>
+                                           <span class="n">frequency</span><span class="p">,</span> <span class="n">delay</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wlength</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">frequency</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">delay</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">delay</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">wlength</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">amp</span> <span class="o">*</span> \
+            <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wlength</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="n">psi</span>
+
+</div>
+<div class="viewcode-block" id="blast_source"><a class="viewcode-back" href="../../../api/seismic.wavefd.html#fatiando.seismic.wavefd.blast_source">[docs]</a><span class="k">def</span> <span class="nf">blast_source</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">sourcetype</span><span class="o">=</span><span class="n">MexHatSource</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Uses several MexHatSources to create a blast source that pushes in all</span>
+<span class="sd">    directions.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * x, z : float</span>
+<span class="sd">        The x, z coordinates of the source</span>
+<span class="sd">    * area : [xmin, xmax, zmin, zmax]</span>
+<span class="sd">        The area bounding the finite difference simulation</span>
+<span class="sd">    * shape : (nz, nx)</span>
+<span class="sd">        The number of nodes in the finite difference grid</span>
+<span class="sd">    * amp : float</span>
+<span class="sd">        The amplitude of the source</span>
+<span class="sd">    * frequency : float</span>
+<span class="sd">        The frequency of the source</span>
+<span class="sd">    * delay : float</span>
+<span class="sd">        The delay before the source starts</span>
+<span class="sd">    * sourcetype : source class</span>
+<span class="sd">        The type of source to use, like</span>
+<span class="sd">        :class:`~fatiando.seismic.wavefd.MexHatSource`.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * [xsources, zsources]</span>
+<span class="sd">        Lists of sources for x- and z-displacements</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nz</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">shape</span>
+    <span class="n">xsources</span><span class="p">,</span> <span class="n">zsources</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="n">center</span> <span class="o">=</span> <span class="n">sourcetype</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">delay</span><span class="p">)</span>
+    <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">center</span><span class="o">.</span><span class="n">indexes</span><span class="p">()</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">locations</span> <span class="o">=</span> <span class="p">[[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">amp</span><span class="p">,</span> <span class="o">-</span><span class="n">amp</span><span class="p">],</span>
+                 <span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">tmp</span> <span class="o">*</span> <span class="n">amp</span><span class="p">],</span>
+                 <span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="o">-</span><span class="n">amp</span><span class="p">],</span>
+                 <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">tmp</span> <span class="o">*</span> <span class="n">amp</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                 <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tmp</span> <span class="o">*</span> <span class="n">amp</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                 <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">amp</span><span class="p">,</span> <span class="n">amp</span><span class="p">],</span>
+                 <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">tmp</span> <span class="o">*</span> <span class="n">amp</span><span class="p">],</span>
+                 <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">amp</span><span class="p">]]</span>
+    <span class="n">locations</span> <span class="o">=</span> <span class="p">[[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">xamp</span><span class="p">,</span> <span class="n">zamp</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">xamp</span><span class="p">,</span> <span class="n">zamp</span> <span class="ow">in</span> <span class="n">locations</span>
+                 <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nz</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">nx</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">xamp</span><span class="p">,</span> <span class="n">zamp</span> <span class="ow">in</span> <span class="n">locations</span><span class="p">:</span>
+        <span class="n">xsrc</span> <span class="o">=</span> <span class="n">sourcetype</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">xamp</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">delay</span><span class="p">)</span>
+        <span class="n">xsrc</span><span class="o">.</span><span class="n">i</span><span class="p">,</span> <span class="n">xsrc</span><span class="o">.</span><span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span>
+        <span class="n">zsrc</span> <span class="o">=</span> <span class="n">sourcetype</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">zamp</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">delay</span><span class="p">)</span>
+        <span class="n">zsrc</span><span class="o">.</span><span class="n">i</span><span class="p">,</span> <span class="n">zsrc</span><span class="o">.</span><span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span>
+        <span class="n">xsources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xsrc</span><span class="p">)</span>
+        <span class="n">zsources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zsrc</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">xsources</span><span class="p">,</span> <span class="n">zsources</span>
+
+</div>
+<div class="viewcode-block" id="GaussSource"><a class="viewcode-back" href="../../../api/seismic.wavefd.html#fatiando.seismic.wavefd.GaussSource">[docs]</a><span class="k">class</span> <span class="nc">GaussSource</span><span class="p">(</span><span class="n">MexHatSource</span><span class="p">):</span>
+
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    A wave source that vibrates as a Gaussian derivative wavelet.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \psi(t) = A 2 \sqrt{e}\ f\ t\ e^\left(-2t^2f^2\right)</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * x, z : float</span>
+<span class="sd">        The x, z coordinates of the source</span>
+<span class="sd">    * area : [xmin, xmax, zmin, zmax]</span>
+<span class="sd">        The area bounding the finite difference simulation</span>
+<span class="sd">    * shape : (nz, nx)</span>
+<span class="sd">        The number of nodes in the finite difference grid</span>
+<span class="sd">    * amp : float</span>
+<span class="sd">        The amplitude of the source (:math:`A`)</span>
+<span class="sd">    * frequency : float</span>
+<span class="sd">        The approximate frequency of the source</span>
+<span class="sd">    * delay : float</span>
+<span class="sd">        The delay before the source starts</span>
+
+<span class="sd">    .. note:: If you want the source to start with amplitude close to 0,</span>
+<span class="sd">        use ``delay = 3.0/frequency``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">GaussSource</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span>
+                                          <span class="n">frequency</span><span class="p">,</span> <span class="n">delay</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">delay</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="mf">3.0</span> <span class="o">/</span> <span class="n">frequency</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">delay</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">amp</span> <span class="o">*</span> <span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">e</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span>
+                          <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">f2</span><span class="p">)</span>
+                          <span class="p">)</span>
+        <span class="k">return</span> <span class="n">psi</span>
+
+</div>
+<div class="viewcode-block" id="lame_lamb"><a class="viewcode-back" href="../../../api/seismic.wavefd.html#fatiando.seismic.wavefd.lame_lamb">[docs]</a><span class="k">def</span> <span class="nf">lame_lamb</span><span class="p">(</span><span class="n">pvel</span><span class="p">,</span> <span class="n">svel</span><span class="p">,</span> <span class="n">dens</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the Lame parameter :math:`\lambda` P and S wave velocities</span>
+<span class="sd">    (:math:`\alpha` and :math:`\beta`) and the density (:math:`\rho`).</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \lambda = \alpha^2 \rho - 2\beta^2 \rho</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * pvel : float or array</span>
+<span class="sd">        The P wave velocity</span>
+<span class="sd">    * svel : float or array</span>
+<span class="sd">        The S wave velocity</span>
+<span class="sd">    * dens : float or array</span>
+<span class="sd">        The density</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * lambda : float or array</span>
+<span class="sd">        The Lame parameter</span>
+
+<span class="sd">    Examples::</span>
+
+<span class="sd">        &gt;&gt;&gt; print lame_lamb(2000, 1000, 2700)</span>
+<span class="sd">        5400000000</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; pv = np.array([2000, 3000])</span>
+<span class="sd">        &gt;&gt;&gt; sv = np.array([1000, 1700])</span>
+<span class="sd">        &gt;&gt;&gt; dens = np.array([2700, 3100])</span>
+<span class="sd">        &gt;&gt;&gt; print lame_lamb(pv, sv, dens)</span>
+<span class="sd">        [5400000000 9982000000]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lamb</span> <span class="o">=</span> <span class="n">dens</span> <span class="o">*</span> <span class="n">pvel</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">dens</span> <span class="o">*</span> <span class="n">svel</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">lamb</span>
+
+</div>
+<div class="viewcode-block" id="lame_mu"><a class="viewcode-back" href="../../../api/seismic.wavefd.html#fatiando.seismic.wavefd.lame_mu">[docs]</a><span class="k">def</span> <span class="nf">lame_mu</span><span class="p">(</span><span class="n">svel</span><span class="p">,</span> <span class="n">dens</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the Lame parameter :math:`\mu` from S wave velocity</span>
+<span class="sd">    (:math:`\beta`) and the density (:math:`\rho`).</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \mu = \beta^2 \rho</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * svel : float or array</span>
+<span class="sd">        The S wave velocity</span>
+<span class="sd">    * dens : float or array</span>
+<span class="sd">        The density</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * mu : float or array</span>
+<span class="sd">        The Lame parameter</span>
+
+<span class="sd">    Examples::</span>
+
+<span class="sd">        &gt;&gt;&gt; print lame_mu(1000, 2700)</span>
+<span class="sd">        2700000000</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; sv = np.array([1000, 1700])</span>
+<span class="sd">        &gt;&gt;&gt; dens = np.array([2700, 3100])</span>
+<span class="sd">        &gt;&gt;&gt; print lame_mu(sv, dens)</span>
+<span class="sd">        [2700000000 8959000000]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">dens</span> <span class="o">*</span> <span class="n">svel</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">mu</span>
+
+</div>
+<span class="k">def</span> <span class="nf">_add_pad</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">pad</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Pad the array with the values of the borders</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">array_pad</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="n">array_pad</span><span class="p">[:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">pad</span><span class="p">):</span>
+        <span class="n">array_pad</span><span class="p">[:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">array_pad</span><span class="p">[:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">pad</span><span class="p">):</span>
+        <span class="n">array_pad</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">pad</span> <span class="o">-</span> <span class="n">k</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">array_pad</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">pad</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="p">:]</span>
+    <span class="k">return</span> <span class="n">array_pad</span>
+
+
+<div class="viewcode-block" id="scalar"><a class="viewcode-back" href="../../../api/seismic.wavefd.html#fatiando.seismic.wavefd.scalar">[docs]</a><span class="k">def</span> <span class="nf">scalar</span><span class="p">(</span><span class="n">vel</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">sources</span><span class="p">,</span> <span class="n">stations</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+           <span class="n">snapshot</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">taper</span><span class="o">=</span><span class="mf">0.005</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Simulate scalar waves using an explicit finite differences scheme 4th order</span>
+<span class="sd">    space. Space increment must be equal in x and z.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * vel : 2D-array (defines shape simulation)</span>
+<span class="sd">        The wave velocity at all the grid nodes</span>
+<span class="sd">    * area : [xmin, xmax, zmin, zmax]</span>
+<span class="sd">        The x, z limits of the simulation area, e.g., the shallowest point is</span>
+<span class="sd">        at zmin, the deepest at zmax.</span>
+<span class="sd">    * dt : float</span>
+<span class="sd">        The time interval between iterations</span>
+<span class="sd">    * iterations : int</span>
+<span class="sd">        Number of time steps to take</span>
+<span class="sd">    * sources : list</span>
+<span class="sd">        A list of the sources of waves</span>
+<span class="sd">        (see :class:`~fatiando.seismic.wavefd.MexHatSource` for an example</span>
+<span class="sd">        source)</span>
+<span class="sd">    * stations : None or list</span>
+<span class="sd">        If not None, then a list of [x, z] pairs with the x and z coordinates</span>
+<span class="sd">        of the recording stations. These are physical coordinates, not the</span>
+<span class="sd">        indexes</span>
+<span class="sd">    * snapshot : None or int</span>
+<span class="sd">        If not None, than yield a snapshot of the displacement at every</span>
+<span class="sd">        *snapshot* iterations.</span>
+<span class="sd">    * padding : int</span>
+<span class="sd">        Number of grid nodes to use for the absorbing boundary region</span>
+<span class="sd">    * taper : float</span>
+<span class="sd">        The intensity of the Gaussian taper function used for the absorbing</span>
+<span class="sd">        boundary conditions</span>
+
+<span class="sd">    Yields:</span>
+
+<span class="sd">    * i, u, seismograms : int, 2D-array and list of 1D-arrays</span>
+<span class="sd">        The current iteration, the scalar quantity disturbed</span>
+<span class="sd">        and a list of the scalar quantity disturbed recorded at each</span>
+<span class="sd">        station until the current iteration.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">nz</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">vel</span><span class="p">)</span>  <span class="c"># get simulation dimensions</span>
+    <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">area</span>
+    <span class="n">dz</span><span class="p">,</span> <span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">z2</span> <span class="o">-</span> <span class="n">z1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nz</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">dz</span> <span class="o">!=</span> <span class="n">dx</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Space increment must be equal in x and z&#39;</span><span class="p">)</span>
+
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">dz</span>  <span class="c"># dz or dx doesn&#39;t matter</span>
+
+    <span class="c"># Get the index of the closest point to the stations and start the</span>
+    <span class="c"># seismograms</span>
+    <span class="k">if</span> <span class="n">stations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">stations</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">z</span> <span class="o">-</span> <span class="n">z1</span><span class="p">)</span> <span class="o">/</span> <span class="n">ds</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">/</span> <span class="n">ds</span><span class="p">))]</span>
+                    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">stations</span><span class="p">]</span>
+        <span class="n">seismograms</span> <span class="o">=</span> <span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">iterations</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stations</span><span class="p">))]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">stations</span><span class="p">,</span> <span class="n">seismograms</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="c"># Add some padding to x and z. The padding region is where the wave is</span>
+    <span class="c"># absorbed</span>
+    <span class="n">pad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">padding</span><span class="p">)</span>
+    <span class="n">nx</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pad</span>
+    <span class="n">nz</span> <span class="o">+=</span> <span class="n">pad</span>
+    <span class="c"># Pad the velocity as well</span>
+    <span class="n">vel_pad</span> <span class="o">=</span> <span class="n">_add_pad</span><span class="p">(</span><span class="n">vel</span><span class="p">,</span> <span class="n">pad</span><span class="p">,</span> <span class="p">(</span><span class="n">nz</span><span class="p">,</span> <span class="n">nx</span><span class="p">))</span>
+    <span class="c"># Pack the particle position u at 2 different times in one 3d array</span>
+    <span class="c"># u[0] = u(t-1)</span>
+    <span class="c"># u[1] = u(t)</span>
+    <span class="c"># The next time step overwrites the t-1 panel</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">nz</span><span class="p">,</span> <span class="n">nx</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="c"># Compute and yield the initial solutions</span>
+    <span class="k">for</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">:</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">indexes</span><span class="p">()</span>
+        <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">]</span> <span class="o">+=</span> <span class="o">-</span><span class="p">((</span><span class="n">vel</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">src</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c"># Update seismograms</span>
+    <span class="k">for</span> <span class="n">station</span><span class="p">,</span> <span class="n">seismogram</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">stations</span><span class="p">,</span> <span class="n">seismograms</span><span class="p">):</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">station</span>
+        <span class="n">seismogram</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">snapshot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="mi">0</span><span class="p">,</span> <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">],</span> <span class="n">seismograms</span>
+
+    <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">iterations</span><span class="p">):</span>
+        <span class="n">t</span><span class="p">,</span> <span class="n">tm1</span> <span class="o">=</span> <span class="n">iteration</span> <span class="o">%</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">iteration</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span>
+        <span class="n">tp1</span> <span class="o">=</span> <span class="n">tm1</span>
+        <span class="n">_step_scalar</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">tp1</span><span class="p">],</span> <span class="n">u</span><span class="p">[</span><span class="n">t</span><span class="p">],</span> <span class="n">u</span><span class="p">[</span><span class="n">tm1</span><span class="p">],</span> <span class="mi">2</span><span class="p">,</span> <span class="n">nx</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">nz</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span>
+                     <span class="n">dt</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">vel_pad</span><span class="p">)</span>
+        <span class="c"># forth order +2-2 indexes needed</span>
+        <span class="c"># Damp the regions in the padding to make waves go to infinity</span>
+        <span class="n">_apply_damping</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">t</span><span class="p">],</span> <span class="n">nx</span><span class="p">,</span> <span class="n">nz</span><span class="p">,</span> <span class="n">pad</span><span class="p">,</span> <span class="n">taper</span><span class="p">)</span>
+        <span class="c"># not PML yet or anything similar</span>
+        <span class="n">_reflexive_scalar_boundary_conditions</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">tp1</span><span class="p">],</span> <span class="n">nx</span><span class="p">,</span> <span class="n">nz</span><span class="p">)</span>
+        <span class="c"># Damp the regions in the padding to make waves go to infinity</span>
+        <span class="n">_apply_damping</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">tp1</span><span class="p">],</span> <span class="n">nx</span><span class="p">,</span> <span class="n">nz</span><span class="p">,</span> <span class="n">pad</span><span class="p">,</span> <span class="n">taper</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">:</span>
+            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">indexes</span><span class="p">()</span>
+            <span class="n">u</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">]</span> <span class="o">+=</span> <span class="o">-</span> \
+                <span class="p">((</span><span class="n">vel</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">src</span><span class="p">(</span><span class="n">iteration</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="c"># Update seismograms</span>
+        <span class="k">for</span> <span class="n">station</span><span class="p">,</span> <span class="n">seismogram</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">stations</span><span class="p">,</span> <span class="n">seismograms</span><span class="p">):</span>
+            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">station</span>
+            <span class="n">seismogram</span><span class="p">[</span><span class="n">iteration</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">snapshot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">iteration</span> <span class="o">%</span> <span class="n">snapshot</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">u</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">],</span> <span class="n">seismograms</span>
+    <span class="k">yield</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">u</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">],</span> <span class="n">seismograms</span>
+
+</div>
+<div class="viewcode-block" id="elastic_sh"><a class="viewcode-back" href="../../../api/seismic.wavefd.html#fatiando.seismic.wavefd.elastic_sh">[docs]</a><span class="k">def</span> <span class="nf">elastic_sh</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">sources</span><span class="p">,</span> <span class="n">stations</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+               <span class="n">snapshot</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">taper</span><span class="o">=</span><span class="mf">0.005</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simulate SH waves using the Equivalent Staggered Grid (ESG) finite</span>
+<span class="sd">    differences scheme of Di Bartolo et al. (2012).</span>
+
+<span class="sd">    This is an iterator. It yields a panel of $u_y$ displacements and a list</span>
+<span class="sd">    of arrays with recorded displacements in a time series.</span>
+<span class="sd">    Parameter *snapshot* controls how often the iterator yields. The default</span>
+<span class="sd">    is only at the end, so only the final panel and full time series are</span>
+<span class="sd">    yielded.</span>
+
+<span class="sd">    Uses absorbing boundary conditions (Gaussian taper) in the lower, left and</span>
+<span class="sd">    right boundaries. The top implements a free-surface boundary condition.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * mu : 2D-array (shape = *shape*)</span>
+<span class="sd">        The :math:`\mu` Lame parameter at all the grid nodes</span>
+<span class="sd">    * density : 2D-array (shape = *shape*)</span>
+<span class="sd">        The value of the density at all the grid nodes</span>
+<span class="sd">    * area : [xmin, xmax, zmin, zmax]</span>
+<span class="sd">        The x, z limits of the simulation area, e.g., the shallowest point is</span>
+<span class="sd">        at zmin, the deepest at zmax.</span>
+<span class="sd">    * dt : float</span>
+<span class="sd">        The time interval between iterations</span>
+<span class="sd">    * iterations : int</span>
+<span class="sd">        Number of time steps to take</span>
+<span class="sd">    * sources : list</span>
+<span class="sd">        A list of the sources of waves</span>
+<span class="sd">        (see :class:`~fatiando.seismic.wavefd.MexHatSource` for an example</span>
+<span class="sd">        source)</span>
+<span class="sd">    * stations : None or list</span>
+<span class="sd">        If not None, then a list of [x, z] pairs with the x and z coordinates</span>
+<span class="sd">        of the recording stations. These are physical coordinates, not the</span>
+<span class="sd">        indexes</span>
+<span class="sd">    * snapshot : None or int</span>
+<span class="sd">        If not None, than yield a snapshot of the displacement at every</span>
+<span class="sd">        *snapshot* iterations.</span>
+<span class="sd">    * padding : int</span>
+<span class="sd">        Number of grid nodes to use for the absorbing boundary region</span>
+<span class="sd">    * taper : float</span>
+<span class="sd">        The intensity of the Gaussian taper function used for the absorbing</span>
+<span class="sd">        boundary conditions</span>
+
+<span class="sd">    Yields:</span>
+
+<span class="sd">    * t, uy, seismograms : int, 2D-array and list of 1D-arrays</span>
+<span class="sd">        The current iteration, the particle displacement in the y direction</span>
+<span class="sd">        and a list of the displacements recorded at each station until the</span>
+<span class="sd">        current iteration.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">mu</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">density</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Density and mu grids should have same shape&#39;</span><span class="p">)</span>
+    <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">area</span>
+    <span class="n">nz</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">mu</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">dz</span><span class="p">,</span> <span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">z2</span> <span class="o">-</span> <span class="n">z1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nz</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c"># Get the index of the closest point to the stations and start the</span>
+    <span class="c"># seismograms</span>
+    <span class="k">if</span> <span class="n">stations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">stations</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">z</span> <span class="o">-</span> <span class="n">z1</span><span class="p">)</span> <span class="o">/</span> <span class="n">dz</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">/</span> <span class="n">dx</span><span class="p">))]</span>
+                    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">stations</span><span class="p">]</span>
+        <span class="n">seismograms</span> <span class="o">=</span> <span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">iterations</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stations</span><span class="p">))]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">stations</span><span class="p">,</span> <span class="n">seismograms</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="c"># Add some padding to x and z. The padding region is where the wave is</span>
+    <span class="c"># absorbed</span>
+    <span class="n">pad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">padding</span><span class="p">)</span>
+    <span class="n">nx</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pad</span>
+    <span class="n">nz</span> <span class="o">+=</span> <span class="n">pad</span>
+    <span class="n">mu_pad</span> <span class="o">=</span> <span class="n">_add_pad</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">pad</span><span class="p">,</span> <span class="p">(</span><span class="n">nz</span><span class="p">,</span> <span class="n">nx</span><span class="p">))</span>
+    <span class="n">dens_pad</span> <span class="o">=</span> <span class="n">_add_pad</span><span class="p">(</span><span class="n">density</span><span class="p">,</span> <span class="n">pad</span><span class="p">,</span> <span class="p">(</span><span class="n">nz</span><span class="p">,</span> <span class="n">nx</span><span class="p">))</span>
+    <span class="c"># Pack the particle position u at 2 different times in one 3d array</span>
+    <span class="c"># u[0] = u(t-1)</span>
+    <span class="c"># u[1] = u(t)</span>
+    <span class="c"># The next time step overwrites the t-1 panel</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">nz</span><span class="p">,</span> <span class="n">nx</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="c"># Compute and yield the initial solutions</span>
+    <span class="k">for</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">:</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">indexes</span><span class="p">()</span>
+        <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">dt</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">density</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">src</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c"># Update seismograms</span>
+    <span class="k">for</span> <span class="n">station</span><span class="p">,</span> <span class="n">seismogram</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">stations</span><span class="p">,</span> <span class="n">seismograms</span><span class="p">):</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">station</span>
+        <span class="n">seismogram</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">snapshot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="mi">0</span><span class="p">,</span> <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">],</span> <span class="n">seismograms</span>
+    <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">iterations</span><span class="p">):</span>
+        <span class="n">t</span><span class="p">,</span> <span class="n">tm1</span> <span class="o">=</span> <span class="n">iteration</span> <span class="o">%</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">iteration</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span>
+        <span class="n">tp1</span> <span class="o">=</span> <span class="n">tm1</span>
+        <span class="n">_step_elastic_sh</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">tp1</span><span class="p">],</span> <span class="n">u</span><span class="p">[</span><span class="n">t</span><span class="p">],</span> <span class="n">u</span><span class="p">[</span><span class="n">tm1</span><span class="p">],</span> <span class="mi">3</span><span class="p">,</span> <span class="n">nx</span> <span class="o">-</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">nz</span> <span class="o">-</span> <span class="mi">3</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span>
+                         <span class="n">dz</span><span class="p">,</span> <span class="n">mu_pad</span><span class="p">,</span> <span class="n">dens_pad</span><span class="p">)</span>
+        <span class="n">_apply_damping</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">t</span><span class="p">],</span> <span class="n">nx</span><span class="p">,</span> <span class="n">nz</span><span class="p">,</span> <span class="n">pad</span><span class="p">,</span> <span class="n">taper</span><span class="p">)</span>
+        <span class="n">_nonreflexive_sh_boundary_conditions</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">tp1</span><span class="p">],</span> <span class="n">u</span><span class="p">[</span><span class="n">t</span><span class="p">],</span> <span class="n">nx</span><span class="p">,</span> <span class="n">nz</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span>
+                                             <span class="n">mu_pad</span><span class="p">,</span> <span class="n">dens_pad</span><span class="p">)</span>
+        <span class="n">_apply_damping</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">tp1</span><span class="p">],</span> <span class="n">nx</span><span class="p">,</span> <span class="n">nz</span><span class="p">,</span> <span class="n">pad</span><span class="p">,</span> <span class="n">taper</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">:</span>
+            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">indexes</span><span class="p">()</span>
+            <span class="n">u</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span>
+                <span class="n">pad</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">dt</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">density</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">src</span><span class="p">(</span><span class="n">iteration</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="c"># Update seismograms</span>
+        <span class="k">for</span> <span class="n">station</span><span class="p">,</span> <span class="n">seismogram</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">stations</span><span class="p">,</span> <span class="n">seismograms</span><span class="p">):</span>
+            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">station</span>
+            <span class="n">seismogram</span><span class="p">[</span><span class="n">iteration</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">snapshot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">iteration</span> <span class="o">%</span> <span class="n">snapshot</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">u</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">],</span> <span class="n">seismograms</span>
+    <span class="k">yield</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">u</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">],</span> <span class="n">seismograms</span>
+
+</div>
+<div class="viewcode-block" id="elastic_psv"><a class="viewcode-back" href="../../../api/seismic.wavefd.html#fatiando.seismic.wavefd.elastic_psv">[docs]</a><span class="k">def</span> <span class="nf">elastic_psv</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">lamb</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">sources</span><span class="p">,</span>
+                <span class="n">stations</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">snapshot</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">taper</span><span class="o">=</span><span class="mf">0.002</span><span class="p">,</span>
+                <span class="n">xz2ps</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simulate P and SV waves using the Parsimonious Staggered Grid (PSG) finite</span>
+<span class="sd">    differences scheme of Luo and Schuster (1990).</span>
+
+<span class="sd">    This is an iterator. It yields panels of $u_x$ and $u_z$ displacements</span>
+<span class="sd">    and a list of arrays with recorded displacements in a time series.</span>
+<span class="sd">    Parameter *snapshot* controls how often the iterator yields. The default</span>
+<span class="sd">    is only at the end, so only the final panel and full time series are</span>
+<span class="sd">    yielded.</span>
+
+<span class="sd">    Uses absorbing boundary conditions (Gaussian taper) in the lower, left and</span>
+<span class="sd">    right boundaries. The top implements the free-surface boundary condition</span>
+<span class="sd">    of Vidale and Clayton (1986).</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * mu : 2D-array (shape = *shape*)</span>
+<span class="sd">        The :math:`\mu` Lame parameter at all the grid nodes</span>
+<span class="sd">    * lamb : 2D-array (shape = *shape*)</span>
+<span class="sd">        The :math:`\lambda` Lame parameter at all the grid nodes</span>
+<span class="sd">    * density : 2D-array (shape = *shape*)</span>
+<span class="sd">        The value of the density at all the grid nodes</span>
+<span class="sd">    * area : [xmin, xmax, zmin, zmax]</span>
+<span class="sd">        The x, z limits of the simulation area, e.g., the shallowest point is</span>
+<span class="sd">        at zmin, the deepest at zmax.</span>
+<span class="sd">    * dt : float</span>
+<span class="sd">        The time interval between iterations</span>
+<span class="sd">    * iterations : int</span>
+<span class="sd">        Number of time steps to take</span>
+<span class="sd">    * sources : [xsources, zsources] : lists</span>
+<span class="sd">        A lists of the sources of waves for the particle movement in the x and</span>
+<span class="sd">        z directions</span>
+<span class="sd">        (see :class:`~fatiando.seismic.wavefd.MexHatSource` for an example</span>
+<span class="sd">        source)</span>
+<span class="sd">    * stations : None or list</span>
+<span class="sd">        If not None, then a list of [x, z] pairs with the x and z coordinates</span>
+<span class="sd">        of the recording stations. These are physical coordinates, not the</span>
+<span class="sd">        indexes!</span>
+<span class="sd">    * snapshot : None or int</span>
+<span class="sd">        If not None, than yield a snapshot of the displacements at every</span>
+<span class="sd">        *snapshot* iterations.</span>
+<span class="sd">    * padding : int</span>
+<span class="sd">        Number of grid nodes to use for the absorbing boundary region</span>
+<span class="sd">    * taper : float</span>
+<span class="sd">        The intensity of the Gaussian taper function used for the absorbing</span>
+<span class="sd">        boundary conditions</span>
+<span class="sd">    * xz2ps : True or False</span>
+<span class="sd">        If True, will yield P and S wave panels instead of ux, uz. See</span>
+<span class="sd">        :func:`~fatiando.seismic.wavefd.xz2ps`.</span>
+
+<span class="sd">    Yields:</span>
+
+<span class="sd">    * [t, ux, uz, xseismograms, zseismograms]</span>
+<span class="sd">        The current iteration, the particle displacements in the x and z</span>
+<span class="sd">        directions, lists of arrays containing the displacements recorded at</span>
+<span class="sd">        each station until the current iteration.</span>
+
+<span class="sd">    References:</span>
+
+<span class="sd">    Vidale, J. E., and R. W. Clayton (1986), A stable free-surface boundary</span>
+<span class="sd">    condition for two-dimensional elastic finite-difference wave simulation,</span>
+<span class="sd">    Geophysics, 51(12), 2247-2249.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">mu</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">lamb</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">density</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Density lambda, and mu grids should have same shape&#39;</span><span class="p">)</span>
+    <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">area</span>
+    <span class="n">nz</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">mu</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">dz</span><span class="p">,</span> <span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">z2</span> <span class="o">-</span> <span class="n">z1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nz</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">xsources</span><span class="p">,</span> <span class="n">zsources</span> <span class="o">=</span> <span class="n">sources</span>
+    <span class="c"># Get the index of the closest point to the stations and start the</span>
+    <span class="c"># seismograms</span>
+    <span class="k">if</span> <span class="n">stations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">stations</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">z</span> <span class="o">-</span> <span class="n">z1</span><span class="p">)</span> <span class="o">/</span> <span class="n">dz</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">/</span> <span class="n">dx</span><span class="p">))]</span>
+                    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">stations</span><span class="p">]</span>
+        <span class="n">xseismograms</span> <span class="o">=</span> <span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">iterations</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stations</span><span class="p">))]</span>
+        <span class="n">zseismograms</span> <span class="o">=</span> <span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">iterations</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stations</span><span class="p">))]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">stations</span><span class="p">,</span> <span class="n">xseismograms</span><span class="p">,</span> <span class="n">zseismograms</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="c"># Add padding to have an absorbing region to simulate an infinite medium</span>
+    <span class="n">pad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">padding</span><span class="p">)</span>
+    <span class="n">nx</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pad</span>
+    <span class="n">nz</span> <span class="o">+=</span> <span class="n">pad</span>
+    <span class="n">mu_pad</span> <span class="o">=</span> <span class="n">_add_pad</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">pad</span><span class="p">,</span> <span class="p">(</span><span class="n">nz</span><span class="p">,</span> <span class="n">nx</span><span class="p">))</span>
+    <span class="n">lamb_pad</span> <span class="o">=</span> <span class="n">_add_pad</span><span class="p">(</span><span class="n">lamb</span><span class="p">,</span> <span class="n">pad</span><span class="p">,</span> <span class="p">(</span><span class="n">nz</span><span class="p">,</span> <span class="n">nx</span><span class="p">))</span>
+    <span class="n">dens_pad</span> <span class="o">=</span> <span class="n">_add_pad</span><span class="p">(</span><span class="n">density</span><span class="p">,</span> <span class="n">pad</span><span class="p">,</span> <span class="p">(</span><span class="n">nz</span><span class="p">,</span> <span class="n">nx</span><span class="p">))</span>
+    <span class="c"># Pre-compute the matrices required for the free-surface boundary</span>
+    <span class="n">dzdx</span> <span class="o">=</span> <span class="n">dz</span> <span class="o">/</span> <span class="n">dx</span>
+    <span class="n">identity</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">k</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">gamma</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">spdiags</span><span class="p">(</span><span class="n">lamb_pad</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">lamb_pad</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">mu_pad</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                                 <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nx</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+    <span class="n">Mx1</span> <span class="o">=</span> <span class="n">identity</span> <span class="o">-</span> <span class="mf">0.0625</span> <span class="o">*</span> <span class="p">(</span><span class="n">dzdx</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">B</span> <span class="o">*</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">B</span>
+    <span class="n">Mx2</span> <span class="o">=</span> <span class="n">identity</span> <span class="o">+</span> <span class="mf">0.0625</span> <span class="o">*</span> <span class="p">(</span><span class="n">dzdx</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">B</span> <span class="o">*</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">B</span>
+    <span class="n">Mx3</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dzdx</span> <span class="o">*</span> <span class="n">B</span>
+    <span class="n">Mz1</span> <span class="o">=</span> <span class="n">identity</span> <span class="o">-</span> <span class="mf">0.0625</span> <span class="o">*</span> <span class="p">(</span><span class="n">dzdx</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">B</span> <span class="o">*</span> <span class="n">B</span>
+    <span class="n">Mz2</span> <span class="o">=</span> <span class="n">identity</span> <span class="o">+</span> <span class="mf">0.0625</span> <span class="o">*</span> <span class="p">(</span><span class="n">dzdx</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">B</span> <span class="o">*</span> <span class="n">B</span>
+    <span class="n">Mz3</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dzdx</span> <span class="o">*</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">B</span>
+    <span class="c"># Compute and yield the initial solutions</span>
+    <span class="n">ux</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">nz</span><span class="p">,</span> <span class="n">nx</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="n">uz</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">nz</span><span class="p">,</span> <span class="n">nx</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">xz2ps</span><span class="p">:</span>
+        <span class="n">p</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">mu</span><span class="p">),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">xsources</span><span class="p">:</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">indexes</span><span class="p">()</span>
+        <span class="n">ux</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">dt</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">density</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">src</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">zsources</span><span class="p">:</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">indexes</span><span class="p">()</span>
+        <span class="n">uz</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">dt</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">density</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">src</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c"># Update seismograms</span>
+    <span class="k">for</span> <span class="n">station</span><span class="p">,</span> <span class="n">xseis</span><span class="p">,</span> <span class="n">zseis</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">stations</span><span class="p">,</span> <span class="n">xseismograms</span><span class="p">,</span> <span class="n">zseismograms</span><span class="p">):</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">station</span>
+        <span class="n">xseis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ux</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">]</span>
+        <span class="n">zseis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">uz</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">snapshot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">xz2ps</span><span class="p">:</span>
+            <span class="n">_xz2ps</span><span class="p">(</span><span class="n">ux</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">],</span> <span class="n">uz</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">],</span> <span class="n">p</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span>
+                   <span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dz</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">xseismograms</span><span class="p">,</span> <span class="n">zseismograms</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">ux</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">],</span> <span class="n">uz</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">],</span>
+                   <span class="n">xseismograms</span><span class="p">,</span> <span class="n">zseismograms</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">iterations</span><span class="p">):</span>
+        <span class="n">t</span><span class="p">,</span> <span class="n">tm1</span> <span class="o">=</span> <span class="n">iteration</span> <span class="o">%</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">iteration</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span>
+        <span class="n">tp1</span> <span class="o">=</span> <span class="n">tm1</span>
+        <span class="n">_step_elastic_psv</span><span class="p">(</span><span class="n">ux</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">tp1</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">tm1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="n">nz</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span>
+                          <span class="n">dz</span><span class="p">,</span> <span class="n">mu_pad</span><span class="p">,</span> <span class="n">lamb_pad</span><span class="p">,</span> <span class="n">dens_pad</span><span class="p">)</span>
+        <span class="n">_apply_damping</span><span class="p">(</span><span class="n">ux</span><span class="p">[</span><span class="n">t</span><span class="p">],</span> <span class="n">nx</span><span class="p">,</span> <span class="n">nz</span><span class="p">,</span> <span class="n">pad</span><span class="p">,</span> <span class="n">taper</span><span class="p">)</span>
+        <span class="n">_apply_damping</span><span class="p">(</span><span class="n">uz</span><span class="p">[</span><span class="n">t</span><span class="p">],</span> <span class="n">nx</span><span class="p">,</span> <span class="n">nz</span><span class="p">,</span> <span class="n">pad</span><span class="p">,</span> <span class="n">taper</span><span class="p">)</span>
+        <span class="c"># Free-surface boundary conditions</span>
+        <span class="n">ux</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">spsolve</span><span class="p">(</span>
+            <span class="n">Mx1</span><span class="p">,</span> <span class="n">Mx2</span><span class="o">*</span><span class="n">ux</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">Mx3</span><span class="o">*</span><span class="n">uz</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
+        <span class="n">uz</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">spsolve</span><span class="p">(</span>
+            <span class="n">Mz1</span><span class="p">,</span> <span class="n">Mz2</span><span class="o">*</span><span class="n">uz</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">Mz3</span><span class="o">*</span><span class="n">ux</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
+        <span class="n">_nonreflexive_psv_boundary_conditions</span><span class="p">(</span><span class="n">ux</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">tp1</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">tm1</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">nz</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+                                              <span class="n">dx</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">mu_pad</span><span class="p">,</span> <span class="n">lamb_pad</span><span class="p">,</span>
+                                              <span class="n">dens_pad</span><span class="p">)</span>
+        <span class="n">_apply_damping</span><span class="p">(</span><span class="n">ux</span><span class="p">[</span><span class="n">tp1</span><span class="p">],</span> <span class="n">nx</span><span class="p">,</span> <span class="n">nz</span><span class="p">,</span> <span class="n">pad</span><span class="p">,</span> <span class="n">taper</span><span class="p">)</span>
+        <span class="n">_apply_damping</span><span class="p">(</span><span class="n">uz</span><span class="p">[</span><span class="n">tp1</span><span class="p">],</span> <span class="n">nx</span><span class="p">,</span> <span class="n">nz</span><span class="p">,</span> <span class="n">pad</span><span class="p">,</span> <span class="n">taper</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">xsources</span><span class="p">:</span>
+            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">indexes</span><span class="p">()</span>
+            <span class="n">ux</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">dt</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">density</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span><span class="o">*</span><span class="n">src</span><span class="p">(</span><span class="n">iteration</span><span class="o">*</span><span class="n">dt</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">zsources</span><span class="p">:</span>
+            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">indexes</span><span class="p">()</span>
+            <span class="n">uz</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span>
+                <span class="n">pad</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">dt</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">density</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">src</span><span class="p">(</span><span class="n">iteration</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">station</span><span class="p">,</span> <span class="n">xseis</span><span class="p">,</span> <span class="n">zseis</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">stations</span><span class="p">,</span> <span class="n">xseismograms</span><span class="p">,</span> <span class="n">zseismograms</span><span class="p">):</span>
+            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">station</span>
+            <span class="n">xseis</span><span class="p">[</span><span class="n">iteration</span><span class="p">]</span> <span class="o">=</span> <span class="n">ux</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">]</span>
+            <span class="n">zseis</span><span class="p">[</span><span class="n">iteration</span><span class="p">]</span> <span class="o">=</span> <span class="n">uz</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">pad</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">snapshot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">iteration</span> <span class="o">%</span> <span class="n">snapshot</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">xz2ps</span><span class="p">:</span>
+                <span class="n">_xz2ps</span><span class="p">(</span><span class="n">ux</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">],</span> <span class="n">uz</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">],</span> <span class="n">p</span><span class="p">,</span>
+                       <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dz</span><span class="p">)</span>
+                <span class="k">yield</span> <span class="p">[</span><span class="n">iteration</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">xseismograms</span><span class="p">,</span> <span class="n">zseismograms</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="p">[</span><span class="n">iteration</span><span class="p">,</span> <span class="n">ux</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">],</span>
+                       <span class="n">uz</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">],</span> <span class="n">xseismograms</span><span class="p">,</span> <span class="n">zseismograms</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">xz2ps</span><span class="p">:</span>
+        <span class="n">_xz2ps</span><span class="p">(</span><span class="n">ux</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">],</span> <span class="n">uz</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">],</span> <span class="n">p</span><span class="p">,</span>
+               <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dz</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="p">[</span><span class="n">iteration</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">xseismograms</span><span class="p">,</span> <span class="n">zseismograms</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="p">[</span><span class="n">iteration</span><span class="p">,</span> <span class="n">ux</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">],</span> <span class="n">uz</span><span class="p">[</span><span class="n">tp1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,</span> <span class="n">pad</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">],</span>
+               <span class="n">xseismograms</span><span class="p">,</span> <span class="n">zseismograms</span><span class="p">]</span>
+
+</div>
+<div class="viewcode-block" id="xz2ps"><a class="viewcode-back" href="../../../api/seismic.wavefd.html#fatiando.seismic.wavefd.xz2ps">[docs]</a><span class="k">def</span> <span class="nf">xz2ps</span><span class="p">(</span><span class="n">ux</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">area</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Convert the x and z displacements into representations of P and S waves</span>
+<span class="sd">    using the divergence and curl, respectively, after Kennett (2002, pp 57)</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        P: \frac{\partial u_x}{\partial x} + \frac{\partial u_z}{\partial z}</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        S: \frac{\partial u_x}{\partial z} - \frac{\partial u_z}{\partial x}</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * ux, uz : 2D-arrays</span>
+<span class="sd">        The x and z displacement panels</span>
+<span class="sd">    * area : [xmin, xmax, zmin, zmax]</span>
+<span class="sd">        The x, z limits of the simulation area, e.g., the shallowest point is</span>
+<span class="sd">        at zmin, the deepest at zmax.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * p, s : 2D-arrays</span>
+<span class="sd">        Panels corresponding to P and S wave components</span>
+
+
+<span class="sd">    References:</span>
+
+<span class="sd">    Kennett, B. L. N. (2002), The Seismic Wavefield: Volume 2, Interpretation</span>
+<span class="sd">    of Seismograms on Regional and Global Scales, Cambridge University Press.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">ux</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">uz</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;ux and uz grids should have same shape&#39;</span><span class="p">)</span>
+    <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">area</span>
+    <span class="n">nz</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">ux</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">dz</span><span class="p">,</span> <span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">z2</span> <span class="o">-</span> <span class="n">z1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nz</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">p</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">ux</span><span class="p">),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">ux</span><span class="p">)</span>
+    <span class="n">_xz2ps</span><span class="p">(</span><span class="n">ux</span><span class="p">,</span> <span class="n">uz</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">nz</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dz</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">p</span><span class="p">,</span> <span class="n">s</span>
+
+</div>
+<div class="viewcode-block" id="maxdt"><a class="viewcode-back" href="../../../api/seismic.wavefd.html#fatiando.seismic.wavefd.maxdt">[docs]</a><span class="k">def</span> <span class="nf">maxdt</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">maxvel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the maximum time step that can be used in the simulation.</span>
+
+<span class="sd">    Uses the result of the Von Neumann type analysis of Di Bartolo et al.</span>
+<span class="sd">    (2012).</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * area : [xmin, xmax, zmin, zmax]</span>
+<span class="sd">        The x, z limits of the simulation area, e.g., the shallowest point is</span>
+<span class="sd">        at zmin, the deepest at zmax.</span>
+<span class="sd">    * shape : (nz, nx)</span>
+<span class="sd">        The number of nodes in the finite difference grid</span>
+<span class="sd">    * maxvel : float</span>
+<span class="sd">        The maximum velocity in the medium</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * maxdt : float</span>
+<span class="sd">        The maximum time step</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">area</span>
+    <span class="n">nz</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">shape</span>
+    <span class="n">spacing</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([(</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">z2</span> <span class="o">-</span> <span class="n">z1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nz</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="mf">0.606</span> <span class="o">*</span> <span class="n">spacing</span> <span class="o">/</span> <span class="n">maxvel</span>
+
+</div>
+<div class="viewcode-block" id="scalar_maxdt"><a class="viewcode-back" href="../../../api/seismic.wavefd.html#fatiando.seismic.wavefd.scalar_maxdt">[docs]</a><span class="k">def</span> <span class="nf">scalar_maxdt</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">maxvel</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the maximum time step that can be used in the</span>
+<span class="sd">    FD scalar simulation with 4th order space 1st time backward.</span>
+
+<span class="sd">    References</span>
+
+<span class="sd">    Alford R.M., Kelly K.R., Boore D.M. (1974) Accuracy of finite-difference</span>
+<span class="sd">    modeling of the acoustic wave equation Geophysics, 39 (6), P. 834-842</span>
+
+<span class="sd">    Chen, Jing-Bo (2011) A stability formula for Lax-Wendroff methods</span>
+<span class="sd">    with fourth-order in time and general-order in space for</span>
+<span class="sd">    the scalar wave equation Geophysics, v. 76, p. T37-T42</span>
+
+<span class="sd">    Convergence</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">         \Delta t \leq \frac{2 \Delta s}{ V \sqrt{\sum_{a=-N}^{N} (|w_a^1| +</span>
+<span class="sd">         |w_a^2|)}}</span>
+<span class="sd">         = \frac{ \Delta s \sqrt{3}}{ V_{max} \sqrt{8}}</span>
+
+<span class="sd">    Where w_a are the centered differences weights</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * area : [xmin, xmax, zmin, zmax]</span>
+<span class="sd">        The x, z limits of the simulation area, e.g., the shallowest point is</span>
+<span class="sd">        at zmin, the deepest at zmax.</span>
+<span class="sd">    * shape : (nz, nx)</span>
+<span class="sd">        The number of nodes in the finite difference grid</span>
+<span class="sd">    * maxvel : float</span>
+<span class="sd">        The maximum velocity in the medium</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * maxdt : float</span>
+<span class="sd">        The maximum time step</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">area</span>
+    <span class="n">nz</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">shape</span>
+    <span class="n">spacing</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([(</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">z2</span> <span class="o">-</span> <span class="n">z1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nz</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)])</span>
+    <span class="n">factor</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">3.</span> <span class="o">/</span> <span class="mf">8.</span><span class="p">)</span>
+    <span class="n">factor</span> <span class="o">-=</span> <span class="n">factor</span> <span class="o">/</span> <span class="mf">100.</span>  <span class="c"># 1% smaller to guarantee criteria</span>
+    <span class="c"># the closer to stability criteria the better the convergence</span>
+    <span class="k">return</span> <span class="n">factor</span> <span class="o">*</span> <span class="n">spacing</span> <span class="o">/</span> <span class="n">maxvel</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

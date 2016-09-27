@@ -1,0 +1,10 @@
+.. _cookbook_vis_mpl_contour:
+
+Vis: Plot contour lines and filled contours
+============================================
+
+
+**Download** source code: :download:`vis_mpl_contour.py<../_static/cookbook/vis_mpl_contour.py>`
+
+.. literalinclude:: ../_static/cookbook/vis_mpl_contour.py
+    :language: python

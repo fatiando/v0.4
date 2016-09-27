@@ -1,0 +1,495 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Hyper parameter optimization (fatiando.inversion.hyper_param) &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Inverse problems framework (fatiando.inversion)" href="inversion.html" />
+    <link rel="next" title="Regularization (fatiando.inversion.regularization)" href="inversion.regularization.html" />
+    <link rel="prev" title="Data misfit functions (fatiando.inversion.misfit)" href="inversion.misfit.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../install.html">Installing</a></li>
+                <li><a href="../docs.html">Documentation</a></li>
+                <li><a href="../cookbook.html">Cookbook</a></li>
+                <li><a href="../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="module-fatiando.inversion.hyper_param">
+<span id="hyper-parameter-optimization-fatiando-inversion-hyper-param"></span><span id="fatiando-inversion-hyper-param"></span><h1>Hyper parameter optimization (<code class="docutils literal"><span class="pre">fatiando.inversion.hyper_param</span></code>)<a class="headerlink" href="#module-fatiando.inversion.hyper_param" title="Permalink to this headline">¶</a></h1>
+<p>Classes for hyper parameter estimation (like the regularizing parameter).</p>
+<p>These classes copy the interface of the standard inversion classes based on
+<a class="reference internal" href="inversion.misfit.html#fatiando.inversion.misfit.Misfit" title="fatiando.inversion.misfit.Misfit"><code class="xref py py-class docutils literal"><span class="pre">Misfit</span></code></a> (i.e.,
+<code class="docutils literal"><span class="pre">solver.config(...).fit().estimate_</span></code>). When their <code class="docutils literal"><span class="pre">fit</span></code> method is called,
+they perform many runs of the inversion and try to select the optimal values
+for the hyper parameters. The class will then behave as the solver that yields
+the best estimate (e.g., <code class="docutils literal"><span class="pre">solver[0].predicted()</span></code>).</p>
+<p>Available classes:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.inversion.hyper_param.LCurve" title="fatiando.inversion.hyper_param.LCurve"><code class="xref py py-class docutils literal"><span class="pre">LCurve</span></code></a>: Estimate the regularizing
+parameter using an L-curve analysis.</li>
+</ul>
+<hr class="docutils" />
+<dl class="class">
+<dt id="fatiando.inversion.hyper_param.LCurve">
+<em class="property">class </em><code class="descclassname">fatiando.inversion.hyper_param.</code><code class="descname">LCurve</code><span class="sig-paren">(</span><em>datamisfit</em>, <em>regul</em>, <em>regul_params</em>, <em>loglog=True</em>, <em>njobs=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/hyper_param.html#LCurve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.hyper_param.LCurve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="inversion.base.html#fatiando.inversion.base.OptimizerMixin" title="fatiando.inversion.base.OptimizerMixin"><code class="xref py py-class docutils literal"><span class="pre">fatiando.inversion.base.OptimizerMixin</span></code></a></p>
+<p>Use the L-curve criterion to estimate the regularization parameter.</p>
+<p>Runs the inversion using several specified regularization parameters.
+The best value is the one that falls on the corner of the log-log plot of
+the data misfit vs regularizing function.
+This point is automatically found using the triangle method of
+Castellanos et al. (2002).</p>
+<p>This class behaves as <code class="xref py py-class docutils literal"><span class="pre">Misfit</span></code>.
+To use it, simply call <code class="docutils literal"><span class="pre">fit</span></code> and optionally <code class="docutils literal"><span class="pre">config</span></code>.
+The estimate will be stored in <code class="docutils literal"><span class="pre">estimate_</span></code> and <code class="docutils literal"><span class="pre">p_</span></code>.
+The estimated regularization parameter will be stored in <code class="docutils literal"><span class="pre">regul_param_</span></code>.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>datamisfit <span class="classifier-delimiter">:</span> <span class="classifier"><code class="xref py py-class docutils literal"><span class="pre">Misfit</span></code></span></dt>
+<dd><p class="first last">The data misfit instance for the inverse problem. Can be a sum of other
+misfits.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>regul <span class="classifier-delimiter">:</span> <span class="classifier">A class from <a class="reference internal" href="inversion.regularization.html#module-fatiando.inversion.regularization" title="fatiando.inversion.regularization"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.inversion.regularization</span></code></a></span></dt>
+<dd><p class="first last">The regularizing function.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>regul_params <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">The values of the regularization parameter that will be tested.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>loglog <span class="classifier-delimiter">:</span> <span class="classifier">True or False</span></dt>
+<dd><p class="first last">If True, will use a log-log scale for the L-curve (recommended).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>jobs <span class="classifier-delimiter">:</span> <span class="classifier">None or int</span></dt>
+<dd><p class="first last">If not None, will use <em>jobs</em> processes to calculate the L-curve.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>References:</p>
+<p>Castellanos, J. L., S. Gomez, and V. Guerra (2002), The triangle method for
+finding the corner of the L-curve, Applied Numerical Mathematics, 43(4),
+359-373, doi:10.1016/S0168-9274(01)00179-9.</p>
+<p>Examples:</p>
+<p>We&#8217;ll use the L-curve to estimate the best regularization parameter for a
+smooth inversion using <a class="reference internal" href="seismic.srtomo.html#module-fatiando.seismic.srtomo" title="fatiando.seismic.srtomo"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.seismic.srtomo</span></code></a>.</p>
+<p>First, we&#8217;ll setup some synthetic data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.mesher</span> <span class="kn">import</span> <span class="n">SquareMesh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.seismic</span> <span class="kn">import</span> <span class="n">ttime2d</span><span class="p">,</span> <span class="n">srtomo</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.inversion</span> <span class="kn">import</span> <span class="n">Smoothness2D</span><span class="p">,</span> <span class="n">LCurve</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">area</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">SquareMesh</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vp</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vp</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">7</span><span class="p">,</span><span class="mi">3</span><span class="p">:</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vp</span>
+<span class="go">array([[  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,  10.,  10.,  10.,  10.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,  10.,  10.,  10.,  10.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,  10.,  10.,  10.,  10.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,  10.,  10.,  10.,  10.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">addprop</span><span class="p">(</span><span class="s">&#39;vp&#39;</span><span class="p">,</span> <span class="n">vp</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">src_loc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">random_points</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rec_loc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">circular_points</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">random</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">srcs</span><span class="p">,</span> <span class="n">recs</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">connect_points</span><span class="p">(</span><span class="n">src_loc</span><span class="p">,</span> <span class="n">rec_loc</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tts</span> <span class="o">=</span> <span class="n">ttime2d</span><span class="o">.</span><span class="n">straight</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s">&#39;vp&#39;</span><span class="p">,</span> <span class="n">srcs</span><span class="p">,</span> <span class="n">recs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tts</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">contaminate</span><span class="p">(</span><span class="n">tts</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">percent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we can setup a tomography by creating the necessary data misfit
+(<code class="docutils literal"><span class="pre">SRTomo</span></code>) and regularization (<code class="docutils literal"><span class="pre">Smoothness2D</span></code>) objects. We&#8217;ll normalize
+the data misfit by the number of data points to make the scale of the
+regularization parameter more tractable.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mesh</span> <span class="o">=</span> <span class="n">SquareMesh</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">datamisfit</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">tts</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="o">*</span><span class="n">srtomo</span><span class="o">.</span><span class="n">SRTomo</span><span class="p">(</span><span class="n">tts</span><span class="p">,</span> <span class="n">srcs</span><span class="p">,</span> <span class="n">recs</span><span class="p">,</span> <span class="n">mesh</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">regul</span> <span class="o">=</span> <span class="n">Smoothness2D</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The tomography solver will be the <code class="docutils literal"><span class="pre">LCurve</span></code> solver. It works by calling
+<code class="docutils literal"><span class="pre">fit()</span></code> and accessing <code class="docutils literal"><span class="pre">estimate_</span></code>, exactly like any other solver:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">regul_params</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="o">**</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tomo</span> <span class="o">=</span> <span class="n">LCurve</span><span class="p">(</span><span class="n">datamisfit</span><span class="p">,</span> <span class="n">regul</span><span class="p">,</span> <span class="n">regul_params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">tomo</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array_repr</span><span class="p">(</span><span class="n">tomo</span><span class="o">.</span><span class="n">estimate_</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">),</span> <span class="n">precision</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="go">array([[  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,  11.,   9.,  11.,  10.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,  10.,  11.,  10.,  10.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,  10.,  10.,  10.,  10.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,  11.,  10.,  11.,   9.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.]])</span>
+</pre></div>
+</div>
+<p>When <code class="docutils literal"><span class="pre">fit()</span></code> is called, the <code class="docutils literal"><span class="pre">LCurve</span></code>  will run the inversion for each
+value of the regularization parameter, build an l-curve, and find the
+best solution (i.e., the corner value of the l-curve).</p>
+<p>The <code class="docutils literal"><span class="pre">LCurve</span></code> object behaves like a normal multi-objective function.
+In fact, it will try to mirror the objective function that resulted in the
+best solution.
+You can index it to access the data misfit and regularization parts.
+For example, to get the residuals vector or the predicted data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">predicted</span> <span class="o">=</span> <span class="n">tomo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">predicted</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">residuals</span> <span class="o">=</span> <span class="n">tomo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">residuals</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;</span><span class="si">%.4f</span><span class="s"> </span><span class="si">%.4f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">residuals</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">residuals</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+<span class="go">-0.0000 0.0047</span>
+</pre></div>
+</div>
+<p>The estimated regularization parameter is stored in <code class="docutils literal"><span class="pre">regul_param_</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tomo</span><span class="o">.</span><span class="n">regul_param_</span>
+<span class="go">1e-05</span>
+</pre></div>
+</div>
+<p>You can run the l-curve analysis in parallel by specifying the <code class="docutils literal"><span class="pre">njobs</span></code>
+argument. This will spread the computations over <code class="docutils literal"><span class="pre">njobs</span></code> number of
+processes and give some speedup over running sequentially. Note that you
+should <strong>not</strong> enable any kind of multi-processes parallelism
+on the data misfit class. It is often better to run each inversion
+sequentially and run many of them in parallel. Note that you&#8217;ll enough
+memory to run multiple inversions at the same time, so this is not suited
+for large, memory hungry inversions.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">par_tomo</span> <span class="o">=</span> <span class="n">LCurve</span><span class="p">(</span><span class="n">datamisfit</span><span class="p">,</span> <span class="n">regul</span><span class="p">,</span> <span class="n">regul_params</span><span class="p">,</span> <span class="n">njobs</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">par_tomo</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>  <span class="c"># Will you 2 processes to run inversions</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">par_tomo</span><span class="o">.</span><span class="n">regul_param_</span>
+<span class="go">1e-05</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array_repr</span><span class="p">(</span><span class="n">par_tomo</span><span class="o">.</span><span class="n">estimate_</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">),</span> <span class="n">precision</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="go">array([[  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,  11.,   9.,  11.,  10.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,  10.,  11.,  10.,  10.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,  10.,  10.,  10.,  10.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,  11.,  10.,  11.,   9.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.]])</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">LCurve</span></code> also has a <code class="docutils literal"><span class="pre">config</span></code> method to configure the optimization
+process for non-linear problems, for example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">initial</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">tomo</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s">&#39;newton&#39;</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="n">initial</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tomo</span><span class="o">.</span><span class="n">regul_param_</span>
+<span class="go">1e-05</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array_repr</span><span class="p">(</span><span class="n">tomo</span><span class="o">.</span><span class="n">estimate_</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">),</span> <span class="n">precision</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="go">array([[  4.,   4.,   3.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,  12.,   9.,  11.,  10.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,  11.,  11.,  10.,  10.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,  10.,  10.,  10.,  10.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,  11.,  10.,  11.,   9.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   5.,   4.,   4.,   4.],</span>
+<span class="go">       [  4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.,   4.]])</span>
+</pre></div>
+</div>
+<p>You can view the optimization information for the run corresponding to the
+best estimate using the <code class="docutils literal"><span class="pre">stats_</span></code> attribute:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">tomo</span><span class="o">.</span><span class="n">stats_</span><span class="p">))</span>
+<span class="go">[&#39;iterations&#39;, &#39;method&#39;, &#39;objective&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tomo</span><span class="o">.</span><span class="n">stats_</span><span class="p">[</span><span class="s">&#39;method&#39;</span><span class="p">]</span>
+<span class="go">&quot;Newton&#39;s method&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tomo</span><span class="o">.</span><span class="n">stats_</span><span class="p">[</span><span class="s">&#39;iterations&#39;</span><span class="p">]</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="fatiando.inversion.hyper_param.LCurve.config">
+<code class="descname">config</code><span class="sig-paren">(</span><em>method</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.inversion.hyper_param.LCurve.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the optimization method and its parameters.</p>
+<p>This sets the method used by
+<code class="xref py py-meth docutils literal"><span class="pre">fit</span></code> and the keyword
+arguments that are passed to it.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The optimization method. One of: <code class="docutils literal"><span class="pre">'linear'</span></code>, <code class="docutils literal"><span class="pre">'newton'</span></code>,
+<code class="docutils literal"><span class="pre">'levmarq'</span></code>, <code class="docutils literal"><span class="pre">'steepest'</span></code>, <code class="docutils literal"><span class="pre">'acor'</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Other keyword arguments that can be passed are the ones allowed by each
+method.</p>
+<p>Some methods have required arguments:</p>
+<ul class="simple">
+<li><em>newton</em>, <em>levmarq</em> and <em>steepest</em> require the <code class="docutils literal"><span class="pre">initial</span></code> argument
+(an initial estimate for the gradient descent)</li>
+<li><em>acor</em> requires the <code class="docutils literal"><span class="pre">bounds</span></code> argument (min/max values for the
+search space)</li>
+</ul>
+<p>See the corresponding docstrings for more information:</p>
+<ul class="simple">
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.linear" title="fatiando.inversion.optimization.linear"><code class="xref py py-meth docutils literal"><span class="pre">linear</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.newton" title="fatiando.inversion.optimization.newton"><code class="xref py py-meth docutils literal"><span class="pre">newton</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.levmarq" title="fatiando.inversion.optimization.levmarq"><code class="xref py py-meth docutils literal"><span class="pre">levmarq</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.steepest" title="fatiando.inversion.optimization.steepest"><code class="xref py py-meth docutils literal"><span class="pre">steepest</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.acor" title="fatiando.inversion.optimization.acor"><code class="xref py py-meth docutils literal"><span class="pre">acor</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.inversion.hyper_param.LCurve.estimate_">
+<code class="descname">estimate_</code><a class="headerlink" href="#fatiando.inversion.hyper_param.LCurve.estimate_" title="Permalink to this definition">¶</a></dt>
+<dd><p>A nicely formatted version of the estimate.</p>
+<p>If the class implements a <cite>fmt_estimate</cite> method, this will its results.
+This can be used to convert the parameter vector to a more useful form,
+like a <a class="reference internal" href="mesher.html#module-fatiando.mesher" title="fatiando.mesher"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.mesher</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.inversion.hyper_param.LCurve.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/hyper_param.html#LCurve.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.hyper_param.LCurve.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve for the parameter vector and optimum regularization parameter.</p>
+<p>Combines the data-misfit and regularization solvers using the range of
+regularization parameters provided and calls <code class="docutils literal"><span class="pre">fit</span></code> and <code class="docutils literal"><span class="pre">config</span></code> on
+each.</p>
+<p>The <code class="docutils literal"><span class="pre">p_</span></code> and <code class="docutils literal"><span class="pre">estimate_</span></code> attributes correspond to the combination
+that falls in the corner of the L-curve.</p>
+<p>The regularization parameter for this corner point if stored in the
+<code class="docutils literal"><span class="pre">regul_param_</span></code> attribute.</p>
+<p>Returns:</p>
+<ul class="simple">
+<li>self</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.inversion.hyper_param.LCurve.fmt_estimate">
+<code class="descname">fmt_estimate</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/hyper_param.html#LCurve.fmt_estimate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.hyper_param.LCurve.fmt_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <code class="docutils literal"><span class="pre">estimate_</span></code> attribute of the optimal solution.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.inversion.hyper_param.LCurve.objective_">
+<code class="descname">objective_</code><a class="headerlink" href="#fatiando.inversion.hyper_param.LCurve.objective_" title="Permalink to this definition">¶</a></dt>
+<dd><p>The objective function corresponding to the best estimate.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.inversion.hyper_param.LCurve.p_">
+<code class="descname">p_</code><a class="headerlink" href="#fatiando.inversion.hyper_param.LCurve.p_" title="Permalink to this definition">¶</a></dt>
+<dd><p>The estimated parameter vector obtained from the best regularization
+parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.inversion.hyper_param.LCurve.plot_lcurve">
+<code class="descname">plot_lcurve</code><span class="sig-paren">(</span><em>ax=None</em>, <em>guides=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/hyper_param.html#LCurve.plot_lcurve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.hyper_param.LCurve.plot_lcurve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a plot of the data-misfit x regularization values.</p>
+<p>The estimated corner value is shown as a blue triangle.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>ax <span class="classifier-delimiter">:</span> <span class="classifier">matplotlib Axes</span></dt>
+<dd><p class="first last">If not <code class="docutils literal"><span class="pre">None</span></code>, will plot the curve on this Axes instance.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>guides <span class="classifier-delimiter">:</span> <span class="classifier">True or False</span></dt>
+<dd><p class="first last">Plot vertical and horizontal lines across the corner value.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.inversion.hyper_param.LCurve.regul_param_">
+<code class="descname">regul_param_</code><a class="headerlink" href="#fatiando.inversion.hyper_param.LCurve.regul_param_" title="Permalink to this definition">¶</a></dt>
+<dd><p>The regularization parameter corresponding to the best estimate.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.inversion.hyper_param.LCurve.select_corner">
+<code class="descname">select_corner</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/hyper_param.html#LCurve.select_corner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.hyper_param.LCurve.select_corner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select the corner value of the L-curve formed inversion results.</p>
+<p>This is performed automatically after calling the
+<a class="reference internal" href="#fatiando.inversion.hyper_param.LCurve.fit" title="fatiando.inversion.hyper_param.LCurve.fit"><code class="xref py py-meth docutils literal"><span class="pre">fit</span></code></a> method.
+You can run this method separately after
+<a class="reference internal" href="#fatiando.inversion.hyper_param.LCurve.fit" title="fatiando.inversion.hyper_param.LCurve.fit"><code class="xref py py-meth docutils literal"><span class="pre">fit</span></code></a> has been called to
+tweak the results.</p>
+<p>You can access the estimated values by:</p>
+<ul class="simple">
+<li>The <code class="docutils literal"><span class="pre">p_</span></code> and <code class="docutils literal"><span class="pre">estimate_</span></code> attributes will hold the estimated
+parameter vector and formatted estimate, respective, corresponding
+to the corner value.</li>
+<li>The <code class="docutils literal"><span class="pre">regul_param_</span></code> attribute holds the value of the regularization
+parameter corresponding to the corner value.</li>
+<li>The <code class="docutils literal"><span class="pre">corner_</span></code> attribute will hold the index of the corner value
+in the list of computed solutions.</li>
+</ul>
+<p>Uses the Triangle method of Castellanos et al. (2002).</p>
+<p>References:</p>
+<p>Castellanos, J. L., S. Gomez, and V. Guerra (2002), The triangle method
+for finding the corner of the L-curve, Applied Numerical Mathematics,
+43(4), 359-373, doi:10.1016/S0168-9274(01)00179-9.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.inversion.hyper_param.LCurve.stats_">
+<code class="descname">stats_</code><a class="headerlink" href="#fatiando.inversion.hyper_param.LCurve.stats_" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optimization information for the best solution found.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="../_sources/api/inversion.hyper_param.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

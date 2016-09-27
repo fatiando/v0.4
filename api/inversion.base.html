@@ -1,0 +1,711 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Base classes for internal use (fatiando.inversion.base) &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Inverse problems framework (fatiando.inversion)" href="inversion.html" />
+    <link rel="next" title="Optimization routines (fatiando.inversion.optimization)" href="inversion.optimization.html" />
+    <link rel="prev" title="Regularization (fatiando.inversion.regularization)" href="inversion.regularization.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../install.html">Installing</a></li>
+                <li><a href="../docs.html">Documentation</a></li>
+                <li><a href="../cookbook.html">Cookbook</a></li>
+                <li><a href="../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="module-fatiando.inversion.base">
+<span id="base-classes-for-internal-use-fatiando-inversion-base"></span><span id="fatiando-inversion-base"></span><h1>Base classes for internal use (<code class="docutils literal"><span class="pre">fatiando.inversion.base</span></code>)<a class="headerlink" href="#module-fatiando.inversion.base" title="Permalink to this headline">¶</a></h1>
+<p>The base classes for inverse problem solving.</p>
+<p>See <a class="reference internal" href="inversion.html#module-fatiando.inversion" title="fatiando.inversion"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.inversion</span></code></a> for examples, regularization, and more.</p>
+<p>This module defines base classes that are used by the rest of the
+<code class="docutils literal"><span class="pre">inversion</span></code> package:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.inversion.base.MultiObjective" title="fatiando.inversion.base.MultiObjective"><code class="xref py py-class docutils literal"><span class="pre">MultiObjective</span></code></a>: A &#8220;container&#8221; class that
+emulates a sum of different  objective (goal) functions (like
+<a class="reference internal" href="inversion.misfit.html#fatiando.inversion.misfit.Misfit" title="fatiando.inversion.misfit.Misfit"><code class="xref py py-class docutils literal"><span class="pre">Misfit</span></code></a> or some form of
+<a class="reference internal" href="inversion.regularization.html#module-fatiando.inversion.regularization" title="fatiando.inversion.regularization"><code class="xref py py-mod docutils literal"><span class="pre">regularization</span></code></a>). When two of those classes are
+added they generate a <code class="docutils literal"><span class="pre">MultiObjective</span></code> object.</li>
+<li><a class="reference internal" href="#fatiando.inversion.base.OperatorMixin" title="fatiando.inversion.base.OperatorMixin"><code class="xref py py-class docutils literal"><span class="pre">OperatorMixin</span></code></a>: A mix-in class that defines
+the operators <code class="docutils literal"><span class="pre">+</span></code> and <code class="docutils literal"><span class="pre">*</span></code> (by a scalar). Used to give these properties to
+<code class="docutils literal"><span class="pre">Misfit</span></code> and the regularizing functions. Adding results in a
+<code class="docutils literal"><span class="pre">MultiObjective</span></code>. Multiplying sets the <code class="docutils literal"><span class="pre">regul_param</span></code> of the class (like a
+scalar weight factor).</li>
+<li><a class="reference internal" href="#fatiando.inversion.base.OptimizerMixin" title="fatiando.inversion.base.OptimizerMixin"><code class="xref py py-class docutils literal"><span class="pre">OptimizerMixin</span></code></a>: A mix-in class that defines
+the <code class="docutils literal"><span class="pre">fit</span></code> and <code class="docutils literal"><span class="pre">config</span></code> methods for optimizing a <code class="docutils literal"><span class="pre">Misfit</span></code> or
+<code class="docutils literal"><span class="pre">MultiObjective</span></code> and fitting the model to the data.</li>
+<li><a class="reference internal" href="#fatiando.inversion.base.CachedMethod" title="fatiando.inversion.base.CachedMethod"><code class="xref py py-class docutils literal"><span class="pre">CachedMethod</span></code></a>: A class that wraps a method
+and caches the returned value. When the same argument (an array) is passed
+twice in a row, the class returns the cached value instead of recomputing.</li>
+<li><a class="reference internal" href="#fatiando.inversion.base.CachedMethodPermanent" title="fatiando.inversion.base.CachedMethodPermanent"><code class="xref py py-class docutils literal"><span class="pre">CachedMethodPermanent</span></code></a>: Like
+<code class="docutils literal"><span class="pre">CachedMethod</span></code> but always returns the cached value, regardless of the
+input. Effectively calculates only the first time the method is called.
+Useful for caching the Jacobian matrix in a linear problem.</li>
+</ul>
+<hr class="docutils" />
+<dl class="class">
+<dt id="fatiando.inversion.base.CachedMethod">
+<em class="property">class </em><code class="descclassname">fatiando.inversion.base.</code><code class="descname">CachedMethod</code><span class="sig-paren">(</span><em>instance</em>, <em>meth</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/base.html#CachedMethod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.base.CachedMethod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">future.types.newobject.newobject</span></code></p>
+<p>Wrap a method to cache it&#8217;s output based on the hash of the input array.</p>
+<p>Store the output of calling the method on a numpy array. If the method is
+called in succession with the same input array, the cached result will be
+returned. If the method is called on a different array, the old result will
+be discarded and the new one stored.</p>
+<p>Uses SHA1 hashes of the input array to tell if it is the same array.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We need the object instance and method name instead of the bound method
+(like <code class="docutils literal"><span class="pre">obj.method</span></code>) because we can&#8217;t pickle bound methods. We need to
+be able to pickle so that the solvers can be passed between processes
+in parallelization.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>instance <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd><p class="first last">The instance of the object that has the method you want to cache.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>meth <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The name of the method you want to cache.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cached</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="n">cached</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="bp">self</span><span class="o">.</span><span class="n">my_method</span> <span class="o">=</span> <span class="n">CachedMethod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;my_method&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">my_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">p</span><span class="o">**</span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">MyClass</span><span class="p">(</span><span class="n">cached</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">my_method</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="go">array([ 0,  1,  4,  9, 16])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">my_method</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="ow">is</span> <span class="n">b</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cached</span> <span class="o">=</span> <span class="n">MyClass</span><span class="p">(</span><span class="n">cached</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">cached</span><span class="o">.</span><span class="n">my_method</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="go">array([ 0,  1,  4,  9, 16])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">cached</span><span class="o">.</span><span class="n">my_method</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="ow">is</span> <span class="n">b</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cached</span><span class="o">.</span><span class="n">my_method</span><span class="o">.</span><span class="n">hard_reset</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">cached</span><span class="o">.</span><span class="n">my_method</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="ow">is</span> <span class="n">b</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">cached</span><span class="o">.</span><span class="n">my_method</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="ow">is</span> <span class="n">c</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cached</span><span class="o">.</span><span class="n">my_method</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="go">array([ 0,  1,  4,  9, 16, 25])</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="fatiando.inversion.base.CachedMethod.hard_reset">
+<code class="descname">hard_reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/base.html#CachedMethod.hard_reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.base.CachedMethod.hard_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the cached values.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatiando.inversion.base.CachedMethodPermanent">
+<em class="property">class </em><code class="descclassname">fatiando.inversion.base.</code><code class="descname">CachedMethodPermanent</code><span class="sig-paren">(</span><em>instance</em>, <em>meth</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/base.html#CachedMethodPermanent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.base.CachedMethodPermanent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">future.types.newobject.newobject</span></code></p>
+<p>Wrap a method to cache it&#8217;s output and return it whenever the method is
+called..</p>
+<p>This is different from <a class="reference internal" href="#fatiando.inversion.base.CachedMethod" title="fatiando.inversion.base.CachedMethod"><code class="xref py py-class docutils literal"><span class="pre">CachedMethod</span></code></a>
+because it will only run the method once. All other times, the result
+returned will be this first one. This class should be used with methods
+that should return always the same output (like the Jacobian matrix of a
+linear problem).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We need the object instance and method name instead of the bound method
+(like <code class="docutils literal"><span class="pre">obj.method</span></code>) because we can&#8217;t pickle bound methods. We need to
+be able to pickle so that the solvers can be passed between processes
+in parallelization.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>instance <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd><p class="first last">The instance of the object that has the method you want to cache.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>meth <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The name of the method you want to cache.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cached</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="n">cached</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="bp">self</span><span class="o">.</span><span class="n">my_method</span> <span class="o">=</span> <span class="n">CachedMethodPermanent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;my_method&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">my_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">p</span><span class="o">**</span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">MyClass</span><span class="p">(</span><span class="n">cached</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">my_method</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="go">array([ 0,  1,  4,  9, 16])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">my_method</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="ow">is</span> <span class="n">b</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cached</span> <span class="o">=</span> <span class="n">MyClass</span><span class="p">(</span><span class="n">cached</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">cached</span><span class="o">.</span><span class="n">my_method</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="go">array([ 0,  1,  4,  9, 16])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">cached</span><span class="o">.</span><span class="n">my_method</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="ow">is</span> <span class="n">b</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">cached</span><span class="o">.</span><span class="n">my_method</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span>
+<span class="go">array([ 0,  1,  4,  9, 16])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="ow">is</span> <span class="n">c</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="fatiando.inversion.base.CachedMethodPermanent.hard_reset">
+<code class="descname">hard_reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/base.html#CachedMethodPermanent.hard_reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.base.CachedMethodPermanent.hard_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the cached values.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatiando.inversion.base.MultiObjective">
+<em class="property">class </em><code class="descclassname">fatiando.inversion.base.</code><code class="descname">MultiObjective</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/base.html#MultiObjective"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.base.MultiObjective" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatiando.inversion.base.OptimizerMixin" title="fatiando.inversion.base.OptimizerMixin"><code class="xref py py-class docutils literal"><span class="pre">fatiando.inversion.base.OptimizerMixin</span></code></a>, <a class="reference internal" href="#fatiando.inversion.base.OperatorMixin" title="fatiando.inversion.base.OperatorMixin"><code class="xref py py-class docutils literal"><span class="pre">fatiando.inversion.base.OperatorMixin</span></code></a></p>
+<p>An objective (goal) function with more than one component.</p>
+<p>This class is a linear combination of other goal functions (like
+<a class="reference internal" href="inversion.misfit.html#fatiando.inversion.misfit.Misfit" title="fatiando.inversion.misfit.Misfit"><code class="xref py py-class docutils literal"><span class="pre">Misfit</span></code></a> and regularization classes).</p>
+<p>It is automatically created by adding two goal functions that have the
+<a class="reference internal" href="#fatiando.inversion.base.OperatorMixin" title="fatiando.inversion.base.OperatorMixin"><code class="xref py py-class docutils literal"><span class="pre">OperatorMixin</span></code></a> as a base class.</p>
+<p>Alternatively, you can create a <code class="docutils literal"><span class="pre">MultiObjetive</span></code> by passing the other
+goals function instances as arguments to the constructor.</p>
+<p>The <code class="docutils literal"><span class="pre">MultiObjetive</span></code> behaves like any other goal function object. It has
+<code class="docutils literal"><span class="pre">fit</span></code> and <code class="docutils literal"><span class="pre">config</span></code> methods and can be added and multiplied by a scalar
+with the same effects.</p>
+<p>Indexing a <code class="docutils literal"><span class="pre">MultiObjetive</span></code> will iterate over the component goal
+functions.</p>
+<p>Examples:</p>
+<p>To show how this class is generated and works, let&#8217;s create a simple class
+that subclasses <code class="docutils literal"><span class="pre">OperatorMixin</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyGoal</span><span class="p">(</span><span class="n">OperatorMixin</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">nparams</span><span class="p">,</span> <span class="n">islinear</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">islinear</span> <span class="o">=</span> <span class="n">islinear</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">nparams</span> <span class="o">=</span> <span class="n">nparams</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="mi">2</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">hessian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">MyGoal</span><span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">MyGoal</span><span class="p">(</span><span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="go">&lt;class &#39;fatiando.inversion.base.MultiObjective&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">size</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">nparams</span>
+<span class="go">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">islinear</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+<span class="go">&#39;A&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+<span class="go">&#39;B&#39;</span>
+</pre></div>
+</div>
+<p>Asking for the value, gradient, and Hessian of the <code class="docutils literal"><span class="pre">MultiObjective</span></code> will
+give me the sum of both components.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="go">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">hessian</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="go">6</span>
+</pre></div>
+</div>
+<p>Multiplying the <code class="docutils literal"><span class="pre">MultiObjective</span></code> by a scalar will set the regularization
+parameter for the sum.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">c</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="go">40</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">hessian</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="go">60</span>
+</pre></div>
+</div>
+<p>All components must have the same number of parameters. For the moment,
+<code class="docutils literal"><span class="pre">MultiObjetive</span></code> doesn&#8217;t handle multiple parameter vector (one for each
+objective function).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">MyGoal</span><span class="p">(</span><span class="s">&quot;E&quot;</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">+</span> <span class="n">e</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">AssertionError</span>: <span class="n">Can&#39;t add goals with different number of parameters: 10, 20</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">MultiObjective</span></code> will automatically detect if the problem remains
+linear or not. For example, adding a non-linear problem to a linear one
+makes the sum non-linear.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">islinear</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">MyGoal</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">islinear</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">f</span> <span class="o">+</span> <span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">islinear</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="fatiando.inversion.base.MultiObjective.config">
+<code class="descname">config</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/base.html#MultiObjective.config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.base.MultiObjective.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the optimization method and its parameters.</p>
+<p>This sets the method used by
+<code class="xref py py-meth docutils literal"><span class="pre">fit</span></code> and the keyword
+arguments that are passed to it.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The optimization method. One of: <code class="docutils literal"><span class="pre">'linear'</span></code>, <code class="docutils literal"><span class="pre">'newton'</span></code>,
+<code class="docutils literal"><span class="pre">'levmarq'</span></code>, <code class="docutils literal"><span class="pre">'steepest'</span></code>, <code class="docutils literal"><span class="pre">'acor'</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Other keyword arguments that can be passed are the ones allowed by each
+method.</p>
+<p>Some methods have required arguments:</p>
+<ul class="simple">
+<li><em>newton</em>, <em>levmarq</em> and <em>steepest</em> require the <code class="docutils literal"><span class="pre">initial</span></code> argument
+(an initial estimate for the gradient descent)</li>
+<li><em>acor</em> requires the <code class="docutils literal"><span class="pre">bounds</span></code> argument (min/max values for the
+search space)</li>
+</ul>
+<p>See the corresponding docstrings for more information:</p>
+<ul class="simple">
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.linear" title="fatiando.inversion.optimization.linear"><code class="xref py py-meth docutils literal"><span class="pre">linear</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.newton" title="fatiando.inversion.optimization.newton"><code class="xref py py-meth docutils literal"><span class="pre">newton</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.levmarq" title="fatiando.inversion.optimization.levmarq"><code class="xref py py-meth docutils literal"><span class="pre">levmarq</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.steepest" title="fatiando.inversion.optimization.steepest"><code class="xref py py-meth docutils literal"><span class="pre">steepest</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.acor" title="fatiando.inversion.optimization.acor"><code class="xref py py-meth docutils literal"><span class="pre">acor</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.inversion.base.MultiObjective.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><em>deep=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.inversion.base.MultiObjective.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a copy of me.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.inversion.base.MultiObjective.estimate_">
+<code class="descname">estimate_</code><a class="headerlink" href="#fatiando.inversion.base.MultiObjective.estimate_" title="Permalink to this definition">¶</a></dt>
+<dd><p>A nicely formatted version of the estimate.</p>
+<p>If the class implements a <cite>fmt_estimate</cite> method, this will its results.
+This can be used to convert the parameter vector to a more useful form,
+like a <a class="reference internal" href="mesher.html#module-fatiando.mesher" title="fatiando.mesher"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.mesher</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.inversion.base.MultiObjective.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/base.html#MultiObjective.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.base.MultiObjective.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve for the parameter vector that minimizes this objective function.</p>
+<p>Uses the optimization method and parameters defined using the
+<a class="reference internal" href="#fatiando.inversion.base.OptimizerMixin.config" title="fatiando.inversion.base.OptimizerMixin.config"><code class="xref py py-meth docutils literal"><span class="pre">config</span></code></a> method.</p>
+<p>The estimated parameter vector can be accessed through the
+<code class="docutils literal"><span class="pre">p_</span></code> attribute. A (possibly) formatted version (converted to a more
+manageable type) of the estimate can be accessed through the property
+<code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.inversion.base.MultiObjective.fmt_estimate">
+<code class="descname">fmt_estimate</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/base.html#MultiObjective.fmt_estimate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.base.MultiObjective.fmt_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format the current estimated parameter vector into a more useful form.</p>
+<p>Will call the <code class="docutils literal"><span class="pre">fmt_estimate</span></code> method of the first component goal
+function (the first term in the addition that created this object).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.inversion.base.MultiObjective.gradient">
+<code class="descname">gradient</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/base.html#MultiObjective.gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.base.MultiObjective.gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the gradient of the multi-objective function.</p>
+<p>This will be the sum of all goal functions that make up this
+multi-objective.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>result <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The sum of the gradients of the components.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.inversion.base.MultiObjective.hessian">
+<code class="descname">hessian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/base.html#MultiObjective.hessian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.base.MultiObjective.hessian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the hessian of the multi-objective function.</p>
+<p>This will be the sum of all goal functions that make up this
+multi-objective.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>result <span class="classifier-delimiter">:</span> <span class="classifier">2d-array</span></dt>
+<dd><p class="first last">The sum of the hessians of the components.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.inversion.base.MultiObjective.regul_param">
+<code class="descname">regul_param</code><a class="headerlink" href="#fatiando.inversion.base.MultiObjective.regul_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>The regularization parameter (scale factor) for the objetive function.</p>
+<p>Defaults to 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.inversion.base.MultiObjective.value">
+<code class="descname">value</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/base.html#MultiObjective.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.base.MultiObjective.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value of the multi-objective function.</p>
+<p>This will be the sum of all goal functions that make up this
+multi-objective.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>result <span class="classifier-delimiter">:</span> <span class="classifier">scalar (float, int, etc)</span></dt>
+<dd><p class="first last">The sum of the values of the components.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatiando.inversion.base.OperatorMixin">
+<em class="property">class </em><code class="descclassname">fatiando.inversion.base.</code><code class="descname">OperatorMixin</code><a class="reference internal" href="../_modules/fatiando/inversion/base.html#OperatorMixin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.base.OperatorMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">future.types.newobject.newobject</span></code></p>
+<p>Implements the operators + and * for the goal functions classes.</p>
+<p>This class is not meant to be used on its own. Use it as a parent to give
+the child class the + and * operators.</p>
+<p>Used in <code class="xref py py-class docutils literal"><span class="pre">Misfit</span></code> and the regularization
+classes in <a class="reference internal" href="inversion.regularization.html#module-fatiando.inversion.regularization" title="fatiando.inversion.regularization"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.inversion.regularization</span></code></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Performing <code class="docutils literal"><span class="pre">A</span> <span class="pre">+</span> <span class="pre">B</span></code> produces a
+<code class="xref py py-class docutils literal"><span class="pre">MultiObjetive</span></code> with copies of <code class="docutils literal"><span class="pre">A</span></code>
+and <code class="docutils literal"><span class="pre">B</span></code>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Performing <code class="docutils literal"><span class="pre">scalar*A</span></code> produces a copy of <code class="docutils literal"><span class="pre">A</span></code> with <code class="docutils literal"><span class="pre">scalar</span></code> set as
+the <code class="docutils literal"><span class="pre">regul_param</span></code> attribute.</p>
+</div>
+<dl class="method">
+<dt id="fatiando.inversion.base.OperatorMixin.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><em>deep=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/base.html#OperatorMixin.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.base.OperatorMixin.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a copy of me.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.inversion.base.OperatorMixin.regul_param">
+<code class="descname">regul_param</code><a class="headerlink" href="#fatiando.inversion.base.OperatorMixin.regul_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>The regularization parameter (scale factor) for the objetive function.</p>
+<p>Defaults to 1.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatiando.inversion.base.OptimizerMixin">
+<em class="property">class </em><code class="descclassname">fatiando.inversion.base.</code><code class="descname">OptimizerMixin</code><a class="reference internal" href="../_modules/fatiando/inversion/base.html#OptimizerMixin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.base.OptimizerMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Defines <code class="docutils literal"><span class="pre">fit</span></code> and <code class="docutils literal"><span class="pre">config</span></code> methods plus all the optimization methods.</p>
+<p>This class is not meant to be used on its own. Use it as a parent to give
+the child class the methods it implements.</p>
+<p>Used in <code class="xref py py-class docutils literal"><span class="pre">Misfit</span></code> and
+<code class="xref py py-class docutils literal"><span class="pre">fatiando.inversion.base.MultiObjetive</span></code>.</p>
+<p>The <a class="reference internal" href="#fatiando.inversion.base.OptimizerMixin.config" title="fatiando.inversion.base.OptimizerMixin.config"><code class="xref py py-meth docutils literal"><span class="pre">config</span></code></a> method is used
+to configure the optimization method that will be used.</p>
+<p>The <a class="reference internal" href="#fatiando.inversion.base.OptimizerMixin.fit" title="fatiando.inversion.base.OptimizerMixin.fit"><code class="xref py py-meth docutils literal"><span class="pre">fit</span></code></a> method runs the
+optimization method configured and stores the computed parameter vector in
+the <code class="docutils literal"><span class="pre">p_</span></code> attribute.</p>
+<p>Some stats about the optimization process are stored in the <code class="docutils literal"><span class="pre">stats_</span></code>
+attribute as a dictionary.</p>
+<p>The minimum requirement for a class to inherit from <code class="docutils literal"><span class="pre">OptimizerMixin</span></code> is
+that it must define at least a
+<code class="xref py py-meth docutils literal"><span class="pre">value</span></code> method.</p>
+<dl class="method">
+<dt id="fatiando.inversion.base.OptimizerMixin.config">
+<code class="descname">config</code><span class="sig-paren">(</span><em>method</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/base.html#OptimizerMixin.config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.base.OptimizerMixin.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the optimization method and its parameters.</p>
+<p>This sets the method used by
+<code class="xref py py-meth docutils literal"><span class="pre">fit</span></code> and the keyword
+arguments that are passed to it.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The optimization method. One of: <code class="docutils literal"><span class="pre">'linear'</span></code>, <code class="docutils literal"><span class="pre">'newton'</span></code>,
+<code class="docutils literal"><span class="pre">'levmarq'</span></code>, <code class="docutils literal"><span class="pre">'steepest'</span></code>, <code class="docutils literal"><span class="pre">'acor'</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Other keyword arguments that can be passed are the ones allowed by each
+method.</p>
+<p>Some methods have required arguments:</p>
+<ul class="simple">
+<li><em>newton</em>, <em>levmarq</em> and <em>steepest</em> require the <code class="docutils literal"><span class="pre">initial</span></code> argument
+(an initial estimate for the gradient descent)</li>
+<li><em>acor</em> requires the <code class="docutils literal"><span class="pre">bounds</span></code> argument (min/max values for the
+search space)</li>
+</ul>
+<p>See the corresponding docstrings for more information:</p>
+<ul class="simple">
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.linear" title="fatiando.inversion.optimization.linear"><code class="xref py py-meth docutils literal"><span class="pre">linear</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.newton" title="fatiando.inversion.optimization.newton"><code class="xref py py-meth docutils literal"><span class="pre">newton</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.levmarq" title="fatiando.inversion.optimization.levmarq"><code class="xref py py-meth docutils literal"><span class="pre">levmarq</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.steepest" title="fatiando.inversion.optimization.steepest"><code class="xref py py-meth docutils literal"><span class="pre">steepest</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.acor" title="fatiando.inversion.optimization.acor"><code class="xref py py-meth docutils literal"><span class="pre">acor</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.inversion.base.OptimizerMixin.estimate_">
+<code class="descname">estimate_</code><a class="headerlink" href="#fatiando.inversion.base.OptimizerMixin.estimate_" title="Permalink to this definition">¶</a></dt>
+<dd><p>A nicely formatted version of the estimate.</p>
+<p>If the class implements a <cite>fmt_estimate</cite> method, this will its results.
+This can be used to convert the parameter vector to a more useful form,
+like a <a class="reference internal" href="mesher.html#module-fatiando.mesher" title="fatiando.mesher"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.mesher</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.inversion.base.OptimizerMixin.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/base.html#OptimizerMixin.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.base.OptimizerMixin.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve for the parameter vector that minimizes this objective function.</p>
+<p>Uses the optimization method and parameters defined using the
+<a class="reference internal" href="#fatiando.inversion.base.OptimizerMixin.config" title="fatiando.inversion.base.OptimizerMixin.config"><code class="xref py py-meth docutils literal"><span class="pre">config</span></code></a> method.</p>
+<p>The estimated parameter vector can be accessed through the
+<code class="docutils literal"><span class="pre">p_</span></code> attribute. A (possibly) formatted version (converted to a more
+manageable type) of the estimate can be accessed through the property
+<code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.inversion.base.OptimizerMixin.fmt_estimate">
+<code class="descname">fmt_estimate</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/inversion/base.html#OptimizerMixin.fmt_estimate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.inversion.base.OptimizerMixin.fmt_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when accessing the property <code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+<p>Use this to convert the parameter vector (p) to a more useful form,
+like a geometric object, etc.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>formatted</dt>
+<dd><p class="first last">Pretty much anything you want.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="../_sources/api/inversion.base.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+.. _cookbook_vis_myv_exaggerate:
+
+Vis: Exaggerate the vertical dimension of 3D plots
+===================================================
+
+
+**Download** source code: :download:`vis_myv_exaggerate.py<../_static/cookbook/vis_myv_exaggerate.py>`
+
+.. literalinclude:: ../_static/cookbook/vis_myv_exaggerate.py
+    :language: python

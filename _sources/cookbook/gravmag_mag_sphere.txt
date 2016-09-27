@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_mag_sphere:
+
+GravMag: 3D forward modeling of total-field magnetic anomaly using spheres
+===========================================================================
+
+
+**Download** source code: :download:`gravmag_mag_sphere.py<../_static/cookbook/gravmag_mag_sphere.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_mag_sphere.py
+    :language: python

@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_eqlayer_pel_polereduc:
+
+GravMag: Use the Polynomial Equivalent Layer to reduce a magnetic total field anomaly to the pole
+==================================================================================================
+
+
+**Download** source code: :download:`gravmag_eqlayer_pel_polereduc.py<../_static/cookbook/gravmag_eqlayer_pel_polereduc.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_eqlayer_pel_polereduc.py
+    :language: python

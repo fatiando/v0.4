@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_transform_deriv:
+
+GravMag: Calculating the derivatives of the gravity anomaly using FFT
+======================================================================
+
+
+**Download** source code: :download:`gravmag_transform_deriv.py<../_static/cookbook/gravmag_transform_deriv.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_transform_deriv.py
+    :language: python

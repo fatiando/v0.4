@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_imaging_migration:
+
+GravMag: 3D imaging using the migration method on synthetic gravity data (more complex model + noisy data)
+===========================================================================================================
+
+
+**Download** source code: :download:`gravmag_imaging_migration.py<../_static/cookbook/gravmag_imaging_migration.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_imaging_migration.py
+    :language: python

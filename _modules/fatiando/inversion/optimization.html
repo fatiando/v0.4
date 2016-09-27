@@ -1,0 +1,717 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fatiando.inversion.optimization &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><img src="../../../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../install.html">Installing</a></li>
+                <li><a href="../../../docs.html">Documentation</a></li>
+                <li><a href="../../../cookbook.html">Cookbook</a></li>
+                <li><a href="../../../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for fatiando.inversion.optimization</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Methods to optimize a given objective function.</span>
+
+<span class="sd">All solvers are Python iterators. This means that should be used in a ``for``</span>
+<span class="sd">loop, like so::</span>
+
+<span class="sd">    solver = newton(hess_func, grad_func, value_func, initial)</span>
+<span class="sd">    for i, p, stats in solver:</span>
+<span class="sd">        ... do something or &#39;continue&#39; to step through the iterations ...</span>
+<span class="sd">        # &#39;p&#39; is the current estimate for the parameter vector at the &#39;i&#39;th</span>
+<span class="sd">        # iteration.</span>
+<span class="sd">        # &#39;stats&#39; is a dictionary with some information about the optimization</span>
+<span class="sd">        # process so far (number of attempted steps, value of objective</span>
+<span class="sd">        # function per step, total number of iterations so far, etc).</span>
+<span class="sd">    # At the end, &#39;p&#39; is the final estimate and &#39;stats&#39; will contain the</span>
+<span class="sd">    # statistics for the whole iteration process.</span>
+
+<span class="sd">**Gradient descent**</span>
+
+<span class="sd">* :func:`~fatiando.inversion.optimization.linear`: Solver for a linear problem</span>
+<span class="sd">* :func:`~fatiando.inversion.optimization.newton`: Newton&#39;s method</span>
+<span class="sd">* :func:`~fatiando.inversion.optimization.levmarq`: Levemberg-Marquardt</span>
+<span class="sd">  algorithm</span>
+<span class="sd">* :func:`~fatiando.inversion.optimization.steepest`: Steepest Descent method</span>
+
+<span class="sd">**Heuristic methods**</span>
+
+<span class="sd">* :func:`~fatiando.inversion.optimization.acor`: ACO-R: Ant Colony Optimization</span>
+<span class="sd">  for Continuous Domains (Socha and Dorigo, 2008)</span>
+
+<span class="sd">**References**</span>
+
+<span class="sd">Socha, K., and M. Dorigo (2008), Ant colony optimization for continuous</span>
+<span class="sd">domains, European Journal of Operational Research, 185(3), 1155-1173,</span>
+<span class="sd">doi:10.1016/j.ejor.2006.06.046.</span>
+
+
+<span class="sd">----</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse</span>
+
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">safe_solve</span><span class="p">,</span> <span class="n">safe_diagonal</span><span class="p">,</span> <span class="n">safe_dot</span>
+
+
+<div class="viewcode-block" id="linear"><a class="viewcode-back" href="../../../api/inversion.optimization.html#fatiando.inversion.optimization.linear">[docs]</a><span class="k">def</span> <span class="nf">linear</span><span class="p">(</span><span class="n">hessian</span><span class="p">,</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">precondition</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Find the parameter vector that minimizes a linear objective function.</span>
+
+<span class="sd">    The parameter vector :math:`\bar{p}` that minimizes this objective</span>
+<span class="sd">    function :math:`\phi` is the one that solves the linear system</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \bar{\bar{H}} \bar{p} = -\bar{g}</span>
+
+<span class="sd">    where :math:`\bar{\bar{H}}` is the Hessian matrix of :math:`\phi` and</span>
+<span class="sd">    :math:`\bar{g}` is the gradient vector of :math:`\phi`.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * hessian : 2d-array</span>
+<span class="sd">        The Hessian matrix of the objective function.</span>
+<span class="sd">    * gradient : 1d-array</span>
+<span class="sd">        The gradient vector of the objective function.</span>
+<span class="sd">    * precondition : True or False</span>
+<span class="sd">        If True, will use Jacobi preconditioning.</span>
+
+<span class="sd">    Yields:</span>
+
+<span class="sd">    * i, estimate, stats:</span>
+<span class="sd">        * i : int</span>
+<span class="sd">            The current iteration number</span>
+<span class="sd">        * estimate : 1d-array</span>
+<span class="sd">            The current estimated parameter vector</span>
+<span class="sd">        * stats : dict</span>
+<span class="sd">            Statistics about the optimization so far</span>
+
+<span class="sd">    Linear solvers have only a single step, so ``i`` will be 0 and ``stats``</span>
+<span class="sd">    will only have the method name.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">precondition</span><span class="p">:</span>
+        <span class="n">diag</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">safe_diagonal</span><span class="p">(</span><span class="n">hessian</span><span class="p">))</span>
+        <span class="n">diag</span><span class="p">[</span><span class="n">diag</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">10</span>
+        <span class="n">precond</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">diags</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="n">diag</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+        <span class="n">hessian</span> <span class="o">=</span> <span class="n">safe_dot</span><span class="p">(</span><span class="n">precond</span><span class="p">,</span> <span class="n">hessian</span><span class="p">)</span>
+        <span class="n">gradient</span> <span class="o">=</span> <span class="n">safe_dot</span><span class="p">(</span><span class="n">precond</span><span class="p">,</span> <span class="n">gradient</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">safe_solve</span><span class="p">(</span><span class="n">hessian</span><span class="p">,</span> <span class="o">-</span><span class="n">gradient</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s">&quot;Linear solver&quot;</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="newton"><a class="viewcode-back" href="../../../api/inversion.optimization.html#fatiando.inversion.optimization.newton">[docs]</a><span class="k">def</span> <span class="nf">newton</span><span class="p">(</span><span class="n">hessian</span><span class="p">,</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">initial</span><span class="p">,</span> <span class="n">maxit</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span>
+           <span class="n">precondition</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Minimize an objective function using Newton&#39;s method.</span>
+
+<span class="sd">    Newton&#39;s method searches for the minimum of an objective function</span>
+<span class="sd">    :math:`\phi(\bar{p})` by successively incrementing the initial estimate.</span>
+<span class="sd">    The increment is the solution of the linear system</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \bar{\bar{H}}(\bar{p}^k) \bar{\Delta p}^k = -\bar{g}(\bar{p}^k)</span>
+
+<span class="sd">    where :math:`\bar{\bar{H}}` is the Hessian matrix of :math:`\phi` and</span>
+<span class="sd">    :math:`\bar{g}` is the gradient vector of :math:`\phi`. Both are evaluated</span>
+<span class="sd">    at the previous estimate :math:`\bar{p}^k`.</span>
+
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * hessian : function</span>
+<span class="sd">        A function that returns the Hessian matrix of the objective function</span>
+<span class="sd">        when given a parameter vector.</span>
+<span class="sd">    * gradient : function</span>
+<span class="sd">        A function that returns the gradient vector of the objective function</span>
+<span class="sd">        when given a parameter vector.</span>
+<span class="sd">    * value : function</span>
+<span class="sd">        A function that returns the value of the objective function evaluated</span>
+<span class="sd">        at a given parameter vector.</span>
+<span class="sd">    * initial : 1d-array</span>
+<span class="sd">        The initial estimate for the gradient descent.</span>
+<span class="sd">    * maxit : int</span>
+<span class="sd">        The maximum number of iterations allowed.</span>
+<span class="sd">    * tol : float</span>
+<span class="sd">        The convergence criterion. The lower it is, the more steps are</span>
+<span class="sd">        permitted.</span>
+<span class="sd">    * precondition : True or False</span>
+<span class="sd">        If True, will use Jacobi preconditioning.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    Yields:</span>
+
+<span class="sd">    * i, estimate, stats:</span>
+<span class="sd">        * i : int</span>
+<span class="sd">            The current iteration number</span>
+<span class="sd">        * estimate : 1d-array</span>
+<span class="sd">            The current estimated parameter vector</span>
+<span class="sd">        * stats : dict</span>
+<span class="sd">            Statistics about the optimization so far. Keys:</span>
+
+<span class="sd">            * method : str</span>
+<span class="sd">                The name of the optimization method</span>
+<span class="sd">            * iterations : int</span>
+<span class="sd">                The total number of iterations  so far</span>
+<span class="sd">            * objective : list</span>
+<span class="sd">                Value of the objective function per iteration. First value</span>
+<span class="sd">                corresponds to the inital estimate</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">stats</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s">&quot;Newton&#39;s method&quot;</span><span class="p">,</span>
+                 <span class="n">iterations</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">objective</span><span class="o">=</span><span class="p">[])</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="n">misfit</span> <span class="o">=</span> <span class="n">value</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">stats</span><span class="p">[</span><span class="s">&#39;objective&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">misfit</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">maxit</span><span class="p">):</span>
+        <span class="n">hess</span> <span class="o">=</span> <span class="n">hessian</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="n">grad</span> <span class="o">=</span> <span class="n">gradient</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">precondition</span><span class="p">:</span>
+            <span class="n">diag</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">safe_diagonal</span><span class="p">(</span><span class="n">hess</span><span class="p">))</span>
+            <span class="n">diag</span><span class="p">[</span><span class="n">diag</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">10</span>
+            <span class="n">precond</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">diags</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="n">diag</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+            <span class="n">hess</span> <span class="o">=</span> <span class="n">safe_dot</span><span class="p">(</span><span class="n">precond</span><span class="p">,</span> <span class="n">hess</span><span class="p">)</span>
+            <span class="n">grad</span> <span class="o">=</span> <span class="n">safe_dot</span><span class="p">(</span><span class="n">precond</span><span class="p">,</span> <span class="n">grad</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="n">safe_solve</span><span class="p">(</span><span class="n">hess</span><span class="p">,</span> <span class="o">-</span><span class="n">grad</span><span class="p">)</span>
+        <span class="n">newmisfit</span> <span class="o">=</span> <span class="n">value</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="n">stats</span><span class="p">[</span><span class="s">&#39;objective&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newmisfit</span><span class="p">)</span>
+        <span class="n">stats</span><span class="p">[</span><span class="s">&#39;iterations&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">yield</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">newmisfit</span> <span class="o">&gt;</span> <span class="n">misfit</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">((</span><span class="n">newmisfit</span> <span class="o">-</span> <span class="n">misfit</span><span class="p">)</span> <span class="o">/</span> <span class="n">misfit</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">misfit</span> <span class="o">=</span> <span class="n">newmisfit</span>
+    <span class="k">if</span> <span class="n">iteration</span> <span class="o">==</span> <span class="n">maxit</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s">&#39;Exited because maximum iterations reached. &#39;</span>
+            <span class="o">+</span> <span class="s">&#39;Might not have achieved convergence. &#39;</span>
+            <span class="o">+</span> <span class="s">&#39;Try inscreasing the maximum number of iterations allowed.&#39;</span><span class="p">,</span>
+            <span class="ne">RuntimeWarning</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="levmarq"><a class="viewcode-back" href="../../../api/inversion.optimization.html#fatiando.inversion.optimization.levmarq">[docs]</a><span class="k">def</span> <span class="nf">levmarq</span><span class="p">(</span><span class="n">hessian</span><span class="p">,</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">initial</span><span class="p">,</span> <span class="n">maxit</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">maxsteps</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">lamb</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">dlamb</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">10</span><span class="o">**-</span><span class="mi">5</span><span class="p">,</span> <span class="n">precondition</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Minimize an objective function using the Levemberg-Marquardt algorithm.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * hessian : function</span>
+<span class="sd">        A function that returns the Hessian matrix of the objective function</span>
+<span class="sd">        when given a parameter vector.</span>
+<span class="sd">    * gradient : function</span>
+<span class="sd">        A function that returns the gradient vector of the objective function</span>
+<span class="sd">        when given a parameter vector.</span>
+<span class="sd">    * value : function</span>
+<span class="sd">        A function that returns the value of the objective function evaluated</span>
+<span class="sd">        at a given parameter vector.</span>
+<span class="sd">    * initial : 1d-array</span>
+<span class="sd">        The initial estimate for the gradient descent.</span>
+<span class="sd">    * maxit : int</span>
+<span class="sd">        The maximum number of iterations allowed.</span>
+<span class="sd">    * maxsteps : int</span>
+<span class="sd">        The maximum number of times to try to take a step before giving up.</span>
+<span class="sd">    * lamb : float</span>
+<span class="sd">        Initial amount of step regularization. The larger this is, the more the</span>
+<span class="sd">        algorithm will resemble Steepest Descent in the initial iterations.</span>
+<span class="sd">    * dlamb : float</span>
+<span class="sd">        Factor by which *lamb* is divided or multiplied when taking steps.</span>
+<span class="sd">    * tol : float</span>
+<span class="sd">        The convergence criterion. The lower it is, the more steps are</span>
+<span class="sd">        permitted.</span>
+<span class="sd">    * precondition : True or False</span>
+<span class="sd">        If True, will use Jacobi preconditioning.</span>
+
+<span class="sd">    Yields:</span>
+
+<span class="sd">    * i, estimate, stats:</span>
+<span class="sd">        * i : int</span>
+<span class="sd">            The current iteration number</span>
+<span class="sd">        * estimate : 1d-array</span>
+<span class="sd">            The current estimated parameter vector</span>
+<span class="sd">        * stats : dict</span>
+<span class="sd">            Statistics about the optimization so far. Keys:</span>
+
+<span class="sd">            * method : str</span>
+<span class="sd">                The name of the optimization method</span>
+<span class="sd">            * iterations : int</span>
+<span class="sd">                The total number of iterations so far</span>
+<span class="sd">            * objective : list</span>
+<span class="sd">                Value of the objective function per iteration. First value</span>
+<span class="sd">                corresponds to the inital estimate</span>
+<span class="sd">            * step_attempts : list</span>
+<span class="sd">                Number of attempts at taking a step per iteration. First number</span>
+<span class="sd">                is zero, reflecting the initial estimate.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">stats</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s">&quot;Levemberg-Marquardt&quot;</span><span class="p">,</span>
+                 <span class="n">iterations</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">objective</span><span class="o">=</span><span class="p">[],</span>
+                 <span class="n">step_attempts</span><span class="o">=</span><span class="p">[],</span>
+                 <span class="n">step_size</span><span class="o">=</span><span class="p">[])</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="n">misfit</span> <span class="o">=</span> <span class="n">value</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">stats</span><span class="p">[</span><span class="s">&#39;objective&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">misfit</span><span class="p">)</span>
+    <span class="n">stats</span><span class="p">[</span><span class="s">&#39;step_attempts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">stats</span><span class="p">[</span><span class="s">&#39;step_size&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lamb</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">maxit</span><span class="p">):</span>
+        <span class="n">hess</span> <span class="o">=</span> <span class="n">hessian</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="n">minus_gradient</span> <span class="o">=</span> <span class="o">-</span><span class="n">gradient</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">precondition</span><span class="p">:</span>
+            <span class="n">diag</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">safe_diagonal</span><span class="p">(</span><span class="n">hess</span><span class="p">))</span>
+            <span class="n">diag</span><span class="p">[</span><span class="n">diag</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">10</span>
+            <span class="n">precond</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">diags</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="n">diag</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+            <span class="n">hess</span> <span class="o">=</span> <span class="n">safe_dot</span><span class="p">(</span><span class="n">precond</span><span class="p">,</span> <span class="n">hess</span><span class="p">)</span>
+            <span class="n">minus_gradient</span> <span class="o">=</span> <span class="n">safe_dot</span><span class="p">(</span><span class="n">precond</span><span class="p">,</span> <span class="n">minus_gradient</span><span class="p">)</span>
+        <span class="n">stagnation</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">diag</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">diags</span><span class="p">(</span><span class="n">safe_diagonal</span><span class="p">(</span><span class="n">hess</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">maxsteps</span><span class="p">):</span>
+            <span class="n">newp</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="n">safe_solve</span><span class="p">(</span><span class="n">hess</span> <span class="o">+</span> <span class="n">lamb</span> <span class="o">*</span> <span class="n">diag</span><span class="p">,</span> <span class="n">minus_gradient</span><span class="p">)</span>
+            <span class="n">newmisfit</span> <span class="o">=</span> <span class="n">value</span><span class="p">(</span><span class="n">newp</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">newmisfit</span> <span class="o">&gt;=</span> <span class="n">misfit</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">lamb</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">**</span> <span class="mi">15</span><span class="p">:</span>
+                    <span class="n">lamb</span> <span class="o">=</span> <span class="n">lamb</span><span class="o">*</span><span class="n">dlamb</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">lamb</span> <span class="o">&gt;</span> <span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">15</span><span class="p">:</span>
+                    <span class="n">lamb</span> <span class="o">=</span> <span class="n">lamb</span><span class="o">/</span><span class="n">dlamb</span>
+                <span class="n">stagnation</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="n">stagnation</span><span class="p">:</span>
+            <span class="n">stop</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s">&quot;Exited because couldn&#39;t take a step without increasing &quot;</span>
+                <span class="o">+</span> <span class="s">&#39;the objective function. &#39;</span>
+                <span class="o">+</span> <span class="s">&#39;Might not have achieved convergence. &#39;</span>
+                <span class="o">+</span> <span class="s">&#39;Try inscreasing the max number of step attempts allowed.&#39;</span><span class="p">,</span>
+                <span class="ne">RuntimeWarning</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">stop</span> <span class="o">=</span> <span class="n">newmisfit</span> <span class="o">&gt;</span> <span class="n">misfit</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">newmisfit</span> <span class="o">-</span> <span class="n">misfit</span><span class="p">)</span> <span class="o">/</span> <span class="n">misfit</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tol</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">newp</span>
+            <span class="n">misfit</span> <span class="o">=</span> <span class="n">newmisfit</span>
+            <span class="c"># Getting inside here means that I could take a step, so this is</span>
+            <span class="c"># where the yield goes.</span>
+            <span class="n">stats</span><span class="p">[</span><span class="s">&#39;objective&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">misfit</span><span class="p">)</span>
+            <span class="n">stats</span><span class="p">[</span><span class="s">&#39;iterations&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">stats</span><span class="p">[</span><span class="s">&#39;step_attempts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">step</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">stats</span><span class="p">[</span><span class="s">&#39;step_size&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lamb</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">stop</span><span class="p">:</span>
+            <span class="k">break</span>
+    <span class="k">if</span> <span class="n">iteration</span> <span class="o">==</span> <span class="n">maxit</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s">&#39;Exited because maximum iterations reached. &#39;</span>
+            <span class="o">+</span> <span class="s">&#39;Might not have achieved convergence. &#39;</span>
+            <span class="o">+</span> <span class="s">&#39;Try inscreasing the maximum number of iterations allowed.&#39;</span><span class="p">,</span>
+            <span class="ne">RuntimeWarning</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="steepest"><a class="viewcode-back" href="../../../api/inversion.optimization.html#fatiando.inversion.optimization.steepest">[docs]</a><span class="k">def</span> <span class="nf">steepest</span><span class="p">(</span><span class="n">gradient</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">initial</span><span class="p">,</span> <span class="n">maxit</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">linesearch</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+             <span class="n">maxsteps</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">10</span><span class="o">**-</span><span class="mi">5</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Minimize an objective function using the Steepest Descent method.</span>
+
+<span class="sd">    The increment to the initial estimate of the parameter vector</span>
+<span class="sd">    :math:`\bar{p}` is calculated by (Kelley, 1999)</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \Delta\bar{p} = -\lambda\bar{g}</span>
+
+<span class="sd">    where :math:`\lambda` is the step size and :math:`\bar{g}` is the gradient</span>
+<span class="sd">    vector.</span>
+
+<span class="sd">    The step size can be determined thought a line search algorithm using the</span>
+<span class="sd">    Armijo rule (Kelley, 1999). In this case,</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \lambda = \beta^m</span>
+
+<span class="sd">    where :math:`1 &gt; \beta &gt; 0` and :math:`m \ge 0` is an integer that controls</span>
+<span class="sd">    the step size. The line search finds the smallest :math:`m` that satisfies</span>
+<span class="sd">    the Armijo rule</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \phi(\bar{p} + \Delta\bar{p}) - \Gamma(\bar{p}) &lt;</span>
+<span class="sd">        \alpha\beta^m ||\bar{g}(\bar{p})||^2</span>
+
+<span class="sd">    where :math:`\phi(\bar{p})` is the objective function evaluated at</span>
+<span class="sd">    :math:`\bar{p}` and :math:`\alpha = 10^{-4}`.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * gradient : function</span>
+<span class="sd">        A function that returns the gradient vector of the objective function</span>
+<span class="sd">        when given a parameter vector.</span>
+<span class="sd">    * value : function</span>
+<span class="sd">        A function that returns the value of the objective function evaluated</span>
+<span class="sd">        at a given parameter vector.</span>
+<span class="sd">    * initial : 1d-array</span>
+<span class="sd">        The initial estimate for the gradient descent.</span>
+<span class="sd">    * maxit : int</span>
+<span class="sd">        The maximum number of iterations allowed.</span>
+<span class="sd">    * linesearch : True or False</span>
+<span class="sd">        Whether or not to perform the line search to determine an optimal step</span>
+<span class="sd">        size.</span>
+<span class="sd">    * maxsteps : int</span>
+<span class="sd">        The maximum number of times to try to take a step before giving up.</span>
+<span class="sd">    * beta : float</span>
+<span class="sd">        The base factor used to determine the step size in line search</span>
+<span class="sd">        algorithm. Must be 1 &gt; beta &gt; 0.</span>
+<span class="sd">    * tol : float</span>
+<span class="sd">        The convergence criterion. The lower it is, the more steps are</span>
+<span class="sd">        permitted.</span>
+
+<span class="sd">    Yields:</span>
+
+<span class="sd">    * i, estimate, stats:</span>
+<span class="sd">        * i : int</span>
+<span class="sd">            The current iteration number</span>
+<span class="sd">        * estimate : 1d-array</span>
+<span class="sd">            The current estimated parameter vector</span>
+<span class="sd">        * stats : dict</span>
+<span class="sd">            Statistics about the optimization so far. Keys:</span>
+
+<span class="sd">            * method : stf</span>
+<span class="sd">                The name of the optimization algorithm</span>
+<span class="sd">            * iterations : int</span>
+<span class="sd">                The total number of iterations so far</span>
+<span class="sd">            * objective : list</span>
+<span class="sd">                Value of the objective function per iteration. First value</span>
+<span class="sd">                corresponds to the inital estimate</span>
+<span class="sd">            * step_attempts : list</span>
+<span class="sd">                Number of attempts at taking a step per iteration. First number</span>
+<span class="sd">                is zero, reflecting the initial estimate. Will be empty if</span>
+<span class="sd">                ``linesearch==False``.</span>
+
+<span class="sd">    References:</span>
+
+<span class="sd">    Kelley, C. T., 1999, Iterative methods for optimization: Raleigh: SIAM.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">beta</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> \
+        <span class="s">&quot;Invalid &#39;beta&#39; parameter {}. Must be 1 &gt; beta &gt; 0&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span>
+    <span class="n">stats</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s">&#39;Steepest Descent&#39;</span><span class="p">,</span>
+                 <span class="n">iterations</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">objective</span><span class="o">=</span><span class="p">[],</span>
+                 <span class="n">step_attempts</span><span class="o">=</span><span class="p">[])</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="n">misfit</span> <span class="o">=</span> <span class="n">value</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">stats</span><span class="p">[</span><span class="s">&#39;objective&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">misfit</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">linesearch</span><span class="p">:</span>
+        <span class="n">stats</span><span class="p">[</span><span class="s">&#39;step_attempts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c"># This is a mystic parameter of the Armijo rule</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">stagnation</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">maxit</span><span class="p">):</span>
+        <span class="n">grad</span> <span class="o">=</span> <span class="n">gradient</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">linesearch</span><span class="p">:</span>
+            <span class="c"># Calculate now to avoid computing inside the loop</span>
+            <span class="n">gradnorm</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="n">stagnation</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="c"># Determine the best step size</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">maxsteps</span><span class="p">):</span>
+                <span class="n">stepsize</span> <span class="o">=</span> <span class="n">beta</span><span class="o">**</span><span class="n">i</span>
+                <span class="n">newp</span> <span class="o">=</span> <span class="n">p</span> <span class="o">-</span> <span class="n">stepsize</span><span class="o">*</span><span class="n">grad</span>
+                <span class="n">newmisfit</span> <span class="o">=</span> <span class="n">value</span><span class="p">(</span><span class="n">newp</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">newmisfit</span> <span class="o">-</span> <span class="n">misfit</span> <span class="o">&lt;</span> <span class="n">alpha</span><span class="o">*</span><span class="n">stepsize</span><span class="o">*</span><span class="n">gradnorm</span><span class="p">:</span>
+                    <span class="n">stagnation</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">newp</span> <span class="o">=</span> <span class="n">p</span> <span class="o">-</span> <span class="n">grad</span>
+            <span class="n">newmisfit</span> <span class="o">=</span> <span class="n">value</span><span class="p">(</span><span class="n">newp</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">stagnation</span><span class="p">:</span>
+            <span class="n">stop</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s">&quot;Exited because couldn&#39;t take a step without increasing &quot;</span>
+                <span class="o">+</span> <span class="s">&#39;the objective function. &#39;</span>
+                <span class="o">+</span> <span class="s">&#39;Might not have achieved convergence. &#39;</span>
+                <span class="o">+</span> <span class="s">&#39;Try inscreasing the max number of step attempts allowed.&#39;</span><span class="p">,</span>
+                <span class="ne">RuntimeWarning</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">stop</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">((</span><span class="n">newmisfit</span> <span class="o">-</span> <span class="n">misfit</span><span class="p">)</span> <span class="o">/</span> <span class="n">misfit</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tol</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">newp</span>
+            <span class="n">misfit</span> <span class="o">=</span> <span class="n">newmisfit</span>
+            <span class="c"># Getting inside here means that I could take a step, so this is</span>
+            <span class="c"># where the yield goes.</span>
+            <span class="n">stats</span><span class="p">[</span><span class="s">&#39;objective&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">misfit</span><span class="p">)</span>
+            <span class="n">stats</span><span class="p">[</span><span class="s">&#39;iterations&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">linesearch</span><span class="p">:</span>
+                <span class="n">stats</span><span class="p">[</span><span class="s">&#39;step_attempts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">stop</span><span class="p">:</span>
+            <span class="k">break</span>
+    <span class="k">if</span> <span class="n">iteration</span> <span class="o">==</span> <span class="n">maxit</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s">&#39;Exited because maximum iterations reached. &#39;</span>
+            <span class="o">+</span> <span class="s">&#39;Might not have achieved convergence. &#39;</span>
+            <span class="o">+</span> <span class="s">&#39;Try inscreasing the maximum number of iterations allowed.&#39;</span><span class="p">,</span>
+            <span class="ne">RuntimeWarning</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="acor"><a class="viewcode-back" href="../../../api/inversion.optimization.html#fatiando.inversion.optimization.acor">[docs]</a><span class="k">def</span> <span class="nf">acor</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">nparams</span><span class="p">,</span> <span class="n">nants</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">archive_size</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">maxit</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+         <span class="n">diverse</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">evap</span><span class="o">=</span><span class="mf">0.85</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Minimize the objective function using ACO-R.</span>
+
+<span class="sd">    ACO-R stands for Ant Colony Optimization for Continuous Domains (Socha and</span>
+<span class="sd">    Dorigo, 2008).</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * value : function</span>
+<span class="sd">        Returns the value of the objective function at a given parameter vector</span>
+<span class="sd">    * bounds : list</span>
+<span class="sd">        The bounds of the search space. If only two values are given, will</span>
+<span class="sd">        interpret as the minimum and maximum, respectively, for all parameters.</span>
+<span class="sd">        Alternatively, you can given a minimum and maximum for each parameter,</span>
+<span class="sd">        e.g., for a problem with 3 parameters you could give</span>
+<span class="sd">        `bounds = [min1, max1, min2, max2, min3, max3]`.</span>
+<span class="sd">    * nparams : int</span>
+<span class="sd">        The number of parameters that the objective function takes.</span>
+<span class="sd">    * nants : int</span>
+<span class="sd">        The number of ants to use in the search. Defaults to the number of</span>
+<span class="sd">        parameters.</span>
+<span class="sd">    * archive_size : int</span>
+<span class="sd">        The number of solutions to keep in the solution archive. Defaults to</span>
+<span class="sd">        10 x nants</span>
+<span class="sd">    * maxit : int</span>
+<span class="sd">        The number of iterations to run.</span>
+<span class="sd">    * diverse : float</span>
+<span class="sd">        Scalar from 0 to 1, non-inclusive, that controls how much better</span>
+<span class="sd">        solutions are favored when constructing new ones.</span>
+<span class="sd">    * evap : float</span>
+<span class="sd">        The pheromone evaporation rate (evap &gt; 0). Controls how spread out the</span>
+<span class="sd">        search is.</span>
+<span class="sd">    * seed : None or int</span>
+<span class="sd">        Seed for the random number generator.</span>
+
+<span class="sd">    Yields:</span>
+
+<span class="sd">    * i, estimate, stats:</span>
+<span class="sd">        * i : int</span>
+<span class="sd">            The current iteration number</span>
+<span class="sd">        * estimate : 1d-array</span>
+<span class="sd">            The current best estimated parameter vector</span>
+<span class="sd">        * stats : dict</span>
+<span class="sd">            Statistics about the optimization so far. Keys:</span>
+
+<span class="sd">            * method : stf</span>
+<span class="sd">                The name of the optimization algorithm</span>
+<span class="sd">            * iterations : int</span>
+<span class="sd">                The total number of iterations so far</span>
+<span class="sd">            * objective : list</span>
+<span class="sd">                Value of the objective function corresponding to the best</span>
+<span class="sd">                estimate per iteration.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">stats</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s">&quot;Ant Colony Optimization for Continuous Domains&quot;</span><span class="p">,</span>
+                 <span class="n">iterations</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">objective</span><span class="o">=</span><span class="p">[])</span>
+    <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="c"># Set the defaults for number of ants and archive size</span>
+    <span class="k">if</span> <span class="n">nants</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">nants</span> <span class="o">=</span> <span class="n">nparams</span>
+    <span class="k">if</span> <span class="n">archive_size</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">archive_size</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">nants</span>
+    <span class="c"># Check is giving bounds for each parameter or one for all</span>
+    <span class="n">bounds</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">bounds</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">low</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="n">bounds</span>
+        <span class="n">archive</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="p">(</span><span class="n">archive_size</span><span class="p">,</span> <span class="n">nparams</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">archive</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">archive_size</span><span class="p">,</span> <span class="n">nparams</span><span class="p">))</span>
+        <span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">nparams</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">bound</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bounds</span><span class="p">):</span>
+            <span class="n">low</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="n">bound</span>
+            <span class="n">archive</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">archive_size</span><span class="p">)</span>
+    <span class="c"># Compute the inital pheromone trail based on the objetive function value</span>
+    <span class="n">trail</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">fromiter</span><span class="p">((</span><span class="n">value</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">archive</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="c"># Sort the archive of initial random solutions</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">trail</span><span class="p">)</span>
+    <span class="n">archive</span> <span class="o">=</span> <span class="p">[</span><span class="n">archive</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">order</span><span class="p">]</span>
+    <span class="n">trail</span> <span class="o">=</span> <span class="n">trail</span><span class="p">[</span><span class="n">order</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">stats</span><span class="p">[</span><span class="s">&#39;objective&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trail</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="c"># Compute the weights (probabilities) of the solutions in the archive</span>
+    <span class="n">amp</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="n">diverse</span> <span class="o">*</span> <span class="n">archive_size</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
+    <span class="n">variance</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">diverse</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">archive_size</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">archive_size</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">variance</span><span class="p">)</span>
+    <span class="n">weights</span> <span class="o">/=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">maxit</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">nants</span><span class="p">):</span>
+            <span class="c"># Sample the propabilities to produce new estimates</span>
+            <span class="n">ant</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nparams</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+            <span class="c"># 1. Choose a pdf from the archive</span>
+            <span class="n">pdf</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span>
+                <span class="n">numpy</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">weights</span><span class="p">),</span>
+                <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">nparams</span><span class="p">):</span>
+                <span class="c"># 2. Get the mean and stddev of the chosen pdf</span>
+                <span class="n">mean</span> <span class="o">=</span> <span class="n">archive</span><span class="p">[</span><span class="n">pdf</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">std</span> <span class="o">=</span> <span class="p">(</span><span class="n">evap</span> <span class="o">/</span> <span class="p">(</span><span class="n">archive_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+                    <span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">archive</span><span class="p">[</span><span class="n">pdf</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">archive</span><span class="p">)</span>
+                <span class="c"># 3. Sample the pdf until the samples are in bounds</span>
+                <span class="k">for</span> <span class="n">atempt</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+                    <span class="n">ant</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">bounds</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="n">low</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="n">bounds</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">low</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">ant</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">low</span> <span class="ow">and</span> <span class="n">ant</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">high</span><span class="p">:</span>
+                        <span class="k">break</span>
+            <span class="n">pheromone</span> <span class="o">=</span> <span class="n">value</span><span class="p">(</span><span class="n">ant</span><span class="p">)</span>
+            <span class="c"># Place the new estimate in the archive</span>
+            <span class="n">place</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">trail</span><span class="p">,</span> <span class="n">pheromone</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">place</span> <span class="o">==</span> <span class="n">archive_size</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">trail</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">place</span><span class="p">,</span> <span class="n">pheromone</span><span class="p">)</span>
+            <span class="n">trail</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">archive</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">place</span><span class="p">,</span> <span class="n">ant</span><span class="p">)</span>
+            <span class="n">archive</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="n">stats</span><span class="p">[</span><span class="s">&#39;objective&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trail</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">stats</span><span class="p">[</span><span class="s">&#39;iterations&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">yield</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">archive</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

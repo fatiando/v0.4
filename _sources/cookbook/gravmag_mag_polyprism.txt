@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_mag_polyprism:
+
+GravMag: 3D forward modeling of total-field magnetic anomaly using polygonal prisms
+====================================================================================
+
+
+**Download** source code: :download:`gravmag_mag_polyprism.py<../_static/cookbook/gravmag_mag_polyprism.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_mag_polyprism.py
+    :language: python

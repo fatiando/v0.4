@@ -1,0 +1,477 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Inverse problems framework (fatiando.inversion) &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../index.html" />
+    <link rel="up" title="The fatiando package" href="fatiando.html" />
+    <link rel="next" title="Data misfit functions (fatiando.inversion.misfit)" href="inversion.misfit.html" />
+    <link rel="prev" title="Physical constants and unit conversions (fatiando.constants)" href="constants.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../install.html">Installing</a></li>
+                <li><a href="../docs.html">Documentation</a></li>
+                <li><a href="../cookbook.html">Cookbook</a></li>
+                <li><a href="../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="module-fatiando.inversion">
+<span id="inverse-problems-framework-fatiando-inversion"></span><span id="fatiando-inversion"></span><h1>Inverse problems framework (<code class="docutils literal"><span class="pre">fatiando.inversion</span></code>)<a class="headerlink" href="#module-fatiando.inversion" title="Permalink to this headline">¶</a></h1>
+<p>Everything you need to solve inverse problems!</p>
+<p>This package provides the basic building blocks to implement inverse problem
+solvers. The main class for this is <a class="reference internal" href="inversion.misfit.html#fatiando.inversion.misfit.Misfit" title="fatiando.inversion.misfit.Misfit"><code class="xref py py-class docutils literal"><span class="pre">Misfit</span></code></a>.
+It represents a data-misfit function and contains various tools to fit a
+model to some data. All you have to do is implement methods to calculate the
+predicted (or modeled) data and (optionally) the Jacobian (or sensitivity)
+matrix. With only that, you have access to a range of optimization methods,
+regularization, joint inversion, etc.</p>
+<div class="section" id="modules">
+<h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="inversion.misfit.html#module-fatiando.inversion.misfit" title="fatiando.inversion.misfit"><code class="xref py py-mod docutils literal"><span class="pre">misfit</span></code></a>: Defines the data-misfit classes. Used to
+implement new inverse problems. The main class is <code class="docutils literal"><span class="pre">Misfit</span></code>. It offers a
+template for you to create standard least-squares inversion methods.</li>
+<li><a class="reference internal" href="inversion.regularization.html#module-fatiando.inversion.regularization" title="fatiando.inversion.regularization"><code class="xref py py-mod docutils literal"><span class="pre">regularization</span></code></a>: Classes for common regularizing
+functions and base classes for building new ones.</li>
+<li><a class="reference internal" href="inversion.hyper_param.html#module-fatiando.inversion.hyper_param" title="fatiando.inversion.hyper_param"><code class="xref py py-mod docutils literal"><span class="pre">hyper_param</span></code></a>: Classes hyper parameter optimization
+(estimating the regularization parameter), like L-curve analysis and (in the
+future) cross-validation.</li>
+<li><a class="reference internal" href="inversion.optimization.html#module-fatiando.inversion.optimization" title="fatiando.inversion.optimization"><code class="xref py py-mod docutils literal"><span class="pre">optimization</span></code></a>: Functions for several optimization
+methods (used internally by <a class="reference internal" href="inversion.misfit.html#fatiando.inversion.misfit.Misfit" title="fatiando.inversion.misfit.Misfit"><code class="xref py py-class docutils literal"><span class="pre">Misfit</span></code></a>).
+In most cases you won&#8217;t need to touch this.</li>
+<li><a class="reference internal" href="inversion.base.html#module-fatiando.inversion.base" title="fatiando.inversion.base"><code class="xref py py-mod docutils literal"><span class="pre">base</span></code></a>: Base classes used internally to define
+common operations and method.
+In most cases you won&#8217;t need to touch this.</li>
+</ul>
+<p>You can import the <code class="docutils literal"><span class="pre">Misfit</span></code>, regularization, and hyper parameter optimization
+classes directly from the <code class="docutils literal"><span class="pre">fatiando.inversion</span></code> namespace:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.inversion</span> <span class="kn">import</span> <span class="n">Misfit</span><span class="p">,</span> <span class="n">LCurve</span><span class="p">,</span> <span class="n">Damping</span><span class="p">,</span> <span class="n">Smoothness</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="inversion.misfit.html#fatiando.inversion.misfit.Misfit" title="fatiando.inversion.misfit.Misfit"><code class="xref py py-class docutils literal"><span class="pre">Misfit</span></code></a> class is used internally in
+Fatiando to implement all of our inversion algorithms. Take a look at the
+modules below for some examples:</p>
+<ul class="simple">
+<li><a class="reference internal" href="seismic.srtomo.html#module-fatiando.seismic.srtomo" title="fatiando.seismic.srtomo"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.seismic.srtomo</span></code></a></li>
+<li><a class="reference internal" href="gravmag.basin2d.html#module-fatiando.gravmag.basin2d" title="fatiando.gravmag.basin2d"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.gravmag.basin2d</span></code></a></li>
+<li><a class="reference internal" href="gravmag.eqlayer.html#module-fatiando.gravmag.eqlayer" title="fatiando.gravmag.eqlayer"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.gravmag.eqlayer</span></code></a></li>
+<li><a class="reference internal" href="gravmag.euler.html#module-fatiando.gravmag.euler" title="fatiando.gravmag.euler"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.gravmag.euler</span></code></a></li>
+<li><a class="reference internal" href="gravmag.magdir.html#module-fatiando.gravmag.magdir" title="fatiando.gravmag.magdir"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.gravmag.magdir</span></code></a></li>
+<li><a class="reference internal" href="seismic.profile.html#module-fatiando.seismic.profile" title="fatiando.seismic.profile"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.seismic.profile</span></code></a></li>
+</ul>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">Misfit</span></code> class works by subclassing it. Doing this gives you access to
+all optimization functions and possible combinations of regularization. When
+subclassing <code class="docutils literal"><span class="pre">Misfit</span></code>, you&#8217;ll need to implement the <code class="docutils literal"><span class="pre">predicted</span></code> method that
+calculates a predicted data vector based on an input parameter vector. This is
+virtually all that is problem-specific in an inverse problem. If you want to
+use gradient-based optimization (or linear problems) you&#8217;ll need to implement
+the <code class="docutils literal"><span class="pre">jacobian</span></code>  method as well that calculates the Jacobian (or sensitivity)
+matrix.</p>
+</div>
+<div class="section" id="linear-regression">
+<h2>Linear Regression<a class="headerlink" href="#linear-regression" title="Permalink to this headline">¶</a></h2>
+<p>Here is an example of how to implement a simple linear regression using the
+<a class="reference internal" href="inversion.misfit.html#fatiando.inversion.misfit.Misfit" title="fatiando.inversion.misfit.Misfit"><code class="xref py py-class docutils literal"><span class="pre">Misfit</span></code></a> class.</p>
+<p>What we want to do is fit <span class="math">\(f(a, b, x) = y = ax + b\)</span> to find a and b.
+Putting a and b in a parameter vector <code class="docutils literal"><span class="pre">p</span> <span class="pre">=</span> <span class="pre">[a,</span> <span class="pre">b]</span></code> we get:</p>
+<div class="math">
+\[\mathbf{d} = \mathbf{A} \mathbf{p}\]</div>
+<p>where <span class="math">\(\mathbf{d}\)</span> is the data vector containing all the values of y
+and <span class="math">\(\mathbf{A}\)</span> is the Jacobian matrix with the values of x in the first
+column and 1 in the second column.</p>
+<p>All we have to do to implement a solver for this problem is write the
+<code class="docutils literal"><span class="pre">predicted</span></code> (to calculate y from values of a and b) and <code class="docutils literal"><span class="pre">jacobian</span></code> (to
+calculate the Jacobian matrix):</p>
+<p>First, I&#8217;ll load numpy and the <code class="docutils literal"><span class="pre">Misfit</span></code> class.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.inversion</span> <span class="kn">import</span> <span class="n">Misfit</span>
+</pre></div>
+</div>
+<p>We&#8217;ll also need some compatibility code to support Python 2 and 3 at the same
+time.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">future.builtins</span> <span class="kn">import</span> <span class="nb">super</span>
+</pre></div>
+</div>
+<p>Now, I&#8217;ll make my regression class that <em>inherits</em> from <code class="docutils literal"><span class="pre">Misfit</span></code>.
+All of the least-squares solving code and much more we get for free just by
+using <code class="docutils literal"><span class="pre">Misfit</span></code> as template for our regression class. Note <code class="docutils literal"><span class="pre">Misfit</span></code> wants a
+1D data vector, no matter what your data is (line, grid, volume).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Regression</span><span class="p">(</span><span class="n">Misfit</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="s">&quot;Perform a linear regression&quot;</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="c"># Call the initialization of Misfit</span>
+<span class="gp">... </span>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">nparams</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">islinear</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>  <span class="c"># Store this to use in the other methods</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">predicted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="s">&quot;Calculate the predicted data for a given parameter vector&quot;</span>
+<span class="gp">... </span>        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">p</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">a</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">b</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">jacobian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="s">&quot;Calculate the Jacobian (ignores p because the problem is linear)&quot;</span>
+<span class="gp">... </span>        <span class="n">jac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">ndata</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nparams</span><span class="p">))</span>
+<span class="gp">... </span>        <span class="n">jac</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+<span class="gp">... </span>        <span class="n">jac</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">jac</span>
+</pre></div>
+</div>
+<p>To test our regression, let&#8217;s generate some data based on known values of a and
+b.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">array([ 0.,  1.,  2.,  3.,  4.,  5.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span>
+<span class="go">array([  5.,   7.,   9.,  11.,  13.,  15.])</span>
+</pre></div>
+</div>
+<p>We must create a solver object to perform our regression. Fitting the data
+(running the optimization) is done by calling the <code class="docutils literal"><span class="pre">fit</span></code> method.
+<code class="docutils literal"><span class="pre">fit</span></code> returns the regression class itself we can chain calls to it like so:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span> <span class="o">=</span> <span class="n">Regression</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The estimated parameter vector is stored in the <code class="docutils literal"><span class="pre">p_</span></code> attribute.
+<code class="docutils literal"><span class="pre">Misfit</span></code> also provides a <code class="docutils literal"><span class="pre">estimate_</span></code> attribute that can be a custom (user
+defined) formatted version of <code class="docutils literal"><span class="pre">p_</span></code>. It&#8217;s better to use <code class="docutils literal"><span class="pre">estimate_</span></code> if
+you&#8217;re not interested in the parameter vector as it is. Since we didn&#8217;t
+implement this custom formatting, both should give the same value.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span><span class="o">.</span><span class="n">p_</span>
+<span class="go">array([ 2.,  5.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span><span class="o">.</span><span class="n">estimate_</span>
+<span class="go">array([ 2.,  5.])</span>
+</pre></div>
+</div>
+<p>The methods <code class="docutils literal"><span class="pre">predicted</span></code> and <code class="docutils literal"><span class="pre">residuals</span></code> will use the cached values based
+on <code class="docutils literal"><span class="pre">p_</span></code> if  the parameter vector is omitted as an argument.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span><span class="o">.</span><span class="n">predicted</span><span class="p">()</span>
+<span class="go">array([  5.,   7.,   9.,  11.,  13.,  15.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">solver</span><span class="o">.</span><span class="n">residuals</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="caching">
+<h2>Caching<a class="headerlink" href="#caching" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">Misfit</span></code> class caches some of the matrices that it computes, like the
+Jacobian matrix. This is needed because separate methods call <code class="docutils literal"><span class="pre">jacobian</span></code> with
+the same input <code class="docutils literal"><span class="pre">p</span></code>, so recomputing the matrix would be a waste.</p>
+<p>For linear problems, the Jacobian matrix is cached permanently. It is only
+calculated once, no matter what <code class="docutils literal"><span class="pre">p</span></code> is passed to it.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">solver</span><span class="o">.</span><span class="n">p_</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span>
+<span class="go">array([[ 0.,  1.],</span>
+<span class="go">       [ 1.,  1.],</span>
+<span class="go">       [ 2.,  1.],</span>
+<span class="go">       [ 3.,  1.],</span>
+<span class="go">       [ 4.,  1.],</span>
+<span class="go">       [ 5.,  1.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span>
+<span class="go">array([[ 0.,  1.],</span>
+<span class="go">       [ 1.,  1.],</span>
+<span class="go">       [ 2.,  1.],</span>
+<span class="go">       [ 3.,  1.],</span>
+<span class="go">       [ 4.,  1.],</span>
+<span class="go">       [ 5.,  1.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="ow">is</span> <span class="n">B</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>For non-linear problems, the Jacobian is also cached but it will be
+recalculated if passed a different value of <code class="docutils literal"><span class="pre">p</span></code> (see the
+<a class="reference internal" href="#inversion-non-lin-problems"><span>non-linear example below</span></a>).</p>
+<p>The Hessian matrix (<span class="math">\(2\mathbf{A}^T\mathbf{A}\)</span>) is also cached permanently
+for linear problems.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">H</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">hessian</span><span class="p">(</span><span class="n">solver</span><span class="o">.</span><span class="n">p_</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">H</span>
+<span class="go">array([[ 110.,   30.],</span>
+<span class="go">       [  30.,   12.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">H2</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">hessian</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">H2</span>
+<span class="go">array([[ 110.,   30.],</span>
+<span class="go">       [  30.,   12.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">H</span> <span class="ow">is</span> <span class="n">H2</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="non-linear-optimization">
+<h2>Non-linear optimization<a class="headerlink" href="#non-linear-optimization" title="Permalink to this headline">¶</a></h2>
+<p>You can configure the solver using the <code class="docutils literal"><span class="pre">config</span></code> method. This allows you to
+choose the optimization method you want to use and it&#8217;s corresponding
+parameters. The <code class="docutils literal"><span class="pre">config</span></code> method also returns the solver class itself so it
+can be chained with <code class="docutils literal"><span class="pre">fit</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Configure solver to use the Levemberg-Marquardt method</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s">&#39;levmarq&#39;</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span><span class="o">.</span><span class="n">estimate_</span>
+<span class="go">array([ 2.,  5.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">solver</span><span class="o">.</span><span class="n">residuals</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># or the Steepest Descent method</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s">&#39;steepest&#39;</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span><span class="o">.</span><span class="n">estimate_</span>
+<span class="go">array([ 2.,  5.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># or the Gauss-Newton method</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s">&#39;newton&#39;</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">maxit</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span><span class="o">.</span><span class="n">estimate_</span>
+<span class="go">array([ 2.,  5.])</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">Misfit</span></code> class keeps track of the optimization process and makes that
+data available through the <code class="docutils literal"><span class="pre">stats_</span></code> attribute (a dictionary).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">solver</span><span class="o">.</span><span class="n">stats_</span><span class="p">))</span>
+<span class="go">[&#39;iterations&#39;, &#39;method&#39;, &#39;objective&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span><span class="o">.</span><span class="n">stats_</span><span class="p">[</span><span class="s">&#39;method&#39;</span><span class="p">]</span>
+<span class="go">&quot;Newton&#39;s method&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span><span class="o">.</span><span class="n">stats_</span><span class="p">[</span><span class="s">&#39;iterations&#39;</span><span class="p">]</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">'objective'</span></code> key holds a list of the objective function value per
+iteration of the optimization process.</p>
+</div>
+<div class="section" id="re-weighted-least-squares">
+<h2>Re-weighted least squares<a class="headerlink" href="#re-weighted-least-squares" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">Misfit</span></code> allows you to set weights to the data in the form of a weight
+matrix or vector (the vector is assumed to be the diagonal of the weight
+matrix). We can use this to perform a re-weighted least-squares fit to remove
+outliers from our data.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">y_outlier</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_outlier</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_outlier</span>
+<span class="go">array([  5.,   7.,   9.,  31.,  13.,  15.])</span>
+</pre></div>
+</div>
+<p>First, we run the regression without any weights.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span> <span class="o">=</span> <span class="n">Regression</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_outlier</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array_repr</span><span class="p">(</span><span class="n">solver</span><span class="o">.</span><span class="n">estimate_</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
+<span class="go">array([ 2.571,  6.905])</span>
+</pre></div>
+</div>
+<p>Now, we can use the inverse of the residuals to set the weights for our data.
+We repeat this for a few iterations and should have our robust estimate by the
+end of it.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">solver</span><span class="o">.</span><span class="n">residuals</span><span class="p">())</span>
+<span class="gp">... </span>    <span class="c"># Avoid small residuals because of zero-division errors</span>
+<span class="gp">... </span>    <span class="n">r</span><span class="p">[</span><span class="n">r</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="n">_</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">set_weights</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span><span class="o">.</span><span class="n">estimate_</span>
+<span class="go">array([ 2.,  5.])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="non-linear-problems">
+<span id="inversion-non-lin-problems"></span><h2>Non-linear problems<a class="headerlink" href="#non-linear-problems" title="Permalink to this headline">¶</a></h2>
+<p>In this example, I want to fit a Gaussian to my data:</p>
+<div class="math">
+\[f(x) = a\exp(-b(x + c)^{2})\]</div>
+<p>Function <em>f</em> is non-linear with respect to inversion parameters <em>a, b, c</em>.
+Thus, we need to configure the solver and choose an optimization method before
+we can call <code class="docutils literal"><span class="pre">fit()</span></code>.</p>
+<p>First, lets create our solver class based on <code class="docutils literal"><span class="pre">Misfit</span></code> and implement the
+<code class="docutils literal"><span class="pre">predicted</span></code> and <code class="docutils literal"><span class="pre">jacobian</span></code> methods.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">GaussianFit</span><span class="p">(</span><span class="n">Misfit</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span>
+<span class="gp">... </span>            <span class="n">data</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">nparams</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">islinear</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">predicted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">p</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">b</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">jacobian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">p</span>
+<span class="gp">... </span>        <span class="n">jac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">ndata</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nparams</span><span class="p">))</span>
+<span class="gp">... </span>        <span class="n">var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">c</span>
+<span class="gp">... </span>        <span class="n">exponential</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">b</span><span class="o">*</span><span class="n">var</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">jac</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">exponential</span>
+<span class="gp">... </span>        <span class="n">jac</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">a</span><span class="o">*</span><span class="n">exponential</span><span class="o">*</span><span class="p">(</span><span class="n">var</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">jac</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">a</span><span class="o">*</span><span class="n">exponential</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">b</span><span class="o">*</span><span class="n">var</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">jac</span>
+</pre></div>
+</div>
+<p>Let&#8217;s create some data to test this.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">b</span><span class="o">*</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For non-linear problems, we <strong>have</strong> to configure the optimization method.
+Lets use Levemberg-Marquardt because it generally offers good convergence.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span> <span class="o">=</span> <span class="n">GaussianFit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s">&#39;levmarq&#39;</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span><span class="o">.</span><span class="n">estimate_</span>
+<span class="go">array([ 100. ,    0.1,   -2. ])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">solver</span><span class="o">.</span><span class="n">residuals</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**-</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>We can use other optimization methods without having to re-implement our
+solution. For example, let&#8217;s see how well the Ant Colony Optimization for
+Continuous Domains (ACO-R) does for this problem:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># bounds are the min, max values of the search domain for each parameter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s">&#39;acor&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array_repr</span><span class="p">(</span><span class="n">solver</span><span class="o">.</span><span class="n">estimate_</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
+<span class="go">array([100. ,   0.1,  -2. ])</span>
+</pre></div>
+</div>
+<p>For non-linear problems, the Jacobian and Hessian are cached but not
+permanently. Calling <code class="docutils literal"><span class="pre">jacobian</span></code> twice in a row with the same parameter vector
+will not trigger a computation and will return the cached value instead.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="ow">is</span> <span class="n">B</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>But passing a different <code class="docutils literal"><span class="pre">p</span></code> will trigger a computation and the cache will be
+replaced by the new value.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="ow">is</span> <span class="n">C</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">A</span> <span class="o">==</span> <span class="n">C</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="ow">is</span> <span class="n">C</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="toctree-wrapper compound">
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="../_sources/api/inversion.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

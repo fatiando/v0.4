@@ -1,0 +1,440 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fatiando.inversion.misfit &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><img src="../../../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../install.html">Installing</a></li>
+                <li><a href="../../../docs.html">Documentation</a></li>
+                <li><a href="../../../cookbook.html">Cookbook</a></li>
+                <li><a href="../../../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for fatiando.inversion.misfit</h1><div class="highlight"><pre>
+<span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">Defines base classes to represent a data-misfit functions (l2-norm, etc)</span>
+
+<span class="sd">These classes can be used to implement parameter estimation problems</span>
+<span class="sd">(inversions). They automate most of the boiler plate required and provide</span>
+<span class="sd">direct access to ready-made optimization routines and regularization.</span>
+
+<span class="sd">For now, only implements an l2-norm data misfit:</span>
+
+<span class="sd">* :class:`~fatiando.inversion.misfit.Misfit`: an l2-norm data-misfit function</span>
+
+<span class="sd">See the documentation for :mod:`fatiando.inversion` for examples of using</span>
+<span class="sd">``Misfit``.</span>
+
+<span class="sd">----</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse</span>
+
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">safe_dot</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="p">(</span><span class="n">OptimizerMixin</span><span class="p">,</span> <span class="n">OperatorMixin</span><span class="p">,</span> <span class="n">CachedMethod</span><span class="p">,</span>
+                   <span class="n">CachedMethodPermanent</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Misfit"><a class="viewcode-back" href="../../../api/inversion.misfit.html#fatiando.geothermal.climsig.Misfit">[docs]</a><span class="k">class</span> <span class="nc">Misfit</span><span class="p">(</span><span class="n">OptimizerMixin</span><span class="p">,</span> <span class="n">OperatorMixin</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    An l2-norm data-misfit function.</span>
+
+<span class="sd">    This is a kind of objective function that measures the misfit between</span>
+<span class="sd">    observed data :math:`\bar{d}^o` and data predicted by a set of model</span>
+<span class="sd">    parameters :math:`\bar{d} = \bar{f}(\bar{p})`.</span>
+
+<span class="sd">    The l2-norm data-misfit is defined as:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \phi (\bar{p}) = \bar{r}^T \bar{r}</span>
+
+<span class="sd">    where :math:`\bar{r} = \bar{d}^o - \bar{d}` is the residual vector and</span>
+<span class="sd">    :math:`N` is the number of data.</span>
+
+<span class="sd">    When subclassing this class, you must implement the method:</span>
+
+<span class="sd">    * ``predicted(self, p)``: calculates the predicted data</span>
+<span class="sd">      :math:`\bar{d}` for a given parameter vector ``p``</span>
+
+<span class="sd">    If you want to use any gradient-based solver (you probably do), you&#39;ll need</span>
+<span class="sd">    to implement the method:</span>
+
+<span class="sd">    * ``jacobian(self, p)``: calculates the Jacobian matrix of</span>
+<span class="sd">      :math:`\bar{f}(\bar{p})` evaluated at ``p``</span>
+
+<span class="sd">    If :math:`\bar{f}` is linear, then the Jacobian will be cached in memory so</span>
+<span class="sd">    that it is only calculated once when using the class multiple times. So</span>
+<span class="sd">    solving the same problem with different methods or using an iterative</span>
+<span class="sd">    method doesn&#39;t have the penalty of recalculating the Jacobian.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        When subclassing, be careful not to set the following attributes:</span>
+<span class="sd">        ``data``, ``nparams``, ``islinear``, ``nparams``, ``ndata``, and</span>
+<span class="sd">        (most importantly) ``regul_param`` and ``_regularizing_parameter``.</span>
+<span class="sd">        This could mess with internal behavior and break things in unexpected</span>
+<span class="sd">        ways.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * data : 1d-array</span>
+<span class="sd">        The observed data vector :math:`\bar{d}^o`</span>
+<span class="sd">    * nparams : int</span>
+<span class="sd">        The number of parameters in parameter vector :math:`\bar{p}`</span>
+<span class="sd">    * islinear : True or False</span>
+<span class="sd">        Whether :math:`\bar{f}` is linear or not.</span>
+<span class="sd">    * cache : True</span>
+<span class="sd">        Whether or not to cache the output of some methods to avoid recomputing</span>
+<span class="sd">        matrices and vectors when passed the same input parameter vector.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">nparams</span><span class="p">,</span> <span class="n">islinear</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nparams</span> <span class="o">=</span> <span class="n">nparams</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">islinear</span> <span class="o">=</span> <span class="n">islinear</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ndata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="n">cache</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">predicted</span> <span class="o">=</span> <span class="n">CachedMethod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;predicted&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">islinear</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">jacobian</span> <span class="o">=</span> <span class="n">CachedMethodPermanent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;jacobian&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">hessian</span> <span class="o">=</span> <span class="n">CachedMethodPermanent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;hessian&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">jacobian</span> <span class="o">=</span> <span class="n">CachedMethod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;jacobian&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Misfit.copy"><a class="viewcode-back" href="../../../api/inversion.misfit.html#fatiando.geothermal.climsig.Misfit.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Make a copy of me together with all the cached methods.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">deep</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;predicted&#39;</span><span class="p">,</span> <span class="s">&#39;jacobian&#39;</span><span class="p">,</span> <span class="s">&#39;hessian&#39;</span><span class="p">]:</span>
+            <span class="n">meth</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">is_cached</span> <span class="o">=</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">meth</span><span class="p">,</span> <span class="n">CachedMethod</span><span class="p">)</span>
+                         <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">meth</span><span class="p">,</span> <span class="n">CachedMethodPermanent</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">is_cached</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">meth</span><span class="p">))</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="n">obj</span>
+        <span class="k">return</span> <span class="n">obj</span>
+</div>
+<div class="viewcode-block" id="Misfit.set_weights"><a class="viewcode-back" href="../../../api/inversion.misfit.html#fatiando.geothermal.climsig.Misfit.set_weights">[docs]</a>    <span class="k">def</span> <span class="nf">set_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        Set the data weights.</span>
+
+<span class="sd">        Using weights for the data, the least-squares data-misfit function</span>
+<span class="sd">        becomes:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \phi = \bar{r}^T \bar{\bar{W}}\bar{r}</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * weights : 1d-array or 2d-array or None</span>
+<span class="sd">            Weights for the data vector.</span>
+<span class="sd">            If None, will remove any weights that have been set before.</span>
+<span class="sd">            If it is a 2d-array, it will be interpreted as the weight matrix</span>
+<span class="sd">            :math:`\bar{\bar{W}}`.</span>
+<span class="sd">            If it is a 1d-array, it will be interpreted as the diagonal of the</span>
+<span class="sd">            weight matrix (all off-diagonal elements will default to zero).</span>
+<span class="sd">            The weight matrix can be a sparse array from ``scipy.sparse``.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span>
+        <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">,</span> \
+                <span class="s">&quot;Invalid weights array with shape {}. &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> \
+                <span class="o">+</span> <span class="s">&quot;Weights array should be 1d or 2d&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">diags</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="c"># Weights change the Hessian</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hessian</span><span class="o">.</span><span class="n">hard_reset</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Misfit.residuals"><a class="viewcode-back" href="../../../api/inversion.misfit.html#fatiando.geothermal.climsig.Misfit.residuals">[docs]</a>    <span class="k">def</span> <span class="nf">residuals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the residuals vector (observed - predicted data).</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * p : 1d-array or None</span>
+<span class="sd">            The parameter vector used to calculate the residuals. If None, will</span>
+<span class="sd">            use the current estimate stored in ``estimate_``.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * residuals : 1d-array or list of 1d-arrays</span>
+<span class="sd">            The residual vector. If this is the sum of 1 or more Misfit</span>
+<span class="sd">            instances, will return the residual vector from each of the summed</span>
+<span class="sd">            misfits in the order of the sum.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">predicted</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span>
+</div>
+    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="Misfit.predicted"><a class="viewcode-back" href="../../../api/inversion.misfit.html#fatiando.geothermal.climsig.Misfit.predicted">[docs]</a>    <span class="k">def</span> <span class="nf">predicted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the predicted data for a given parameter vector.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * p : 1d-array or None</span>
+<span class="sd">            The parameter vector used to calculate the predicted data. If None,</span>
+<span class="sd">            will use the current estimate stored in ``estimate_``.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * predicted : 1d-array or list of 1d-arrays</span>
+<span class="sd">            The predicted data. If this is the sum of 1 or more Misfit</span>
+<span class="sd">            instances, will return the predicted data from each of the summed</span>
+<span class="sd">            misfits in the order of the sum.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="Misfit.value"><a class="viewcode-back" href="../../../api/inversion.misfit.html#fatiando.geothermal.climsig.Misfit.value">[docs]</a>    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the value of the misfit for a given parameter vector.</span>
+
+<span class="sd">        The value is given by:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \phi(\bar{p}) = \bar{r}^T\bar{\bar{W}}\bar{r}</span>
+
+
+<span class="sd">        where :math:`\bar{r}` is the residual vector and :math:`bar{\bar{W}}`</span>
+<span class="sd">        are optional data weights.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * p : 1d-array or None</span>
+<span class="sd">            The parameter vector.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * value : float</span>
+<span class="sd">            The value of the misfit function.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">residuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">predicted</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">residuals</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">*</span><span class="p">(</span><span class="n">residuals</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">val</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">regul_param</span>
+</div>
+<div class="viewcode-block" id="Misfit.hessian"><a class="viewcode-back" href="../../../api/inversion.misfit.html#fatiando.geothermal.climsig.Misfit.hessian">[docs]</a>    <span class="k">def</span> <span class="nf">hessian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        The Hessian of the misfit function with respect to the parameters.</span>
+
+<span class="sd">        Calculated using the Gauss approximation:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \bar{\bar{H}} \approx 2\bar{\bar{J}}^T\bar{\bar{J}}</span>
+
+<span class="sd">        where :math:`\bar{\bar{J}}` is the Jacobian matrix.</span>
+
+<span class="sd">        For linear problems, the Hessian matrix is cached in memory, so calling</span>
+<span class="sd">        this method again will not trigger a re-calculation.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * p : 1d-array</span>
+<span class="sd">            The parameter vector where the Hessian is evaluated</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * hessian : 2d-array</span>
+<span class="sd">            The Hessian matrix</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">jacobian</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">hessian</span> <span class="o">=</span> <span class="n">safe_dot</span><span class="p">(</span><span class="n">jacobian</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">jacobian</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">hessian</span> <span class="o">=</span> <span class="n">safe_dot</span><span class="p">(</span><span class="n">jacobian</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">*</span><span class="n">jacobian</span><span class="p">)</span>
+        <span class="n">hessian</span> <span class="o">*=</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">regul_param</span>
+        <span class="k">return</span> <span class="n">hessian</span>
+</div>
+<div class="viewcode-block" id="Misfit.gradient"><a class="viewcode-back" href="../../../api/inversion.misfit.html#fatiando.geothermal.climsig.Misfit.gradient">[docs]</a>    <span class="k">def</span> <span class="nf">gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        The gradient vector of the misfit function.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \bar{g} = -2\bar{\bar{J}}^T\bar{r}</span>
+
+<span class="sd">        where :math:`\bar{\bar{J}}` is the Jacobian matrix and :math:`\bar{r}`</span>
+<span class="sd">        is the residual vector.</span>
+
+<span class="sd">        Parameters:</span>
+
+<span class="sd">        * p : 1d-array</span>
+<span class="sd">            The parameter vector where the gradient is evaluated</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        * gradient : 1d-array</span>
+<span class="sd">            The gradient vector.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">jacobian</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">predicted</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">grad</span> <span class="o">=</span> <span class="n">safe_dot</span><span class="p">(</span><span class="n">jacobian</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">tmp</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">grad</span> <span class="o">=</span> <span class="n">safe_dot</span><span class="p">(</span><span class="n">jacobian</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">*</span><span class="n">tmp</span><span class="p">)</span>
+        <span class="c"># Check if the gradient isn&#39;t a one column matrix</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">grad</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c"># Need to convert it to a 1d array so that hell won&#39;t break loose</span>
+            <span class="n">grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">grad</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="n">grad</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">regul_param</span>
+        <span class="k">return</span> <span class="n">grad</span></div></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

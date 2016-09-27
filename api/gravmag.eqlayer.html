@@ -1,0 +1,2384 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Equivalent layer processing (fatiando.gravmag.eqlayer) &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Gravity and magnetics (fatiando.gravmag)" href="gravmag.html" />
+    <link rel="next" title="Utilities for operating on the gradient tensor (fatiando.gravmag.tensor)" href="gravmag.tensor.html" />
+    <link rel="prev" title="Imaging methods for potential fields (fatiando.gravmag.imaging)" href="gravmag.imaging.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../install.html">Installing</a></li>
+                <li><a href="../docs.html">Documentation</a></li>
+                <li><a href="../cookbook.html">Cookbook</a></li>
+                <li><a href="../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="module-fatiando.gravmag.eqlayer">
+<span id="equivalent-layer-processing-fatiando-gravmag-eqlayer"></span><span id="fatiando-gravmag-eqlayer"></span><h1>Equivalent layer processing (<code class="docutils literal"><span class="pre">fatiando.gravmag.eqlayer</span></code>)<a class="headerlink" href="#module-fatiando.gravmag.eqlayer" title="Permalink to this headline">¶</a></h1>
+<p>Equivalent layer processing.</p>
+<p>Use the classes here to estimate an equivalent layer from potential field data.
+Then you can use the estimated layer to perform tranformations (gridding,
+continuation, derivation, reduction to the pole, etc.) by forward modeling
+the layer. Use <a class="reference internal" href="gravmag.sphere.html#module-fatiando.gravmag.sphere" title="fatiando.gravmag.sphere"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.gravmag.sphere</span></code></a> for forward modeling.</p>
+<p><strong>Algorithms</strong></p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.gravmag.eqlayer.EQLGravity" title="fatiando.gravmag.eqlayer.EQLGravity"><code class="xref py py-class docutils literal"><span class="pre">EQLGravity</span></code></a> and
+<a class="reference internal" href="#fatiando.gravmag.eqlayer.EQLTotalField" title="fatiando.gravmag.eqlayer.EQLTotalField"><code class="xref py py-class docutils literal"><span class="pre">EQLTotalField</span></code></a>: The classic (space domain)
+equivalent layer as formulated in Li and Oldenburg (2010) or
+Oliveira Jr. et al (2012).
+Doesn&#8217;t have wavelet compression or other tweaks.</li>
+<li><a class="reference internal" href="#fatiando.gravmag.eqlayer.PELGravity" title="fatiando.gravmag.eqlayer.PELGravity"><code class="xref py py-class docutils literal"><span class="pre">PELGravity</span></code></a> and
+<a class="reference internal" href="#fatiando.gravmag.eqlayer.PELTotalField" title="fatiando.gravmag.eqlayer.PELTotalField"><code class="xref py py-class docutils literal"><span class="pre">PELTotalField</span></code></a>: The polynomial equivalent
+layer of Oliveira Jr. et al (2012). A fast and memory efficient algorithm.
+Both of these require special regularization
+(<a class="reference internal" href="#fatiando.gravmag.eqlayer.PELSmoothness" title="fatiando.gravmag.eqlayer.PELSmoothness"><code class="xref py py-class docutils literal"><span class="pre">PELSmoothness</span></code></a>).</li>
+</ul>
+<p><strong>References</strong></p>
+<p>Li, Y., and D. W. Oldenburg (2010), Rapid construction of equivalent sources
+using wavelets, Geophysics, 75(3), L51-L59, doi:10.1190/1.3378764.</p>
+<p>Oliveira Jr., V. C., V. C. F. Barbosa, and L. Uieda (2012), Polynomial
+equivalent layer, Geophysics, 78(1), G1-G13, doi:10.1190/geo2012-0196.1.</p>
+<hr class="docutils" />
+<dl class="class">
+<dt id="fatiando.gravmag.eqlayer.EQLBase">
+<em class="property">class </em><code class="descclassname">fatiando.gravmag.eqlayer.</code><code class="descname">EQLBase</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em>, <em>data</em>, <em>grid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/eqlayer.html#EQLBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="inversion.misfit.html#fatiando.inversion.misfit.Misfit" title="fatiando.inversion.misfit.Misfit"><code class="xref py py-class docutils literal"><span class="pre">fatiando.inversion.misfit.Misfit</span></code></a></p>
+<p>Base class for the classic equivalent layer.</p>
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLBase.config">
+<code class="descname">config</code><span class="sig-paren">(</span><em>method</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLBase.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the optimization method and its parameters.</p>
+<p>This sets the method used by
+<code class="xref py py-meth docutils literal"><span class="pre">fit</span></code> and the keyword
+arguments that are passed to it.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The optimization method. One of: <code class="docutils literal"><span class="pre">'linear'</span></code>, <code class="docutils literal"><span class="pre">'newton'</span></code>,
+<code class="docutils literal"><span class="pre">'levmarq'</span></code>, <code class="docutils literal"><span class="pre">'steepest'</span></code>, <code class="docutils literal"><span class="pre">'acor'</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Other keyword arguments that can be passed are the ones allowed by each
+method.</p>
+<p>Some methods have required arguments:</p>
+<ul class="simple">
+<li><em>newton</em>, <em>levmarq</em> and <em>steepest</em> require the <code class="docutils literal"><span class="pre">initial</span></code> argument
+(an initial estimate for the gradient descent)</li>
+<li><em>acor</em> requires the <code class="docutils literal"><span class="pre">bounds</span></code> argument (min/max values for the
+search space)</li>
+</ul>
+<p>See the corresponding docstrings for more information:</p>
+<ul class="simple">
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.linear" title="fatiando.inversion.optimization.linear"><code class="xref py py-meth docutils literal"><span class="pre">linear</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.newton" title="fatiando.inversion.optimization.newton"><code class="xref py py-meth docutils literal"><span class="pre">newton</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.levmarq" title="fatiando.inversion.optimization.levmarq"><code class="xref py py-meth docutils literal"><span class="pre">levmarq</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.steepest" title="fatiando.inversion.optimization.steepest"><code class="xref py py-meth docutils literal"><span class="pre">steepest</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.acor" title="fatiando.inversion.optimization.acor"><code class="xref py py-meth docutils literal"><span class="pre">acor</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLBase.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><em>deep=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLBase.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a copy of me together with all the cached methods.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.eqlayer.EQLBase.estimate_">
+<code class="descname">estimate_</code><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLBase.estimate_" title="Permalink to this definition">¶</a></dt>
+<dd><p>A nicely formatted version of the estimate.</p>
+<p>If the class implements a <cite>fmt_estimate</cite> method, this will its results.
+This can be used to convert the parameter vector to a more useful form,
+like a <a class="reference internal" href="mesher.html#module-fatiando.mesher" title="fatiando.mesher"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.mesher</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLBase.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLBase.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve for the parameter vector that minimizes this objective function.</p>
+<p>Uses the optimization method and parameters defined using the
+<a class="reference internal" href="inversion.base.html#fatiando.inversion.base.OptimizerMixin.config" title="fatiando.inversion.base.OptimizerMixin.config"><code class="xref py py-meth docutils literal"><span class="pre">config</span></code></a> method.</p>
+<p>The estimated parameter vector can be accessed through the
+<code class="docutils literal"><span class="pre">p_</span></code> attribute. A (possibly) formatted version (converted to a more
+manageable type) of the estimate can be accessed through the property
+<code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLBase.fmt_estimate">
+<code class="descname">fmt_estimate</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLBase.fmt_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when accessing the property <code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+<p>Use this to convert the parameter vector (p) to a more useful form,
+like a geometric object, etc.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>formatted</dt>
+<dd><p class="first last">Pretty much anything you want.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLBase.gradient">
+<code class="descname">gradient</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLBase.gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The gradient vector of the misfit function.</p>
+<div class="math">
+\[\bar{g} = -2\bar{\bar{J}}^T\bar{r}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix and <span class="math">\(\bar{r}\)</span>
+is the residual vector.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the gradient is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>gradient <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The gradient vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLBase.hessian">
+<code class="descname">hessian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLBase.hessian" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Hessian of the misfit function with respect to the parameters.</p>
+<p>Calculated using the Gauss approximation:</p>
+<div class="math">
+\[\bar{\bar{H}} \approx 2\bar{\bar{J}}^T\bar{\bar{J}}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix.</p>
+<p>For linear problems, the Hessian matrix is cached in memory, so calling
+this method again will not trigger a re-calculation.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the Hessian is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>hessian <span class="classifier-delimiter">:</span> <span class="classifier">2d-array</span></dt>
+<dd><p class="first last">The Hessian matrix</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLBase.predicted">
+<code class="descname">predicted</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/eqlayer.html#EQLBase.predicted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLBase.predicted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the data predicted by a given parameter vector.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array (optional)</span></dt>
+<dd><p class="first last">The parameter vector with the estimated physical properties of the
+layer. If not given, will use the value calculated by <code class="docutils literal"><span class="pre">.fit()</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>result <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The predicted data vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.eqlayer.EQLBase.regul_param">
+<code class="descname">regul_param</code><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLBase.regul_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>The regularization parameter (scale factor) for the objetive function.</p>
+<p>Defaults to 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLBase.residuals">
+<code class="descname">residuals</code><span class="sig-paren">(</span><em>p=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLBase.residuals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the residuals vector (observed - predicted data).</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector used to calculate the residuals. If None, will
+use the current estimate stored in <code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>residuals <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or list of 1d-arrays</span></dt>
+<dd><p class="first last">The residual vector. If this is the sum of 1 or more Misfit
+instances, will return the residual vector from each of the summed
+misfits in the order of the sum.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLBase.set_weights">
+<code class="descname">set_weights</code><span class="sig-paren">(</span><em>weights</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLBase.set_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the data weights.</p>
+<p>Using weights for the data, the least-squares data-misfit function
+becomes:</p>
+<div class="math">
+\[\phi = \bar{r}^T \bar{\bar{W}}\bar{r}\]</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>weights <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or 2d-array or None</span></dt>
+<dd><p class="first last">Weights for the data vector.
+If None, will remove any weights that have been set before.
+If it is a 2d-array, it will be interpreted as the weight matrix
+<span class="math">\(\bar{\bar{W}}\)</span>.
+If it is a 1d-array, it will be interpreted as the diagonal of the
+weight matrix (all off-diagonal elements will default to zero).
+The weight matrix can be a sparse array from <code class="docutils literal"><span class="pre">scipy.sparse</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLBase.value">
+<code class="descname">value</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLBase.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the value of the misfit for a given parameter vector.</p>
+<p>The value is given by:</p>
+<div class="math">
+\[\phi(\bar{p}) = \bar{r}^T\bar{\bar{W}}\bar{r}\]</div>
+<p>where <span class="math">\(\bar{r}\)</span> is the residual vector and <span class="math">\(bar{\bar{W}}\)</span>
+are optional data weights.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>value <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The value of the misfit function.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatiando.gravmag.eqlayer.EQLGravity">
+<em class="property">class </em><code class="descclassname">fatiando.gravmag.eqlayer.</code><code class="descname">EQLGravity</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em>, <em>data</em>, <em>grid</em>, <em>field='gz'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/eqlayer.html#EQLGravity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLGravity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatiando.gravmag.eqlayer.EQLBase" title="fatiando.gravmag.eqlayer.EQLBase"><code class="xref py py-class docutils literal"><span class="pre">fatiando.gravmag.eqlayer.EQLBase</span></code></a></p>
+<p>Estimate an equivalent layer from gravity data.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Assumes x = North, y = East, z = Down.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, y, z <span class="classifier-delimiter">:</span> <span class="classifier">1d-arrays</span></dt>
+<dd><p class="first last">The x, y, z coordinates of each data point.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The gravity data at each point.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>grid <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference internal" href="mesher.html#fatiando.mesher.PointGrid" title="fatiando.mesher.PointGrid"><code class="xref py py-class docutils literal"><span class="pre">PointGrid</span></code></a></span></dt>
+<dd><p class="first last">The sources in the equivalent layer. Will invert for the density of
+each point in the grid.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>field <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">Which gravitational field is the data. Options are: <code class="docutils literal"><span class="pre">'gz'</span></code> (gravity
+anomaly), <code class="docutils literal"><span class="pre">'gxx'</span></code>, <code class="docutils literal"><span class="pre">'gxy'</span></code>, ..., <code class="docutils literal"><span class="pre">'gzz'</span></code> (gravity gradient
+tensor). Defaults to <code class="docutils literal"><span class="pre">'gz'</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Examples:</p>
+<p>Use the layer to fit some gravity data and check if our layer is able to
+produce data at a different locations (i.e., interpolate, upward continue)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando</span> <span class="kn">import</span> <span class="n">gridder</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.gravmag</span> <span class="kn">import</span> <span class="n">sphere</span><span class="p">,</span> <span class="n">prism</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.gravmag.eqlayer</span> <span class="kn">import</span> <span class="n">EQLGravity</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.mesher</span> <span class="kn">import</span> <span class="n">Prism</span><span class="p">,</span> <span class="n">PointGrid</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.inversion.regularization</span> <span class="kn">import</span> <span class="n">Damping</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Produce some gravity data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">area</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">gridder</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">z</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="p">[</span><span class="n">Prism</span><span class="p">(</span><span class="mi">4500</span><span class="p">,</span> <span class="mi">5500</span><span class="p">,</span> <span class="mi">4500</span><span class="p">,</span> <span class="mi">5500</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span>
+<span class="gp">... </span>               <span class="p">{</span><span class="s">&#39;density&#39;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">})]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gz</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">gz</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Plot the data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">tricontourf</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">gz</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s">&#39;Reds&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;mGal&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="s">&#39;.k&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure">
+<img alt="../_images/gravmag-eqlayer-1.png" src="../_images/gravmag-eqlayer-1.png" />
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Setup a layer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layer</span> <span class="o">=</span> <span class="n">PointGrid</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span> <span class="o">=</span> <span class="p">(</span><span class="n">EQLGravity</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">gz</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span> <span class="o">+</span>
+<span class="gp">... </span>          <span class="mi">10</span><span class="o">**-</span><span class="mi">24</span><span class="o">*</span><span class="n">Damping</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">size</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Check that the predicted data fits the observations</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">gz</span><span class="p">,</span> <span class="n">solver</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">predicted</span><span class="p">(),</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Add the densities to the layer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layer</span><span class="o">.</span><span class="n">addprop</span><span class="p">(</span><span class="s">&#39;density&#39;</span><span class="p">,</span> <span class="n">solver</span><span class="o">.</span><span class="n">estimate_</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Make a regular grid</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">gridder</span><span class="o">.</span><span class="n">regular</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="n">z</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Interpolate and check against the model</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gz_layer</span> <span class="o">=</span> <span class="n">sphere</span><span class="o">.</span><span class="n">gz</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gz_model</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">gz</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">gz_layer</span><span class="p">,</span> <span class="n">gz_model</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Upward continue and check against model data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zup</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="mi">500</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gz_layer_up</span> <span class="o">=</span> <span class="n">sphere</span><span class="o">.</span><span class="n">gz</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">zup</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gz_model_up</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">gz</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">zup</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">gz_layer_up</span><span class="p">,</span> <span class="n">gz_model_up</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Plot the interpolated and upward continued data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">tricontourf</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">gz_layer_up</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s">&#39;Reds&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;mGal&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure">
+<img alt="../_images/gravmag-eqlayer-2.png" src="../_images/gravmag-eqlayer-2.png" />
+</div>
+<p>If you have multiple types of gravity data (like gravity anomaly and
+gradient tensor components), you can add <code class="docutils literal"><span class="pre">EQLGravity</span></code> instances together
+for a joint inversion:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span> <span class="o">=</span> <span class="n">gridder</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="n">z</span><span class="o">=-</span><span class="mi">400</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gz</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">gz</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">gridder</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">z</span><span class="o">=-</span><span class="mi">150</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gxy</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">gxy</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Plot the gz and gxy data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;gz&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">tricontourf</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">gz</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s">&#39;Reds&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;mGal&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="s">&#39;.k&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;gxy&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">tricontourf</span><span class="p">(</span><span class="n">y2</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">gxy</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s">&#39;RdBu_r&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;Eotvos&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y2</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="s">&#39;.k&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure">
+<img alt="../_images/gravmag-eqlayer-3.png" src="../_images/gravmag-eqlayer-3.png" />
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Setup a layer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layer</span> <span class="o">=</span> <span class="n">PointGrid</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span> <span class="o">=</span> <span class="p">(</span><span class="n">EQLGravity</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">gz</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">field</span><span class="o">=</span><span class="s">&#39;gz&#39;</span><span class="p">)</span> <span class="o">+</span>
+<span class="gp">... </span>          <span class="n">EQLGravity</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">gxy</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">field</span><span class="o">=</span><span class="s">&#39;gxy&#39;</span><span class="p">)</span> <span class="o">+</span>
+<span class="gp">... </span>          <span class="mi">10</span><span class="o">**-</span><span class="mi">24</span><span class="o">*</span><span class="n">Damping</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">size</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Check the fit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gz_pred</span> <span class="o">=</span> <span class="n">solver</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">predicted</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gxy_pred</span> <span class="o">=</span> <span class="n">solver</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">predicted</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">gz</span><span class="p">,</span> <span class="n">gz_pred</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">gxy</span><span class="p">,</span> <span class="n">gxy_pred</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Add the densities to the layer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layer</span><span class="o">.</span><span class="n">addprop</span><span class="p">(</span><span class="s">&#39;density&#39;</span><span class="p">,</span> <span class="n">solver</span><span class="o">.</span><span class="n">estimate_</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now that we have the layer, we can do any operation by forward modeling the
+layer. For example, lets just upward continue gxy (without interpolation).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Upward continue gxy only without interpolation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zup</span> <span class="o">=</span> <span class="n">z2</span> <span class="o">-</span> <span class="mi">500</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gxy_layer</span> <span class="o">=</span> <span class="n">sphere</span><span class="o">.</span><span class="n">gxy</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">zup</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Check against model data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gxy_model</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">gxy</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">zup</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">gxy_layer</span><span class="p">,</span> <span class="n">gxy_model</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Plot the upward continued gxy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Upward continued gxy&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">tricontourf</span><span class="p">(</span><span class="n">y2</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">gxy_layer</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s">&#39;RdBu_r&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;Eotvos&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y2</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="s">&#39;.k&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure">
+<img alt="../_images/gravmag-eqlayer-5.png" src="../_images/gravmag-eqlayer-5.png" />
+</div>
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLGravity.config">
+<code class="descname">config</code><span class="sig-paren">(</span><em>method</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLGravity.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the optimization method and its parameters.</p>
+<p>This sets the method used by
+<code class="xref py py-meth docutils literal"><span class="pre">fit</span></code> and the keyword
+arguments that are passed to it.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The optimization method. One of: <code class="docutils literal"><span class="pre">'linear'</span></code>, <code class="docutils literal"><span class="pre">'newton'</span></code>,
+<code class="docutils literal"><span class="pre">'levmarq'</span></code>, <code class="docutils literal"><span class="pre">'steepest'</span></code>, <code class="docutils literal"><span class="pre">'acor'</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Other keyword arguments that can be passed are the ones allowed by each
+method.</p>
+<p>Some methods have required arguments:</p>
+<ul class="simple">
+<li><em>newton</em>, <em>levmarq</em> and <em>steepest</em> require the <code class="docutils literal"><span class="pre">initial</span></code> argument
+(an initial estimate for the gradient descent)</li>
+<li><em>acor</em> requires the <code class="docutils literal"><span class="pre">bounds</span></code> argument (min/max values for the
+search space)</li>
+</ul>
+<p>See the corresponding docstrings for more information:</p>
+<ul class="simple">
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.linear" title="fatiando.inversion.optimization.linear"><code class="xref py py-meth docutils literal"><span class="pre">linear</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.newton" title="fatiando.inversion.optimization.newton"><code class="xref py py-meth docutils literal"><span class="pre">newton</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.levmarq" title="fatiando.inversion.optimization.levmarq"><code class="xref py py-meth docutils literal"><span class="pre">levmarq</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.steepest" title="fatiando.inversion.optimization.steepest"><code class="xref py py-meth docutils literal"><span class="pre">steepest</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.acor" title="fatiando.inversion.optimization.acor"><code class="xref py py-meth docutils literal"><span class="pre">acor</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLGravity.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><em>deep=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLGravity.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a copy of me together with all the cached methods.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.eqlayer.EQLGravity.estimate_">
+<code class="descname">estimate_</code><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLGravity.estimate_" title="Permalink to this definition">¶</a></dt>
+<dd><p>A nicely formatted version of the estimate.</p>
+<p>If the class implements a <cite>fmt_estimate</cite> method, this will its results.
+This can be used to convert the parameter vector to a more useful form,
+like a <a class="reference internal" href="mesher.html#module-fatiando.mesher" title="fatiando.mesher"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.mesher</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLGravity.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLGravity.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve for the parameter vector that minimizes this objective function.</p>
+<p>Uses the optimization method and parameters defined using the
+<a class="reference internal" href="inversion.base.html#fatiando.inversion.base.OptimizerMixin.config" title="fatiando.inversion.base.OptimizerMixin.config"><code class="xref py py-meth docutils literal"><span class="pre">config</span></code></a> method.</p>
+<p>The estimated parameter vector can be accessed through the
+<code class="docutils literal"><span class="pre">p_</span></code> attribute. A (possibly) formatted version (converted to a more
+manageable type) of the estimate can be accessed through the property
+<code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLGravity.fmt_estimate">
+<code class="descname">fmt_estimate</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLGravity.fmt_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when accessing the property <code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+<p>Use this to convert the parameter vector (p) to a more useful form,
+like a geometric object, etc.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>formatted</dt>
+<dd><p class="first last">Pretty much anything you want.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLGravity.gradient">
+<code class="descname">gradient</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLGravity.gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The gradient vector of the misfit function.</p>
+<div class="math">
+\[\bar{g} = -2\bar{\bar{J}}^T\bar{r}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix and <span class="math">\(\bar{r}\)</span>
+is the residual vector.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the gradient is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>gradient <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The gradient vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLGravity.hessian">
+<code class="descname">hessian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLGravity.hessian" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Hessian of the misfit function with respect to the parameters.</p>
+<p>Calculated using the Gauss approximation:</p>
+<div class="math">
+\[\bar{\bar{H}} \approx 2\bar{\bar{J}}^T\bar{\bar{J}}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix.</p>
+<p>For linear problems, the Hessian matrix is cached in memory, so calling
+this method again will not trigger a re-calculation.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the Hessian is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>hessian <span class="classifier-delimiter">:</span> <span class="classifier">2d-array</span></dt>
+<dd><p class="first last">The Hessian matrix</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLGravity.jacobian">
+<code class="descname">jacobian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/eqlayer.html#EQLGravity.jacobian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLGravity.jacobian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Jacobian matrix for a given parameter vector.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLGravity.predicted">
+<code class="descname">predicted</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLGravity.predicted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the data predicted by a given parameter vector.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array (optional)</span></dt>
+<dd><p class="first last">The parameter vector with the estimated physical properties of the
+layer. If not given, will use the value calculated by <code class="docutils literal"><span class="pre">.fit()</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>result <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The predicted data vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.eqlayer.EQLGravity.regul_param">
+<code class="descname">regul_param</code><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLGravity.regul_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>The regularization parameter (scale factor) for the objetive function.</p>
+<p>Defaults to 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLGravity.residuals">
+<code class="descname">residuals</code><span class="sig-paren">(</span><em>p=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLGravity.residuals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the residuals vector (observed - predicted data).</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector used to calculate the residuals. If None, will
+use the current estimate stored in <code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>residuals <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or list of 1d-arrays</span></dt>
+<dd><p class="first last">The residual vector. If this is the sum of 1 or more Misfit
+instances, will return the residual vector from each of the summed
+misfits in the order of the sum.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLGravity.set_weights">
+<code class="descname">set_weights</code><span class="sig-paren">(</span><em>weights</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLGravity.set_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the data weights.</p>
+<p>Using weights for the data, the least-squares data-misfit function
+becomes:</p>
+<div class="math">
+\[\phi = \bar{r}^T \bar{\bar{W}}\bar{r}\]</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>weights <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or 2d-array or None</span></dt>
+<dd><p class="first last">Weights for the data vector.
+If None, will remove any weights that have been set before.
+If it is a 2d-array, it will be interpreted as the weight matrix
+<span class="math">\(\bar{\bar{W}}\)</span>.
+If it is a 1d-array, it will be interpreted as the diagonal of the
+weight matrix (all off-diagonal elements will default to zero).
+The weight matrix can be a sparse array from <code class="docutils literal"><span class="pre">scipy.sparse</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLGravity.value">
+<code class="descname">value</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLGravity.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the value of the misfit for a given parameter vector.</p>
+<p>The value is given by:</p>
+<div class="math">
+\[\phi(\bar{p}) = \bar{r}^T\bar{\bar{W}}\bar{r}\]</div>
+<p>where <span class="math">\(\bar{r}\)</span> is the residual vector and <span class="math">\(bar{\bar{W}}\)</span>
+are optional data weights.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>value <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The value of the misfit function.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatiando.gravmag.eqlayer.EQLTotalField">
+<em class="property">class </em><code class="descclassname">fatiando.gravmag.eqlayer.</code><code class="descname">EQLTotalField</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em>, <em>data</em>, <em>inc</em>, <em>dec</em>, <em>grid</em>, <em>sinc=None</em>, <em>sdec=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/eqlayer.html#EQLTotalField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLTotalField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatiando.gravmag.eqlayer.EQLBase" title="fatiando.gravmag.eqlayer.EQLBase"><code class="xref py py-class docutils literal"><span class="pre">fatiando.gravmag.eqlayer.EQLBase</span></code></a></p>
+<p>Estimate an equivalent layer from total field magnetic anomaly data.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Assumes x = North, y = East, z = Down.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, y, z <span class="classifier-delimiter">:</span> <span class="classifier">1d-arrays</span></dt>
+<dd><p class="first last">The x, y, z coordinates of each data point.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The total field anomaly data at each point.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>inc, dec <span class="classifier-delimiter">:</span> <span class="classifier">floats</span></dt>
+<dd><p class="first last">The inclination and declination of the inducing field</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>grid <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference internal" href="mesher.html#fatiando.mesher.PointGrid" title="fatiando.mesher.PointGrid"><code class="xref py py-class docutils literal"><span class="pre">PointGrid</span></code></a></span></dt>
+<dd><p class="first last">The sources in the equivalent layer. Will invert for the magnetization
+intensity of each point in the grid.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>sinc, sdec <span class="classifier-delimiter">:</span> <span class="classifier">None or floats</span></dt>
+<dd><p class="first last">The inclination and declination of the equivalent layer. Use these if
+there is remanent magnetization and the total magnetization of the
+layer if different from the induced magnetization.
+If there is only induced magnetization, use None</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Examples:</p>
+<p>Use the layer to fit some synthetic data and check is our layer is able to
+produce data at a different locations (i.e., interpolate, upward continue,
+reduce to the pole)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando</span> <span class="kn">import</span> <span class="n">gridder</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.gravmag</span> <span class="kn">import</span> <span class="n">sphere</span><span class="p">,</span> <span class="n">prism</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.mesher</span> <span class="kn">import</span> <span class="n">Sphere</span><span class="p">,</span> <span class="n">Prism</span><span class="p">,</span> <span class="n">PointGrid</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.inversion</span> <span class="kn">import</span> <span class="n">Damping</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Produce some synthetic data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">area</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">gridder</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">z</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="p">[</span><span class="n">Prism</span><span class="p">(</span><span class="mi">450</span><span class="p">,</span> <span class="mi">550</span><span class="p">,</span> <span class="mi">450</span><span class="p">,</span> <span class="mi">550</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;magnetization&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">})]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">inc</span><span class="p">,</span> <span class="n">dec</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">23</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tf</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">tf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Setup a layer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layer</span> <span class="o">=</span> <span class="n">PointGrid</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span> <span class="o">=</span> <span class="p">(</span><span class="n">EQLTotalField</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span> <span class="o">+</span>
+<span class="gp">... </span>          <span class="mi">10</span><span class="o">**-</span><span class="mi">17</span><span class="o">*</span><span class="n">Damping</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">size</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Check the fit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">tf</span><span class="p">,</span> <span class="n">solver</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">predicted</span><span class="p">(),</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Add the magnetization to the layer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layer</span><span class="o">.</span><span class="n">addprop</span><span class="p">(</span><span class="s">&#39;magnetization&#39;</span><span class="p">,</span> <span class="n">solver</span><span class="o">.</span><span class="n">estimate_</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Make a regular grid</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">gridder</span><span class="o">.</span><span class="n">regular</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="n">z</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Interpolate and check agains the model</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tf_layer</span> <span class="o">=</span> <span class="n">sphere</span><span class="o">.</span><span class="n">tf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tf_model</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">tf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">tf_layer</span><span class="p">,</span> <span class="n">tf_model</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Upward continue and check agains model data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zup</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="mi">50</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tf_layer</span> <span class="o">=</span> <span class="n">sphere</span><span class="o">.</span><span class="n">tf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">zup</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tf_model</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">tf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">zup</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">tf_layer</span><span class="p">,</span> <span class="n">tf_model</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Reduce to the pole and check agains model data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tf_layer</span> <span class="o">=</span> <span class="n">sphere</span><span class="o">.</span><span class="n">tf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">zup</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tf_model</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">tf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">zup</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">tf_layer</span><span class="p">,</span> <span class="n">tf_model</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLTotalField.config">
+<code class="descname">config</code><span class="sig-paren">(</span><em>method</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLTotalField.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the optimization method and its parameters.</p>
+<p>This sets the method used by
+<code class="xref py py-meth docutils literal"><span class="pre">fit</span></code> and the keyword
+arguments that are passed to it.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The optimization method. One of: <code class="docutils literal"><span class="pre">'linear'</span></code>, <code class="docutils literal"><span class="pre">'newton'</span></code>,
+<code class="docutils literal"><span class="pre">'levmarq'</span></code>, <code class="docutils literal"><span class="pre">'steepest'</span></code>, <code class="docutils literal"><span class="pre">'acor'</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Other keyword arguments that can be passed are the ones allowed by each
+method.</p>
+<p>Some methods have required arguments:</p>
+<ul class="simple">
+<li><em>newton</em>, <em>levmarq</em> and <em>steepest</em> require the <code class="docutils literal"><span class="pre">initial</span></code> argument
+(an initial estimate for the gradient descent)</li>
+<li><em>acor</em> requires the <code class="docutils literal"><span class="pre">bounds</span></code> argument (min/max values for the
+search space)</li>
+</ul>
+<p>See the corresponding docstrings for more information:</p>
+<ul class="simple">
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.linear" title="fatiando.inversion.optimization.linear"><code class="xref py py-meth docutils literal"><span class="pre">linear</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.newton" title="fatiando.inversion.optimization.newton"><code class="xref py py-meth docutils literal"><span class="pre">newton</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.levmarq" title="fatiando.inversion.optimization.levmarq"><code class="xref py py-meth docutils literal"><span class="pre">levmarq</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.steepest" title="fatiando.inversion.optimization.steepest"><code class="xref py py-meth docutils literal"><span class="pre">steepest</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.acor" title="fatiando.inversion.optimization.acor"><code class="xref py py-meth docutils literal"><span class="pre">acor</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLTotalField.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><em>deep=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLTotalField.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a copy of me together with all the cached methods.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.eqlayer.EQLTotalField.estimate_">
+<code class="descname">estimate_</code><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLTotalField.estimate_" title="Permalink to this definition">¶</a></dt>
+<dd><p>A nicely formatted version of the estimate.</p>
+<p>If the class implements a <cite>fmt_estimate</cite> method, this will its results.
+This can be used to convert the parameter vector to a more useful form,
+like a <a class="reference internal" href="mesher.html#module-fatiando.mesher" title="fatiando.mesher"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.mesher</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLTotalField.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLTotalField.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve for the parameter vector that minimizes this objective function.</p>
+<p>Uses the optimization method and parameters defined using the
+<a class="reference internal" href="inversion.base.html#fatiando.inversion.base.OptimizerMixin.config" title="fatiando.inversion.base.OptimizerMixin.config"><code class="xref py py-meth docutils literal"><span class="pre">config</span></code></a> method.</p>
+<p>The estimated parameter vector can be accessed through the
+<code class="docutils literal"><span class="pre">p_</span></code> attribute. A (possibly) formatted version (converted to a more
+manageable type) of the estimate can be accessed through the property
+<code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLTotalField.fmt_estimate">
+<code class="descname">fmt_estimate</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLTotalField.fmt_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when accessing the property <code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+<p>Use this to convert the parameter vector (p) to a more useful form,
+like a geometric object, etc.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>formatted</dt>
+<dd><p class="first last">Pretty much anything you want.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLTotalField.gradient">
+<code class="descname">gradient</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLTotalField.gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The gradient vector of the misfit function.</p>
+<div class="math">
+\[\bar{g} = -2\bar{\bar{J}}^T\bar{r}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix and <span class="math">\(\bar{r}\)</span>
+is the residual vector.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the gradient is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>gradient <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The gradient vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLTotalField.hessian">
+<code class="descname">hessian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLTotalField.hessian" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Hessian of the misfit function with respect to the parameters.</p>
+<p>Calculated using the Gauss approximation:</p>
+<div class="math">
+\[\bar{\bar{H}} \approx 2\bar{\bar{J}}^T\bar{\bar{J}}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix.</p>
+<p>For linear problems, the Hessian matrix is cached in memory, so calling
+this method again will not trigger a re-calculation.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the Hessian is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>hessian <span class="classifier-delimiter">:</span> <span class="classifier">2d-array</span></dt>
+<dd><p class="first last">The Hessian matrix</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLTotalField.jacobian">
+<code class="descname">jacobian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/eqlayer.html#EQLTotalField.jacobian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLTotalField.jacobian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Jacobian matrix for a given parameter vector.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLTotalField.predicted">
+<code class="descname">predicted</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLTotalField.predicted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the data predicted by a given parameter vector.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array (optional)</span></dt>
+<dd><p class="first last">The parameter vector with the estimated physical properties of the
+layer. If not given, will use the value calculated by <code class="docutils literal"><span class="pre">.fit()</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>result <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The predicted data vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.eqlayer.EQLTotalField.regul_param">
+<code class="descname">regul_param</code><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLTotalField.regul_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>The regularization parameter (scale factor) for the objetive function.</p>
+<p>Defaults to 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLTotalField.residuals">
+<code class="descname">residuals</code><span class="sig-paren">(</span><em>p=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLTotalField.residuals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the residuals vector (observed - predicted data).</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector used to calculate the residuals. If None, will
+use the current estimate stored in <code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>residuals <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or list of 1d-arrays</span></dt>
+<dd><p class="first last">The residual vector. If this is the sum of 1 or more Misfit
+instances, will return the residual vector from each of the summed
+misfits in the order of the sum.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLTotalField.set_weights">
+<code class="descname">set_weights</code><span class="sig-paren">(</span><em>weights</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLTotalField.set_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the data weights.</p>
+<p>Using weights for the data, the least-squares data-misfit function
+becomes:</p>
+<div class="math">
+\[\phi = \bar{r}^T \bar{\bar{W}}\bar{r}\]</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>weights <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or 2d-array or None</span></dt>
+<dd><p class="first last">Weights for the data vector.
+If None, will remove any weights that have been set before.
+If it is a 2d-array, it will be interpreted as the weight matrix
+<span class="math">\(\bar{\bar{W}}\)</span>.
+If it is a 1d-array, it will be interpreted as the diagonal of the
+weight matrix (all off-diagonal elements will default to zero).
+The weight matrix can be a sparse array from <code class="docutils literal"><span class="pre">scipy.sparse</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.EQLTotalField.value">
+<code class="descname">value</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.EQLTotalField.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the value of the misfit for a given parameter vector.</p>
+<p>The value is given by:</p>
+<div class="math">
+\[\phi(\bar{p}) = \bar{r}^T\bar{\bar{W}}\bar{r}\]</div>
+<p>where <span class="math">\(\bar{r}\)</span> is the residual vector and <span class="math">\(bar{\bar{W}}\)</span>
+are optional data weights.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>value <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The value of the misfit function.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatiando.gravmag.eqlayer.PELBase">
+<em class="property">class </em><code class="descclassname">fatiando.gravmag.eqlayer.</code><code class="descname">PELBase</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em>, <em>data</em>, <em>grid</em>, <em>windows</em>, <em>degree</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/eqlayer.html#PELBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatiando.gravmag.eqlayer.EQLBase" title="fatiando.gravmag.eqlayer.EQLBase"><code class="xref py py-class docutils literal"><span class="pre">fatiando.gravmag.eqlayer.EQLBase</span></code></a></p>
+<p>Base class for the Polynomial Equivalent Layer.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Overloads <em>fit</em> to convert the estimated coefficients to physical
+properties. The coefficients are stored in the <code class="docutils literal"><span class="pre">coeffs_</span></code> attribute.</p>
+</div>
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELBase.config">
+<code class="descname">config</code><span class="sig-paren">(</span><em>method</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELBase.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the optimization method and its parameters.</p>
+<p>This sets the method used by
+<code class="xref py py-meth docutils literal"><span class="pre">fit</span></code> and the keyword
+arguments that are passed to it.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The optimization method. One of: <code class="docutils literal"><span class="pre">'linear'</span></code>, <code class="docutils literal"><span class="pre">'newton'</span></code>,
+<code class="docutils literal"><span class="pre">'levmarq'</span></code>, <code class="docutils literal"><span class="pre">'steepest'</span></code>, <code class="docutils literal"><span class="pre">'acor'</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Other keyword arguments that can be passed are the ones allowed by each
+method.</p>
+<p>Some methods have required arguments:</p>
+<ul class="simple">
+<li><em>newton</em>, <em>levmarq</em> and <em>steepest</em> require the <code class="docutils literal"><span class="pre">initial</span></code> argument
+(an initial estimate for the gradient descent)</li>
+<li><em>acor</em> requires the <code class="docutils literal"><span class="pre">bounds</span></code> argument (min/max values for the
+search space)</li>
+</ul>
+<p>See the corresponding docstrings for more information:</p>
+<ul class="simple">
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.linear" title="fatiando.inversion.optimization.linear"><code class="xref py py-meth docutils literal"><span class="pre">linear</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.newton" title="fatiando.inversion.optimization.newton"><code class="xref py py-meth docutils literal"><span class="pre">newton</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.levmarq" title="fatiando.inversion.optimization.levmarq"><code class="xref py py-meth docutils literal"><span class="pre">levmarq</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.steepest" title="fatiando.inversion.optimization.steepest"><code class="xref py py-meth docutils literal"><span class="pre">steepest</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.acor" title="fatiando.inversion.optimization.acor"><code class="xref py py-meth docutils literal"><span class="pre">acor</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELBase.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><em>deep=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELBase.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a copy of me together with all the cached methods.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.eqlayer.PELBase.estimate_">
+<code class="descname">estimate_</code><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELBase.estimate_" title="Permalink to this definition">¶</a></dt>
+<dd><p>A nicely formatted version of the estimate.</p>
+<p>If the class implements a <cite>fmt_estimate</cite> method, this will its results.
+This can be used to convert the parameter vector to a more useful form,
+like a <a class="reference internal" href="mesher.html#module-fatiando.mesher" title="fatiando.mesher"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.mesher</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELBase.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELBase.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve for the parameter vector that minimizes this objective function.</p>
+<p>Uses the optimization method and parameters defined using the
+<a class="reference internal" href="inversion.base.html#fatiando.inversion.base.OptimizerMixin.config" title="fatiando.inversion.base.OptimizerMixin.config"><code class="xref py py-meth docutils literal"><span class="pre">config</span></code></a> method.</p>
+<p>The estimated parameter vector can be accessed through the
+<code class="docutils literal"><span class="pre">p_</span></code> attribute. A (possibly) formatted version (converted to a more
+manageable type) of the estimate can be accessed through the property
+<code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELBase.fmt_estimate">
+<code class="descname">fmt_estimate</code><span class="sig-paren">(</span><em>coefs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/eqlayer.html#PELBase.fmt_estimate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELBase.fmt_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the estimated polynomial coefficients to physical property
+values along the layer.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>coefs <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The estimated parameter vector with the polynomial coefficients</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>estimate <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The converted physical property values along the layer.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELBase.gradient">
+<code class="descname">gradient</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELBase.gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The gradient vector of the misfit function.</p>
+<div class="math">
+\[\bar{g} = -2\bar{\bar{J}}^T\bar{r}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix and <span class="math">\(\bar{r}\)</span>
+is the residual vector.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the gradient is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>gradient <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The gradient vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELBase.hessian">
+<code class="descname">hessian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELBase.hessian" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Hessian of the misfit function with respect to the parameters.</p>
+<p>Calculated using the Gauss approximation:</p>
+<div class="math">
+\[\bar{\bar{H}} \approx 2\bar{\bar{J}}^T\bar{\bar{J}}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix.</p>
+<p>For linear problems, the Hessian matrix is cached in memory, so calling
+this method again will not trigger a re-calculation.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the Hessian is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>hessian <span class="classifier-delimiter">:</span> <span class="classifier">2d-array</span></dt>
+<dd><p class="first last">The Hessian matrix</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELBase.predicted">
+<code class="descname">predicted</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELBase.predicted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the data predicted by a given parameter vector.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array (optional)</span></dt>
+<dd><p class="first last">The parameter vector with the estimated physical properties of the
+layer. If not given, will use the value calculated by <code class="docutils literal"><span class="pre">.fit()</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>result <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The predicted data vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.eqlayer.PELBase.regul_param">
+<code class="descname">regul_param</code><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELBase.regul_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>The regularization parameter (scale factor) for the objetive function.</p>
+<p>Defaults to 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELBase.residuals">
+<code class="descname">residuals</code><span class="sig-paren">(</span><em>p=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELBase.residuals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the residuals vector (observed - predicted data).</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector used to calculate the residuals. If None, will
+use the current estimate stored in <code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>residuals <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or list of 1d-arrays</span></dt>
+<dd><p class="first last">The residual vector. If this is the sum of 1 or more Misfit
+instances, will return the residual vector from each of the summed
+misfits in the order of the sum.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELBase.set_weights">
+<code class="descname">set_weights</code><span class="sig-paren">(</span><em>weights</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELBase.set_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the data weights.</p>
+<p>Using weights for the data, the least-squares data-misfit function
+becomes:</p>
+<div class="math">
+\[\phi = \bar{r}^T \bar{\bar{W}}\bar{r}\]</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>weights <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or 2d-array or None</span></dt>
+<dd><p class="first last">Weights for the data vector.
+If None, will remove any weights that have been set before.
+If it is a 2d-array, it will be interpreted as the weight matrix
+<span class="math">\(\bar{\bar{W}}\)</span>.
+If it is a 1d-array, it will be interpreted as the diagonal of the
+weight matrix (all off-diagonal elements will default to zero).
+The weight matrix can be a sparse array from <code class="docutils literal"><span class="pre">scipy.sparse</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELBase.value">
+<code class="descname">value</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELBase.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the value of the misfit for a given parameter vector.</p>
+<p>The value is given by:</p>
+<div class="math">
+\[\phi(\bar{p}) = \bar{r}^T\bar{\bar{W}}\bar{r}\]</div>
+<p>where <span class="math">\(\bar{r}\)</span> is the residual vector and <span class="math">\(bar{\bar{W}}\)</span>
+are optional data weights.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>value <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The value of the misfit function.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatiando.gravmag.eqlayer.PELGravity">
+<em class="property">class </em><code class="descclassname">fatiando.gravmag.eqlayer.</code><code class="descname">PELGravity</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em>, <em>data</em>, <em>grid</em>, <em>windows</em>, <em>degree</em>, <em>field='gz'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/eqlayer.html#PELGravity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELGravity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatiando.gravmag.eqlayer.PELBase" title="fatiando.gravmag.eqlayer.PELBase"><code class="xref py py-class docutils literal"><span class="pre">fatiando.gravmag.eqlayer.PELBase</span></code></a></p>
+<p>Estimate a polynomial equivalent layer from gravity data.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Assumes x = North, y = East, z = Down.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, y, z <span class="classifier-delimiter">:</span> <span class="classifier">1d-arrays</span></dt>
+<dd><p class="first last">The x, y, z coordinates of each data point.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The gravity data at each point.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>grid <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference internal" href="mesher.html#fatiando.mesher.PointGrid" title="fatiando.mesher.PointGrid"><code class="xref py py-class docutils literal"><span class="pre">PointGrid</span></code></a></span></dt>
+<dd><p class="first last">The sources in the equivalent layer. Will invert for the density of
+each point in the grid.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>windows <span class="classifier-delimiter">:</span> <span class="classifier">tuple = (ny, nx)</span></dt>
+<dd><p class="first last">The number of windows that the layer will be divided in the y and x
+directions, respectively</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>degree <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The degree of the bivariate polynomials used in each window of the PEL</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>field <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">Which gravitational field is the data. Options are: <code class="docutils literal"><span class="pre">'gz'</span></code> (gravity
+anomaly), <code class="docutils literal"><span class="pre">'gxx'</span></code>, <code class="docutils literal"><span class="pre">'gxy'</span></code>, ..., <code class="docutils literal"><span class="pre">'gzz'</span></code> (gravity gradient
+tensor). Defaults to <code class="docutils literal"><span class="pre">'gz'</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Examples:</p>
+<p>Use the layer to fit some gravity data and check is our layer is able to
+produce data at a different locations (i.e., interpolate, upward continue)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando</span> <span class="kn">import</span> <span class="n">gridder</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.gravmag</span> <span class="kn">import</span> <span class="n">sphere</span><span class="p">,</span> <span class="n">prism</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.mesher</span> <span class="kn">import</span> <span class="n">Sphere</span><span class="p">,</span> <span class="n">Prism</span><span class="p">,</span> <span class="n">PointGrid</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Produce some gravity data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">area</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">gridder</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">z</span><span class="o">=-</span><span class="mi">150</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="p">[</span><span class="n">Prism</span><span class="p">(</span><span class="mi">4500</span><span class="p">,</span> <span class="mi">5500</span><span class="p">,</span> <span class="mi">4500</span><span class="p">,</span> <span class="mi">5500</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;density&#39;</span><span class="p">:</span><span class="mi">1000</span><span class="p">})]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gz</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">gz</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Setup a layer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layer</span> <span class="o">=</span> <span class="n">PointGrid</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="p">(</span><span class="mi">48</span><span class="p">,</span> <span class="mi">48</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">degree</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span> <span class="o">=</span> <span class="p">(</span><span class="n">PELGravity</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">gz</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">windows</span><span class="p">,</span> <span class="n">degree</span><span class="p">)</span> <span class="o">+</span>
+<span class="gp">... </span>          <span class="mi">10</span><span class="o">**-</span><span class="mi">24</span><span class="o">*</span><span class="n">PELSmoothness</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">windows</span><span class="p">,</span> <span class="n">degree</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Check the fit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">gz</span><span class="p">,</span> <span class="n">solver</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">predicted</span><span class="p">(),</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Add the densities to the layer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layer</span><span class="o">.</span><span class="n">addprop</span><span class="p">(</span><span class="s">&#39;density&#39;</span><span class="p">,</span> <span class="n">solver</span><span class="o">.</span><span class="n">estimate_</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Upward continue and check agains model data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zup</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="mi">50</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gz_layer</span> <span class="o">=</span> <span class="n">sphere</span><span class="o">.</span><span class="n">gz</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">zup</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gz_model</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">gz</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">zup</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">gz_layer</span><span class="p">,</span> <span class="n">gz_model</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Make a regular grid</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">gridder</span><span class="o">.</span><span class="n">regular</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="n">z</span><span class="o">=-</span><span class="mi">150</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Interpolate and check agains the model</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gz_layer</span> <span class="o">=</span> <span class="n">sphere</span><span class="o">.</span><span class="n">gz</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gz_model</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">gz</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">gz_layer</span><span class="p">,</span> <span class="n">gz_model</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELGravity.config">
+<code class="descname">config</code><span class="sig-paren">(</span><em>method</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELGravity.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the optimization method and its parameters.</p>
+<p>This sets the method used by
+<code class="xref py py-meth docutils literal"><span class="pre">fit</span></code> and the keyword
+arguments that are passed to it.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The optimization method. One of: <code class="docutils literal"><span class="pre">'linear'</span></code>, <code class="docutils literal"><span class="pre">'newton'</span></code>,
+<code class="docutils literal"><span class="pre">'levmarq'</span></code>, <code class="docutils literal"><span class="pre">'steepest'</span></code>, <code class="docutils literal"><span class="pre">'acor'</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Other keyword arguments that can be passed are the ones allowed by each
+method.</p>
+<p>Some methods have required arguments:</p>
+<ul class="simple">
+<li><em>newton</em>, <em>levmarq</em> and <em>steepest</em> require the <code class="docutils literal"><span class="pre">initial</span></code> argument
+(an initial estimate for the gradient descent)</li>
+<li><em>acor</em> requires the <code class="docutils literal"><span class="pre">bounds</span></code> argument (min/max values for the
+search space)</li>
+</ul>
+<p>See the corresponding docstrings for more information:</p>
+<ul class="simple">
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.linear" title="fatiando.inversion.optimization.linear"><code class="xref py py-meth docutils literal"><span class="pre">linear</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.newton" title="fatiando.inversion.optimization.newton"><code class="xref py py-meth docutils literal"><span class="pre">newton</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.levmarq" title="fatiando.inversion.optimization.levmarq"><code class="xref py py-meth docutils literal"><span class="pre">levmarq</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.steepest" title="fatiando.inversion.optimization.steepest"><code class="xref py py-meth docutils literal"><span class="pre">steepest</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.acor" title="fatiando.inversion.optimization.acor"><code class="xref py py-meth docutils literal"><span class="pre">acor</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELGravity.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><em>deep=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELGravity.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a copy of me together with all the cached methods.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.eqlayer.PELGravity.estimate_">
+<code class="descname">estimate_</code><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELGravity.estimate_" title="Permalink to this definition">¶</a></dt>
+<dd><p>A nicely formatted version of the estimate.</p>
+<p>If the class implements a <cite>fmt_estimate</cite> method, this will its results.
+This can be used to convert the parameter vector to a more useful form,
+like a <a class="reference internal" href="mesher.html#module-fatiando.mesher" title="fatiando.mesher"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.mesher</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELGravity.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELGravity.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve for the parameter vector that minimizes this objective function.</p>
+<p>Uses the optimization method and parameters defined using the
+<a class="reference internal" href="inversion.base.html#fatiando.inversion.base.OptimizerMixin.config" title="fatiando.inversion.base.OptimizerMixin.config"><code class="xref py py-meth docutils literal"><span class="pre">config</span></code></a> method.</p>
+<p>The estimated parameter vector can be accessed through the
+<code class="docutils literal"><span class="pre">p_</span></code> attribute. A (possibly) formatted version (converted to a more
+manageable type) of the estimate can be accessed through the property
+<code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELGravity.fmt_estimate">
+<code class="descname">fmt_estimate</code><span class="sig-paren">(</span><em>coefs</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELGravity.fmt_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the estimated polynomial coefficients to physical property
+values along the layer.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>coefs <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The estimated parameter vector with the polynomial coefficients</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>estimate <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The converted physical property values along the layer.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELGravity.gradient">
+<code class="descname">gradient</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELGravity.gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The gradient vector of the misfit function.</p>
+<div class="math">
+\[\bar{g} = -2\bar{\bar{J}}^T\bar{r}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix and <span class="math">\(\bar{r}\)</span>
+is the residual vector.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the gradient is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>gradient <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The gradient vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELGravity.hessian">
+<code class="descname">hessian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELGravity.hessian" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Hessian of the misfit function with respect to the parameters.</p>
+<p>Calculated using the Gauss approximation:</p>
+<div class="math">
+\[\bar{\bar{H}} \approx 2\bar{\bar{J}}^T\bar{\bar{J}}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix.</p>
+<p>For linear problems, the Hessian matrix is cached in memory, so calling
+this method again will not trigger a re-calculation.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the Hessian is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>hessian <span class="classifier-delimiter">:</span> <span class="classifier">2d-array</span></dt>
+<dd><p class="first last">The Hessian matrix</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELGravity.jacobian">
+<code class="descname">jacobian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/eqlayer.html#PELGravity.jacobian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELGravity.jacobian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Jacobian matrix for a given parameter vector.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELGravity.predicted">
+<code class="descname">predicted</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELGravity.predicted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the data predicted by a given parameter vector.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array (optional)</span></dt>
+<dd><p class="first last">The parameter vector with the estimated physical properties of the
+layer. If not given, will use the value calculated by <code class="docutils literal"><span class="pre">.fit()</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>result <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The predicted data vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.eqlayer.PELGravity.regul_param">
+<code class="descname">regul_param</code><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELGravity.regul_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>The regularization parameter (scale factor) for the objetive function.</p>
+<p>Defaults to 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELGravity.residuals">
+<code class="descname">residuals</code><span class="sig-paren">(</span><em>p=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELGravity.residuals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the residuals vector (observed - predicted data).</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector used to calculate the residuals. If None, will
+use the current estimate stored in <code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>residuals <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or list of 1d-arrays</span></dt>
+<dd><p class="first last">The residual vector. If this is the sum of 1 or more Misfit
+instances, will return the residual vector from each of the summed
+misfits in the order of the sum.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELGravity.set_weights">
+<code class="descname">set_weights</code><span class="sig-paren">(</span><em>weights</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELGravity.set_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the data weights.</p>
+<p>Using weights for the data, the least-squares data-misfit function
+becomes:</p>
+<div class="math">
+\[\phi = \bar{r}^T \bar{\bar{W}}\bar{r}\]</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>weights <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or 2d-array or None</span></dt>
+<dd><p class="first last">Weights for the data vector.
+If None, will remove any weights that have been set before.
+If it is a 2d-array, it will be interpreted as the weight matrix
+<span class="math">\(\bar{\bar{W}}\)</span>.
+If it is a 1d-array, it will be interpreted as the diagonal of the
+weight matrix (all off-diagonal elements will default to zero).
+The weight matrix can be a sparse array from <code class="docutils literal"><span class="pre">scipy.sparse</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELGravity.value">
+<code class="descname">value</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELGravity.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the value of the misfit for a given parameter vector.</p>
+<p>The value is given by:</p>
+<div class="math">
+\[\phi(\bar{p}) = \bar{r}^T\bar{\bar{W}}\bar{r}\]</div>
+<p>where <span class="math">\(\bar{r}\)</span> is the residual vector and <span class="math">\(bar{\bar{W}}\)</span>
+are optional data weights.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>value <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The value of the misfit function.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatiando.gravmag.eqlayer.PELSmoothness">
+<em class="property">class </em><code class="descclassname">fatiando.gravmag.eqlayer.</code><code class="descname">PELSmoothness</code><span class="sig-paren">(</span><em>grid</em>, <em>windows</em>, <em>degree</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/eqlayer.html#PELSmoothness"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELSmoothness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="inversion.regularization.html#fatiando.inversion.regularization.Smoothness" title="fatiando.inversion.regularization.Smoothness"><code class="xref py py-class docutils literal"><span class="pre">fatiando.inversion.regularization.Smoothness</span></code></a></p>
+<p>Regularization to &#8220;join&#8221; neighboring windows in the PEL.</p>
+<p>Use this with <a class="reference internal" href="#fatiando.gravmag.eqlayer.PELGravity" title="fatiando.gravmag.eqlayer.PELGravity"><code class="xref py py-class docutils literal"><span class="pre">PELGravity</span></code></a> and
+<a class="reference internal" href="#fatiando.gravmag.eqlayer.PELTotalField" title="fatiando.gravmag.eqlayer.PELTotalField"><code class="xref py py-class docutils literal"><span class="pre">PELTotalField</span></code></a>.</p>
+<p>Parameters passed to PELSmoothness must be the same as passed to the PEL
+solvers.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>grid <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference internal" href="mesher.html#fatiando.mesher.PointGrid" title="fatiando.mesher.PointGrid"><code class="xref py py-class docutils literal"><span class="pre">PointGrid</span></code></a></span></dt>
+<dd><p class="first last">The sources in the equivalent layer.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>windows <span class="classifier-delimiter">:</span> <span class="classifier">tuple = (ny, nx)</span></dt>
+<dd><p class="first last">The number of windows that the layer will be divided in the y and x
+directions, respectively.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>degree <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The degree of the bivariate polynomials used in each window of the PEL</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>See the docstring of <a class="reference internal" href="#fatiando.gravmag.eqlayer.PELGravity" title="fatiando.gravmag.eqlayer.PELGravity"><code class="xref py py-class docutils literal"><span class="pre">PELGravity</span></code></a> for an
+example usage.</p>
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELSmoothness.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><em>deep=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELSmoothness.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a copy of me together with all the cached methods.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELSmoothness.gradient">
+<code class="descname">gradient</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELSmoothness.gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the gradient vector.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector. If None, will return 0.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>gradient <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The gradient</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELSmoothness.hessian">
+<code class="descname">hessian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELSmoothness.hessian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Hessian matrix.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>hessian <span class="classifier-delimiter">:</span> <span class="classifier">2d-array</span></dt>
+<dd><p class="first last">The Hessian</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.eqlayer.PELSmoothness.regul_param">
+<code class="descname">regul_param</code><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELSmoothness.regul_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>The regularization parameter (scale factor) for the objetive function.</p>
+<p>Defaults to 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELSmoothness.value">
+<code class="descname">value</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELSmoothness.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the value of this function.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>value <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The value of this function evaluated at <em>p</em></p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatiando.gravmag.eqlayer.PELTotalField">
+<em class="property">class </em><code class="descclassname">fatiando.gravmag.eqlayer.</code><code class="descname">PELTotalField</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em>, <em>data</em>, <em>inc</em>, <em>dec</em>, <em>grid</em>, <em>windows</em>, <em>degree</em>, <em>sinc=None</em>, <em>sdec=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/eqlayer.html#PELTotalField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELTotalField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatiando.gravmag.eqlayer.PELBase" title="fatiando.gravmag.eqlayer.PELBase"><code class="xref py py-class docutils literal"><span class="pre">fatiando.gravmag.eqlayer.PELBase</span></code></a></p>
+<p>Estimate a polynomial equivalent layer from magnetic total field anomaly.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Assumes x = North, y = East, z = Down.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, y, z <span class="classifier-delimiter">:</span> <span class="classifier">1d-arrays</span></dt>
+<dd><p class="first last">The x, y, z coordinates of each data point.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The total field magnetic anomaly data at each point.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>inc, dec <span class="classifier-delimiter">:</span> <span class="classifier">floats</span></dt>
+<dd><p class="first last">The inclination and declination of the inducing field</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>grid <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference internal" href="mesher.html#fatiando.mesher.PointGrid" title="fatiando.mesher.PointGrid"><code class="xref py py-class docutils literal"><span class="pre">PointGrid</span></code></a></span></dt>
+<dd><p class="first last">The sources in the equivalent layer. Will invert for the magnetization
+intensity of each point in the grid.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>windows <span class="classifier-delimiter">:</span> <span class="classifier">tuple = (ny, nx)</span></dt>
+<dd><p class="first last">The number of windows that the layer will be divided in the y and x
+directions, respectively</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>degree <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The degree of the bivariate polynomials used in each window of the PEL</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>sinc, sdec <span class="classifier-delimiter">:</span> <span class="classifier">None or floats</span></dt>
+<dd><p class="first last">The inclination and declination of the equivalent layer. Use these if
+there is remanent magnetization and the total magnetization of the
+layer if different from the induced magnetization.
+If there is only induced magnetization, use None</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Examples:</p>
+<p>Use the layer to fit some synthetic data and check is our layer is able to
+produce data at a different locations (i.e., interpolate, upward continue,
+reduce to the pole)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando</span> <span class="kn">import</span> <span class="n">gridder</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.gravmag</span> <span class="kn">import</span> <span class="n">sphere</span><span class="p">,</span> <span class="n">prism</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fatiando.mesher</span> <span class="kn">import</span> <span class="n">Sphere</span><span class="p">,</span> <span class="n">Prism</span><span class="p">,</span> <span class="n">PointGrid</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Produce some synthetic data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">area</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">gridder</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">z</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="p">[</span><span class="n">Prism</span><span class="p">(</span><span class="mi">450</span><span class="p">,</span> <span class="mi">550</span><span class="p">,</span> <span class="mi">450</span><span class="p">,</span> <span class="mi">550</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;magnetization&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">})]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">inc</span><span class="p">,</span> <span class="n">dec</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">23</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tf</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">tf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Setup a layer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layer</span> <span class="o">=</span> <span class="n">PointGrid</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">60</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">degree</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span> <span class="o">=</span> <span class="p">(</span><span class="n">PELTotalField</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">windows</span><span class="p">,</span> <span class="n">degree</span><span class="p">)</span>
+<span class="gp">... </span>          <span class="o">+</span> <span class="mi">10</span><span class="o">**-</span><span class="mi">15</span><span class="o">*</span><span class="n">PELSmoothness</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">windows</span><span class="p">,</span> <span class="n">degree</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Check the fit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">tf</span><span class="p">,</span> <span class="n">solver</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">predicted</span><span class="p">(),</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Add the magnetization to the layer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layer</span><span class="o">.</span><span class="n">addprop</span><span class="p">(</span><span class="s">&#39;magnetization&#39;</span><span class="p">,</span> <span class="n">solver</span><span class="o">.</span><span class="n">estimate_</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Upward continue and check agains model data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zup</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="mi">50</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tf_layer</span> <span class="o">=</span> <span class="n">sphere</span><span class="o">.</span><span class="n">tf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">zup</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tf_model</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">tf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">zup</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">tf_layer</span><span class="p">,</span> <span class="n">tf_model</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Reduce to the pole and check agains model data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tf_layer</span> <span class="o">=</span> <span class="n">sphere</span><span class="o">.</span><span class="n">tf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">zup</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tf_model</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">tf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">zup</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">tf_layer</span><span class="p">,</span> <span class="n">tf_model</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Interpolate and check agains the model</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">gridder</span><span class="o">.</span><span class="n">regular</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="n">z</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tf_layer</span> <span class="o">=</span> <span class="n">sphere</span><span class="o">.</span><span class="n">tf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tf_model</span> <span class="o">=</span> <span class="n">prism</span><span class="o">.</span><span class="n">tf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">tf_layer</span><span class="p">,</span> <span class="n">tf_model</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELTotalField.config">
+<code class="descname">config</code><span class="sig-paren">(</span><em>method</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELTotalField.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the optimization method and its parameters.</p>
+<p>This sets the method used by
+<code class="xref py py-meth docutils literal"><span class="pre">fit</span></code> and the keyword
+arguments that are passed to it.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">The optimization method. One of: <code class="docutils literal"><span class="pre">'linear'</span></code>, <code class="docutils literal"><span class="pre">'newton'</span></code>,
+<code class="docutils literal"><span class="pre">'levmarq'</span></code>, <code class="docutils literal"><span class="pre">'steepest'</span></code>, <code class="docutils literal"><span class="pre">'acor'</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Other keyword arguments that can be passed are the ones allowed by each
+method.</p>
+<p>Some methods have required arguments:</p>
+<ul class="simple">
+<li><em>newton</em>, <em>levmarq</em> and <em>steepest</em> require the <code class="docutils literal"><span class="pre">initial</span></code> argument
+(an initial estimate for the gradient descent)</li>
+<li><em>acor</em> requires the <code class="docutils literal"><span class="pre">bounds</span></code> argument (min/max values for the
+search space)</li>
+</ul>
+<p>See the corresponding docstrings for more information:</p>
+<ul class="simple">
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.linear" title="fatiando.inversion.optimization.linear"><code class="xref py py-meth docutils literal"><span class="pre">linear</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.newton" title="fatiando.inversion.optimization.newton"><code class="xref py py-meth docutils literal"><span class="pre">newton</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.levmarq" title="fatiando.inversion.optimization.levmarq"><code class="xref py py-meth docutils literal"><span class="pre">levmarq</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.steepest" title="fatiando.inversion.optimization.steepest"><code class="xref py py-meth docutils literal"><span class="pre">steepest</span></code></a></li>
+<li><a class="reference internal" href="inversion.optimization.html#fatiando.inversion.optimization.acor" title="fatiando.inversion.optimization.acor"><code class="xref py py-meth docutils literal"><span class="pre">acor</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELTotalField.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><em>deep=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELTotalField.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a copy of me together with all the cached methods.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.eqlayer.PELTotalField.estimate_">
+<code class="descname">estimate_</code><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELTotalField.estimate_" title="Permalink to this definition">¶</a></dt>
+<dd><p>A nicely formatted version of the estimate.</p>
+<p>If the class implements a <cite>fmt_estimate</cite> method, this will its results.
+This can be used to convert the parameter vector to a more useful form,
+like a <a class="reference internal" href="mesher.html#module-fatiando.mesher" title="fatiando.mesher"><code class="xref py py-mod docutils literal"><span class="pre">fatiando.mesher</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELTotalField.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELTotalField.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve for the parameter vector that minimizes this objective function.</p>
+<p>Uses the optimization method and parameters defined using the
+<a class="reference internal" href="inversion.base.html#fatiando.inversion.base.OptimizerMixin.config" title="fatiando.inversion.base.OptimizerMixin.config"><code class="xref py py-meth docutils literal"><span class="pre">config</span></code></a> method.</p>
+<p>The estimated parameter vector can be accessed through the
+<code class="docutils literal"><span class="pre">p_</span></code> attribute. A (possibly) formatted version (converted to a more
+manageable type) of the estimate can be accessed through the property
+<code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELTotalField.fmt_estimate">
+<code class="descname">fmt_estimate</code><span class="sig-paren">(</span><em>coefs</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELTotalField.fmt_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the estimated polynomial coefficients to physical property
+values along the layer.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>coefs <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The estimated parameter vector with the polynomial coefficients</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>estimate <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The converted physical property values along the layer.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELTotalField.gradient">
+<code class="descname">gradient</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELTotalField.gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The gradient vector of the misfit function.</p>
+<div class="math">
+\[\bar{g} = -2\bar{\bar{J}}^T\bar{r}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix and <span class="math">\(\bar{r}\)</span>
+is the residual vector.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the gradient is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>gradient <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The gradient vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELTotalField.hessian">
+<code class="descname">hessian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELTotalField.hessian" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Hessian of the misfit function with respect to the parameters.</p>
+<p>Calculated using the Gauss approximation:</p>
+<div class="math">
+\[\bar{\bar{H}} \approx 2\bar{\bar{J}}^T\bar{\bar{J}}\]</div>
+<p>where <span class="math">\(\bar{\bar{J}}\)</span> is the Jacobian matrix.</p>
+<p>For linear problems, the Hessian matrix is cached in memory, so calling
+this method again will not trigger a re-calculation.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The parameter vector where the Hessian is evaluated</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>hessian <span class="classifier-delimiter">:</span> <span class="classifier">2d-array</span></dt>
+<dd><p class="first last">The Hessian matrix</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELTotalField.jacobian">
+<code class="descname">jacobian</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/eqlayer.html#PELTotalField.jacobian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELTotalField.jacobian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Jacobian matrix for a given parameter vector.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELTotalField.predicted">
+<code class="descname">predicted</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELTotalField.predicted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the data predicted by a given parameter vector.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array (optional)</span></dt>
+<dd><p class="first last">The parameter vector with the estimated physical properties of the
+layer. If not given, will use the value calculated by <code class="docutils literal"><span class="pre">.fit()</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>result <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">The predicted data vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatiando.gravmag.eqlayer.PELTotalField.regul_param">
+<code class="descname">regul_param</code><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELTotalField.regul_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>The regularization parameter (scale factor) for the objetive function.</p>
+<p>Defaults to 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELTotalField.residuals">
+<code class="descname">residuals</code><span class="sig-paren">(</span><em>p=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELTotalField.residuals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the residuals vector (observed - predicted data).</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector used to calculate the residuals. If None, will
+use the current estimate stored in <code class="docutils literal"><span class="pre">estimate_</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>residuals <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or list of 1d-arrays</span></dt>
+<dd><p class="first last">The residual vector. If this is the sum of 1 or more Misfit
+instances, will return the residual vector from each of the summed
+misfits in the order of the sum.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELTotalField.set_weights">
+<code class="descname">set_weights</code><span class="sig-paren">(</span><em>weights</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELTotalField.set_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the data weights.</p>
+<p>Using weights for the data, the least-squares data-misfit function
+becomes:</p>
+<div class="math">
+\[\phi = \bar{r}^T \bar{\bar{W}}\bar{r}\]</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>weights <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or 2d-array or None</span></dt>
+<dd><p class="first last">Weights for the data vector.
+If None, will remove any weights that have been set before.
+If it is a 2d-array, it will be interpreted as the weight matrix
+<span class="math">\(\bar{\bar{W}}\)</span>.
+If it is a 1d-array, it will be interpreted as the diagonal of the
+weight matrix (all off-diagonal elements will default to zero).
+The weight matrix can be a sparse array from <code class="docutils literal"><span class="pre">scipy.sparse</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatiando.gravmag.eqlayer.PELTotalField.value">
+<code class="descname">value</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#fatiando.gravmag.eqlayer.PELTotalField.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the value of the misfit for a given parameter vector.</p>
+<p>The value is given by:</p>
+<div class="math">
+\[\phi(\bar{p}) = \bar{r}^T\bar{\bar{W}}\bar{r}\]</div>
+<p>where <span class="math">\(\bar{r}\)</span> is the residual vector and <span class="math">\(bar{\bar{W}}\)</span>
+are optional data weights.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">1d-array or None</span></dt>
+<dd><p class="first last">The parameter vector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>value <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">The value of the misfit function.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gravmag.eqlayer.ncoeffs">
+<code class="descclassname">fatiando.gravmag.eqlayer.</code><code class="descname">ncoeffs</code><span class="sig-paren">(</span><em>degree</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gravmag/eqlayer.html#ncoeffs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gravmag.eqlayer.ncoeffs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the number of coefficients in a bivarite polynomail.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>degree <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The degree of the polynomial</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>n <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The number of coefficients</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ncoeffs</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ncoeffs</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ncoeffs</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ncoeffs</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">15</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="../_sources/api/gravmag.eqlayer.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,1079 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fatiando.utils &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html"><img src="../../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../install.html">Installing</a></li>
+                <li><a href="../../docs.html">Documentation</a></li>
+                <li><a href="../../cookbook.html">Cookbook</a></li>
+                <li><a href="../../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for fatiando.utils</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Miscellaneous utility functions and classes.</span>
+
+<span class="sd">**Mathematical functions**</span>
+
+<span class="sd">* :func:`~fatiando.utils.normal`</span>
+<span class="sd">* :func:`~fatiando.utils.gaussian`</span>
+<span class="sd">* :func:`~fatiando.utils.gaussian2d`</span>
+<span class="sd">* :func:`~fatiando.utils.safe_solve`</span>
+<span class="sd">* :func:`~fatiando.utils.safe_dot`</span>
+<span class="sd">* :func:`~fatiando.utils.safe_diagonal`</span>
+<span class="sd">* :func:`~fatiando.utils.safe_inverse`</span>
+
+<span class="sd">**Point scatter generation**</span>
+
+<span class="sd">* :func:`~fatiando.utils.random_points`</span>
+<span class="sd">* :func:`~fatiando.utils.circular_points`</span>
+<span class="sd">* :func:`~fatiando.utils.connect_points`</span>
+
+<span class="sd">**Unit conversion**</span>
+
+<span class="sd">* :func:`~fatiando.utils.si2mgal`</span>
+<span class="sd">* :func:`~fatiando.utils.mgal2si`</span>
+<span class="sd">* :func:`~fatiando.utils.si2eotvos`</span>
+<span class="sd">* :func:`~fatiando.utils.eotvos2si`</span>
+<span class="sd">* :func:`~fatiando.utils.si2nt`</span>
+<span class="sd">* :func:`~fatiando.utils.nt2si`</span>
+
+<span class="sd">**Coordinate system conversions**</span>
+
+<span class="sd">* :func:`~fatiando.utils.sph2cart`</span>
+
+<span class="sd">**Others**</span>
+
+<span class="sd">* :func:`~fatiando.utils.fromimage`: Load a matrix from an image file</span>
+<span class="sd">* :func:`~fatiando.utils.contaminate`: Contaminate a vector with pseudo-random</span>
+<span class="sd">  Gaussian noise</span>
+<span class="sd">* :func:`~fatiando.utils.dircos`: Get the 3 coordinates of a unit vector</span>
+<span class="sd">* :func:`~fatiando.utils.ang2vec`: Convert intensity, inclination and</span>
+<span class="sd">  declination to a 3-component vector</span>
+<span class="sd">* :func:`~fatiando.utils.vecnorm`: Get the norm of a vector or list of vectors</span>
+<span class="sd">* :func:`~fatiando.utils.vecmean`: Take the mean array out of a list of arrays</span>
+<span class="sd">* :func:`~fatiando.utils.vecstd`: Take the standard deviation array out of a</span>
+<span class="sd">  list of arrays</span>
+<span class="sd">* :class:`~fatiando.utils.SparseList`: Store only non-zero elements on an</span>
+<span class="sd">  immutable list</span>
+<span class="sd">* :func:`~fatiando.utils.sec2hms`: Convert seconds to hours, minutes, and</span>
+<span class="sd">  seconds</span>
+<span class="sd">* :func:`~fatiando.utils.sec2year`: Convert seconds to Julian years</span>
+<span class="sd">* :func:`~fatiando.utils.year2sec`: Convert Julian years to seconds</span>
+
+<span class="sd">----</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse.linalg</span>
+<span class="kn">import</span> <span class="nn">scipy.misc</span>
+<span class="kn">import</span> <span class="nn">PIL.Image</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">constants</span><span class="p">,</span> <span class="n">gridder</span>
+
+
+<div class="viewcode-block" id="fromimage"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.fromimage">[docs]</a><span class="k">def</span> <span class="nf">fromimage</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">ranges</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load an array of normalized gray-scale values from an image file.</span>
+
+<span class="sd">    The values will be in the range [0, 1]. The shape of the array is the shape</span>
+<span class="sd">    of the image (ny, nx), i.e., number of pixels in vertical (height) and</span>
+<span class="sd">    horizontal (width) dimensions.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * fname : str</span>
+<span class="sd">        Name of the image file</span>
+<span class="sd">    * ranges : [vmax, vmin] = floats</span>
+<span class="sd">        If not ``None``, will set the gray-scale values to this range.</span>
+<span class="sd">    * shape : (ny, nx)</span>
+<span class="sd">        If not ``None``, will interpolate the array to match this new shape</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * values : 2d-array</span>
+<span class="sd">        The array of gray-scale values</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">fromimage</span><span class="p">(</span><span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fname</span><span class="p">),</span> <span class="n">flatten</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="c"># Invert the color scale and normalize</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">image</span><span class="p">)</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">image</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">ranges</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">ranges</span>
+        <span class="n">values</span> <span class="o">*=</span> <span class="n">vmax</span> <span class="o">-</span> <span class="n">vmin</span>
+        <span class="n">values</span> <span class="o">+=</span> <span class="n">vmin</span>
+    <span class="k">if</span> <span class="n">shape</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">nx</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="n">ny</span><span class="p">))</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">gridder</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">Y</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">values</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span>
+                                <span class="n">shape</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">values</span>
+
+</div>
+<div class="viewcode-block" id="safe_inverse"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.safe_inverse">[docs]</a><span class="k">def</span> <span class="nf">safe_inverse</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the inverse of a matrix using an apropriate algorithm.</span>
+
+<span class="sd">    Uses the standard :func:`numpy.linalg.inv` if *matrix* is dense.</span>
+<span class="sd">    If it is sparse (from :mod:`scipy.sparse`) then will use</span>
+<span class="sd">    :func:`scipy.sparse.linalg.inv`.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * matrix : 2d-array</span>
+<span class="sd">        The matrix</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * inverse : 2d-array</span>
+<span class="sd">        The inverse of *matrix*</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="safe_solve"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.safe_solve">[docs]</a><span class="k">def</span> <span class="nf">safe_solve</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">vector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solve a linear system using an apropriate algorithm.</span>
+
+<span class="sd">    Uses the standard :func:`numpy.linalg.solve` if both *matrix* and *vector*</span>
+<span class="sd">    are dense.</span>
+
+<span class="sd">    If any of the two is sparse (from :mod:`scipy.sparse`) then will use the</span>
+<span class="sd">    Conjugate Gradient Method (:func:`scipy.sparse.cgs`).</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * matrix : 2d-array</span>
+<span class="sd">        The matrix defining the linear system</span>
+<span class="sd">    * vector : 1d or 2d-array</span>
+<span class="sd">        The right-side vector of the system</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * solution : 1d or 2d-array</span>
+<span class="sd">        The solution of the linear system</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span> <span class="ow">or</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">vector</span><span class="p">):</span>
+        <span class="n">estimate</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cgs</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">vector</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">estimate</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;CGS exited with input error&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">vector</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="safe_dot"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.safe_dot">[docs]</a><span class="k">def</span> <span class="nf">safe_dot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make the dot product using the appropriate method.</span>
+
+<span class="sd">    If *a* and *b* are dense, will use :func:`numpy.dot`. If either is sparse</span>
+<span class="sd">    (from :mod:`scipy.sparse`) will use the multiplication operator (i.e., \*).</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * a, b : array or matrix</span>
+<span class="sd">        The vectors/matrices to take the dot product of.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * prod : array or matrix</span>
+<span class="sd">        The dot product of *a* and *b*</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="ow">or</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="safe_diagonal"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.safe_diagonal">[docs]</a><span class="k">def</span> <span class="nf">safe_diagonal</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the diagonal of a matrix using the appropriate method.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * matrix : 2d-array, matrix, sparse matrix</span>
+<span class="sd">        The matrix...</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * diag : 1d-array</span>
+<span class="sd">        A numpy array with the diagonal of the matrix</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">diagonal</span><span class="p">())</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">diagonal</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="vecnorm"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.vecnorm">[docs]</a><span class="k">def</span> <span class="nf">vecnorm</span><span class="p">(</span><span class="n">vectors</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the l2 norm of each vector in a list.</span>
+
+<span class="sd">    Use this to get, for example, the magnetization intensity from a list of</span>
+<span class="sd">    magnetization vectors.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * vectors : list of arrays</span>
+<span class="sd">        The vector</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * norms : list</span>
+<span class="sd">        The norms of the vectors</span>
+
+<span class="sd">    Examples::</span>
+
+<span class="sd">        &gt;&gt;&gt; v = [[1, 1, 1], [2, 2, 2], [3, 3, 3]]</span>
+<span class="sd">        &gt;&gt;&gt; print vecnorm(v)</span>
+<span class="sd">        [ 1.73205081  3.46410162  5.19615242]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">norm</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">i</span> <span class="o">**</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">numpy</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">vectors</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">norm</span>
+
+</div>
+<div class="viewcode-block" id="sph2cart"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.sph2cart">[docs]</a><span class="k">def</span> <span class="nf">sph2cart</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert spherical coordinates to Cartesian geocentric coordinates.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * lon, lat, height : floats</span>
+<span class="sd">        Spherical coordinates. lon and lat in degrees, height in meters. height</span>
+<span class="sd">        is the height above mean Earth radius.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * x, y, z : floats</span>
+<span class="sd">        Converted Cartesian coordinates</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">d2r</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>
+    <span class="n">radius</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">MEAN_EARTH_RADIUS</span> <span class="o">+</span> <span class="n">height</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">d2r</span> <span class="o">*</span> <span class="n">lat</span><span class="p">)</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">d2r</span> <span class="o">*</span> <span class="n">lon</span><span class="p">)</span> <span class="o">*</span> <span class="n">radius</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">d2r</span> <span class="o">*</span> <span class="n">lat</span><span class="p">)</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">d2r</span> <span class="o">*</span> <span class="n">lon</span><span class="p">)</span> <span class="o">*</span> <span class="n">radius</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">d2r</span> <span class="o">*</span> <span class="n">lat</span><span class="p">)</span> <span class="o">*</span> <span class="n">radius</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span>
+
+</div>
+<div class="viewcode-block" id="si2nt"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.si2nt">[docs]</a><span class="k">def</span> <span class="nf">si2nt</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a value from SI units to nanoTesla.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * value : number or array</span>
+<span class="sd">        The value in SI</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * value : number or array</span>
+<span class="sd">        The value in nanoTesla</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="o">*</span> <span class="n">constants</span><span class="o">.</span><span class="n">T2NT</span>
+
+</div>
+<div class="viewcode-block" id="nt2si"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.nt2si">[docs]</a><span class="k">def</span> <span class="nf">nt2si</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a value from nanoTesla to SI units.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * value : number or array</span>
+<span class="sd">        The value in nanoTesla</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * value : number or array</span>
+<span class="sd">        The value in SI</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="o">/</span> <span class="n">constants</span><span class="o">.</span><span class="n">T2NT</span>
+
+</div>
+<div class="viewcode-block" id="si2eotvos"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.si2eotvos">[docs]</a><span class="k">def</span> <span class="nf">si2eotvos</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a value from SI units to Eotvos.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * value : number or array</span>
+<span class="sd">        The value in SI</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * value : number or array</span>
+<span class="sd">        The value in Eotvos</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="o">*</span> <span class="n">constants</span><span class="o">.</span><span class="n">SI2EOTVOS</span>
+
+</div>
+<div class="viewcode-block" id="eotvos2si"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.eotvos2si">[docs]</a><span class="k">def</span> <span class="nf">eotvos2si</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a value from Eotvos to SI units.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * value : number or array</span>
+<span class="sd">        The value in Eotvos</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * value : number or array</span>
+<span class="sd">        The value in SI</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="o">/</span> <span class="n">constants</span><span class="o">.</span><span class="n">SI2EOTVOS</span>
+
+</div>
+<div class="viewcode-block" id="si2mgal"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.si2mgal">[docs]</a><span class="k">def</span> <span class="nf">si2mgal</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a value from SI units to mGal.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * value : number or array</span>
+<span class="sd">        The value in SI</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * value : number or array</span>
+<span class="sd">        The value in mGal</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="o">*</span> <span class="n">constants</span><span class="o">.</span><span class="n">SI2MGAL</span>
+
+</div>
+<div class="viewcode-block" id="mgal2si"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.mgal2si">[docs]</a><span class="k">def</span> <span class="nf">mgal2si</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a value from mGal to SI units.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * value : number or array</span>
+<span class="sd">        The value in mGal</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * value : number or array</span>
+<span class="sd">        The value in SI</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="o">/</span> <span class="n">constants</span><span class="o">.</span><span class="n">SI2MGAL</span>
+
+</div>
+<div class="viewcode-block" id="vec2ang"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.vec2ang">[docs]</a><span class="k">def</span> <span class="nf">vec2ang</span><span class="p">(</span><span class="n">vector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a 3-component vector to intensity, inclination and declination.</span>
+
+<span class="sd">    .. note:: Coordinate system is assumed to be x-&gt;North, y-&gt;East, z-&gt;Down.</span>
+<span class="sd">        Inclination is positive down and declination is measured with respect</span>
+<span class="sd">        to x (North).</span>
+
+<span class="sd">    Parameter:</span>
+
+<span class="sd">    * vector : array = [x, y, z]</span>
+<span class="sd">        The vector</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * [intensity, inclination, declination] : floats</span>
+<span class="sd">        The intensity, inclination and declination (in degrees)</span>
+
+<span class="sd">    Examples::</span>
+
+<span class="sd">        &gt;&gt;&gt; s = vec2ang([1.5, 1.5, 2.121320343559643])</span>
+<span class="sd">        &gt;&gt;&gt; print &quot;%.3f %.3f %.3f&quot; % tuple(s)</span>
+<span class="sd">        3.000 45.000 45.000</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">intensity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
+    <span class="n">r2d</span> <span class="o">=</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">vector</span>
+    <span class="n">declination</span> <span class="o">=</span> <span class="n">r2d</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="n">inclination</span> <span class="o">=</span> <span class="n">r2d</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="n">z</span> <span class="o">/</span> <span class="n">intensity</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">intensity</span><span class="p">,</span> <span class="n">inclination</span><span class="p">,</span> <span class="n">declination</span><span class="p">]</span>
+
+</div>
+<div class="viewcode-block" id="ang2vec"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.ang2vec">[docs]</a><span class="k">def</span> <span class="nf">ang2vec</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert intensity, inclination and  declination to a 3-component vector</span>
+
+<span class="sd">    .. note:: Coordinate system is assumed to be x-&gt;North, y-&gt;East, z-&gt;Down.</span>
+<span class="sd">        Inclination is positive down and declination is measured with respect</span>
+<span class="sd">        to x (North).</span>
+
+<span class="sd">    Parameter:</span>
+
+<span class="sd">    * intensity : float or array</span>
+<span class="sd">        The intensity (norm) of the vector</span>
+<span class="sd">    * inc : float</span>
+<span class="sd">        The inclination of the vector (in degrees)</span>
+<span class="sd">    * dec : float</span>
+<span class="sd">        The declination of the vector (in degrees)</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * vec : array = [x, y, z]</span>
+<span class="sd">        The vector</span>
+
+<span class="sd">    Examples::</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy</span>
+<span class="sd">        &gt;&gt;&gt; print ang2vec(3, 45, 45)</span>
+<span class="sd">        [ 1.5         1.5         2.12132034]</span>
+<span class="sd">        &gt;&gt;&gt; print ang2vec(numpy.arange(4), 45, 45)</span>
+<span class="sd">        [[ 0.          0.          0.        ]</span>
+<span class="sd">         [ 0.5         0.5         0.70710678]</span>
+<span class="sd">         [ 1.          1.          1.41421356]</span>
+<span class="sd">         [ 1.5         1.5         2.12132034]]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">transpose</span><span class="p">([</span><span class="n">intensity</span> <span class="o">*</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">dircos</span><span class="p">(</span><span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">)])</span>
+
+</div>
+<div class="viewcode-block" id="dircos"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.dircos">[docs]</a><span class="k">def</span> <span class="nf">dircos</span><span class="p">(</span><span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the 3 coordinates of a unit vector given its inclination and</span>
+<span class="sd">    declination.</span>
+
+<span class="sd">    .. note:: Coordinate system is assumed to be x-&gt;North, y-&gt;East, z-&gt;Down.</span>
+<span class="sd">        Inclination is positive down and declination is measured with respect</span>
+<span class="sd">        to x (North).</span>
+
+<span class="sd">    Parameter:</span>
+
+<span class="sd">    * inc : float</span>
+<span class="sd">        The inclination of the vector (in degrees)</span>
+<span class="sd">    * dec : float</span>
+<span class="sd">        The declination of the vector (in degrees)</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * vect : list = [x, y, z]</span>
+<span class="sd">        The unit vector</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">d2r</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.</span>
+    <span class="n">vect</span> <span class="o">=</span> <span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">d2r</span> <span class="o">*</span> <span class="n">inc</span><span class="p">)</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">d2r</span> <span class="o">*</span> <span class="n">dec</span><span class="p">),</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">d2r</span> <span class="o">*</span> <span class="n">inc</span><span class="p">)</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">d2r</span> <span class="o">*</span> <span class="n">dec</span><span class="p">),</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">d2r</span> <span class="o">*</span> <span class="n">inc</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">vect</span>
+
+</div>
+<div class="viewcode-block" id="vecmean"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.vecmean">[docs]</a><span class="k">def</span> <span class="nf">vecmean</span><span class="p">(</span><span class="n">arrays</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Take the mean array out of a list of arrays.</span>
+
+<span class="sd">    Parameter:</span>
+
+<span class="sd">    * arrays : list</span>
+<span class="sd">        List of arrays</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * mean : array</span>
+<span class="sd">        The mean of each element in the arrays</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        &gt;&gt;&gt; print vecmean([[1, 1, 2], [2, 3, 5]])</span>
+<span class="sd">        [ 1.5  2.   3.5]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="vecstd"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.vecstd">[docs]</a><span class="k">def</span> <span class="nf">vecstd</span><span class="p">(</span><span class="n">arrays</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Take the standard deviation array out of a list of arrays.</span>
+
+<span class="sd">    Parameter:</span>
+
+<span class="sd">    * arrays : list</span>
+<span class="sd">        List of arrays</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * std : array</span>
+<span class="sd">        Standard deviation of each element in the arrays</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        &gt;&gt;&gt; print vecstd([[1, 1, 2], [2, 3, 5]])</span>
+<span class="sd">        [ 0.5  1.   1.5]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="SparseList"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.SparseList">[docs]</a><span class="k">class</span> <span class="nc">SparseList</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Store only non-zero elements on an immutable list.</span>
+
+<span class="sd">    Can iterate over and access elements just like if it were a list.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * size : int</span>
+<span class="sd">        Size of the list.</span>
+<span class="sd">    * elements : dict</span>
+<span class="sd">        Dictionary used to initialize the list. Keys are the index of the</span>
+<span class="sd">        elements and values are their respective values.</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        &gt;&gt;&gt; l = SparseList(5)</span>
+<span class="sd">        &gt;&gt;&gt; l[3] = 42.0</span>
+<span class="sd">        &gt;&gt;&gt; print len(l)</span>
+<span class="sd">        5</span>
+<span class="sd">        &gt;&gt;&gt; print l[1], l[3]</span>
+<span class="sd">        0.0 42.0</span>
+<span class="sd">        &gt;&gt;&gt; l[1] += 3.0</span>
+<span class="sd">        &gt;&gt;&gt; for i in l:</span>
+<span class="sd">        ...     print i,</span>
+<span class="sd">        0.0 3.0 0.0 42.0 0.0</span>
+<span class="sd">        &gt;&gt;&gt; l2 = SparseList(4, elements={1:3.2, 3:2.8})</span>
+<span class="sd">        &gt;&gt;&gt; for i in l2:</span>
+<span class="sd">        ...     print i,</span>
+<span class="sd">        0.0 3.2 0.0 2.8</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">elements</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">elements</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elements</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elements</span> <span class="o">=</span> <span class="n">elements</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="n">index</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="ow">or</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s">&#39;index out of range&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s">&#39;index out of range&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span><span class="p">()</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="sec2hms"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.sec2hms">[docs]</a><span class="k">def</span> <span class="nf">sec2hms</span><span class="p">(</span><span class="n">seconds</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert seconds into a string with hours, minutes and seconds.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * seconds : float</span>
+<span class="sd">        Time in seconds</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * time : str</span>
+<span class="sd">        String in the format ``&#39;%dh %dm %2.5fs&#39;``</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        &gt;&gt;&gt; print sec2hms(62.2)</span>
+<span class="sd">        0h 1m 2.20000s</span>
+<span class="sd">        &gt;&gt;&gt; print sec2hms(3862.12345678)</span>
+<span class="sd">        1h 4m 22.12346s</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">seconds</span> <span class="o">/</span> <span class="mi">3600</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">seconds</span> <span class="o">-</span> <span class="n">h</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">seconds</span> <span class="o">-</span> <span class="n">h</span> <span class="o">*</span> <span class="mi">3600</span> <span class="o">-</span> <span class="n">m</span> <span class="o">*</span> <span class="mi">60</span>
+    <span class="k">return</span> <span class="s">&#39;</span><span class="si">%d</span><span class="s">h </span><span class="si">%d</span><span class="s">m </span><span class="si">%2.5f</span><span class="s">s&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="sec2year"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.sec2year">[docs]</a><span class="k">def</span> <span class="nf">sec2year</span><span class="p">(</span><span class="n">seconds</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert seconds into decimal Julian years.</span>
+
+<span class="sd">    Julian years have 365.25 days.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * seconds : float</span>
+<span class="sd">        Time in seconds</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * years : float</span>
+<span class="sd">        Time in years</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        &gt;&gt;&gt; print sec2year(31557600)</span>
+<span class="sd">        1.0</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span> <span class="o">/</span> <span class="mf">31557600.0</span>
+
+</div>
+<div class="viewcode-block" id="year2sec"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.year2sec">[docs]</a><span class="k">def</span> <span class="nf">year2sec</span><span class="p">(</span><span class="n">years</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert decimal Julian years into seconds.</span>
+
+<span class="sd">    Julian years have 365.25 days.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * years : float</span>
+<span class="sd">        Time in years</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * seconds : float</span>
+<span class="sd">        Time in seconds</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        &gt;&gt;&gt; print year2sec(1)</span>
+<span class="sd">        31557600.0</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mf">31557600.0</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">years</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="contaminate"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.contaminate">[docs]</a><span class="k">def</span> <span class="nf">contaminate</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">stddev</span><span class="p">,</span> <span class="n">percent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">return_stddev</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Add pseudorandom gaussian noise to an array.</span>
+
+<span class="sd">    Noise added is normally distributed with zero mean.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * data : array or list of arrays</span>
+<span class="sd">        Data to contaminate</span>
+<span class="sd">    * stddev : float or list of floats</span>
+<span class="sd">        Standard deviation of the Gaussian noise that will be added to *data*</span>
+<span class="sd">    * percent : True or False</span>
+<span class="sd">        If ``True``, will consider *stddev* as a decimal percentage and the</span>
+<span class="sd">        standard deviation of the Gaussian noise will be this percentage of</span>
+<span class="sd">        the maximum absolute value of *data*</span>
+<span class="sd">    * return_stddev : True or False</span>
+<span class="sd">        If ``True``, will return also the standard deviation used to</span>
+<span class="sd">        contaminate *data*</span>
+<span class="sd">    * seed : None or int</span>
+<span class="sd">        Seed used to generate the pseudo-random numbers. If `None`, will use a</span>
+<span class="sd">        different seed every time. Use the same seed to generate the same</span>
+<span class="sd">        random sequence to contaminate the data.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    if *return_stddev* is ``False``:</span>
+
+<span class="sd">    * contam : array or list of arrays</span>
+<span class="sd">        The contaminated data array</span>
+
+<span class="sd">    else:</span>
+
+<span class="sd">    * results : list = [contam, stddev]</span>
+<span class="sd">        The contaminated data array and the standard deviation used to</span>
+<span class="sd">        contaminate it.</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; data = np.ones(5)</span>
+<span class="sd">    &gt;&gt;&gt; noisy = contaminate(data, 0.1, seed=0)</span>
+<span class="sd">    &gt;&gt;&gt; print noisy</span>
+<span class="sd">    [ 1.03137726  0.89498775  0.95284582  1.07906135  1.04172782]</span>
+<span class="sd">    &gt;&gt;&gt; noisy, std = contaminate(data, 0.05, seed=0, percent=True,</span>
+<span class="sd">    ...                          return_stddev=True)</span>
+<span class="sd">    &gt;&gt;&gt; print std</span>
+<span class="sd">    0.05</span>
+<span class="sd">    &gt;&gt;&gt; print noisy</span>
+<span class="sd">    [ 1.01568863  0.94749387  0.97642291  1.03953067  1.02086391]</span>
+<span class="sd">    &gt;&gt;&gt; data = [np.zeros(5), np.ones(3)]</span>
+<span class="sd">    &gt;&gt;&gt; noisy = contaminate(data, [0.1, 0.2], seed=0)</span>
+<span class="sd">    &gt;&gt;&gt; print noisy[0]</span>
+<span class="sd">    [ 0.03137726 -0.10501225 -0.04715418  0.07906135  0.04172782]</span>
+<span class="sd">    &gt;&gt;&gt; print noisy[1]</span>
+<span class="sd">    [ 0.81644754  1.20192079  0.98163167]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="c"># Check if dealing with an array or list of arrays</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stddev</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">stddev</span> <span class="o">=</span> <span class="p">[</span><span class="n">stddev</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span>
+    <span class="n">contam</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stddev</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">stddev</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.</span><span class="p">:</span>
+            <span class="n">contam</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">percent</span><span class="p">:</span>
+            <span class="n">stddev</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">stddev</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+        <span class="n">noise</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="n">stddev</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+        <span class="c"># Subtract the mean so that the noise doesn&#39;t introduce a systematic</span>
+        <span class="c"># shift in the data</span>
+        <span class="n">noise</span> <span class="o">-=</span> <span class="n">noise</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">contam</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="n">noise</span><span class="p">)</span>
+    <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">contam</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">contam</span> <span class="o">=</span> <span class="n">contam</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">stddev</span> <span class="o">=</span> <span class="n">stddev</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">return_stddev</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">contam</span><span class="p">,</span> <span class="n">stddev</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">contam</span>
+
+</div>
+<div class="viewcode-block" id="normal"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.normal">[docs]</a><span class="k">def</span> <span class="nf">normal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Normal distribution.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        N(x,\\bar{x},\sigma) = \\frac{1}{\sigma\sqrt{2 \pi}}</span>
+<span class="sd">        \exp\\left(-\\frac{(x-\\bar{x})^2}{\sigma^2}\\right)</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * x : float or array</span>
+<span class="sd">        Value at which to calculate the normal distribution</span>
+<span class="sd">    * mean : float</span>
+<span class="sd">        The mean of the distribution :math:`\\bar{x}`</span>
+<span class="sd">    * std : float</span>
+<span class="sd">        The standard deviation of the distribution :math:`\sigma`</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * normal : array</span>
+<span class="sd">        Normal distribution evaluated at *x*</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">factor</span> <span class="o">=</span> <span class="p">(</span><span class="n">std</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="p">((</span><span class="n">mean</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="n">std</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">factor</span>
+
+</div>
+<div class="viewcode-block" id="gaussian"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.gaussian">[docs]</a><span class="k">def</span> <span class="nf">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Non-normalized Gaussian function</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        G(x,\\bar{x},\sigma) = \exp\\left(-\\frac{(x-\\bar{x})^2}{\sigma^2}</span>
+<span class="sd">        \\right)</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * x : float or array</span>
+<span class="sd">        Values at which to calculate the Gaussian function</span>
+<span class="sd">    * mean : float</span>
+<span class="sd">        The mean of the distribution :math:`\\bar{x}`</span>
+<span class="sd">    * std : float</span>
+<span class="sd">        The standard deviation of the distribution :math:`\sigma`</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * gauss : array</span>
+<span class="sd">        Gaussian function evaluated at *x*</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="p">((</span><span class="n">mean</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="n">std</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="gaussian2d"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.gaussian2d">[docs]</a><span class="k">def</span> <span class="nf">gaussian2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sigma_x</span><span class="p">,</span> <span class="n">sigma_y</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Non-normalized 2D Gaussian function</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * x, y : float or arrays</span>
+<span class="sd">        Coordinates at which to calculate the Gaussian function</span>
+<span class="sd">    * sigma_x, sigma_y : float</span>
+<span class="sd">        Standard deviation in the x and y directions</span>
+<span class="sd">    * x0, y0 : float</span>
+<span class="sd">        Coordinates of the center of the distribution</span>
+<span class="sd">    * angle : float</span>
+<span class="sd">        Rotation angle of the gaussian measure from the x axis (north) growing</span>
+<span class="sd">        positive to the east (positive y axis)</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * gauss : array</span>
+<span class="sd">        Gaussian function evaluated at *x*, *y*</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">angle</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.</span>
+    <span class="n">tmpx</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">sigma_x</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">tmpy</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">sigma_y</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">sintheta</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">costheta</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">tmpx</span> <span class="o">*</span> <span class="n">costheta</span> <span class="o">+</span> <span class="n">tmpy</span> <span class="o">*</span> <span class="n">sintheta</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">tmpy</span> <span class="o">-</span> <span class="n">tmpx</span><span class="p">)</span> <span class="o">*</span> <span class="n">costheta</span> <span class="o">*</span> <span class="n">sintheta</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">tmpx</span> <span class="o">*</span> <span class="n">sintheta</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">tmpy</span> <span class="o">*</span> <span class="n">costheta</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">xhat</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">x0</span>
+    <span class="n">yhat</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">y0</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">xhat</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">b</span> <span class="o">*</span> <span class="n">xhat</span> <span class="o">*</span> <span class="n">yhat</span> <span class="o">+</span> <span class="n">c</span> <span class="o">*</span> <span class="n">yhat</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+
+</div>
+<div class="viewcode-block" id="random_points"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.random_points">[docs]</a><span class="k">def</span> <span class="nf">random_points</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a set of n random points.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * area : list = [x1, x2, y1, y2]</span>
+<span class="sd">        Area inside of which the points are contained</span>
+<span class="sd">    * n : int</span>
+<span class="sd">        Number of points</span>
+<span class="sd">    * seed : None or int</span>
+<span class="sd">        Seed used to generate the pseudo-random numbers. If `None`, will use a</span>
+<span class="sd">        different seed every time. Use the same seed to generate the same</span>
+<span class="sd">        random sequence.</span>
+
+<span class="sd">    Result:</span>
+
+<span class="sd">    * points : list</span>
+<span class="sd">        List of (x, y) coordinates of the points</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">area</span>
+    <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">ys</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+</div>
+<div class="viewcode-block" id="circular_points"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.circular_points">[docs]</a><span class="k">def</span> <span class="nf">circular_points</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">random</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a set of n points positioned in a circular array.</span>
+
+<span class="sd">    The diameter of the circle is equal to the smallest dimension of the area</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * area : list = [x1, x2, y1, y2]</span>
+<span class="sd">        Area inside of which the points are contained</span>
+<span class="sd">    * n : int</span>
+<span class="sd">        Number of points</span>
+<span class="sd">    * random : True or False</span>
+<span class="sd">        If True, positions of the points on the circle will be chosen at random</span>
+<span class="sd">    * seed : None or int</span>
+<span class="sd">        Seed used to generate the pseudo-random numbers if `random==True`.</span>
+<span class="sd">        If `None`, will use a different seed every time.</span>
+<span class="sd">        Use the same seed to generate the same random sequence.</span>
+
+<span class="sd">    Result:</span>
+
+<span class="sd">    * points : list</span>
+<span class="sd">        List of (x, y) coordinates of the points</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">area</span>
+    <span class="n">radius</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="nb">min</span><span class="p">(</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">random</span><span class="p">:</span>
+        <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">da</span> <span class="o">=</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">da</span><span class="p">)</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x1</span> <span class="o">+</span> <span class="n">x2</span><span class="p">)</span> <span class="o">+</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span>
+    <span class="n">ys</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">y1</span> <span class="o">+</span> <span class="n">y2</span><span class="p">)</span> <span class="o">+</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+</div>
+<div class="viewcode-block" id="connect_points"><a class="viewcode-back" href="../../api/utils.html#fatiando.utils.connect_points">[docs]</a><span class="k">def</span> <span class="nf">connect_points</span><span class="p">(</span><span class="n">pts1</span><span class="p">,</span> <span class="n">pts2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Connects each point in the first list with all points in the second.</span>
+<span class="sd">    If the first list has N points and the second has M, the result are 2 lists</span>
+<span class="sd">    with N*M points each, representing the connections.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * pts1 : list</span>
+<span class="sd">        List of (x, y) coordinates of the points.</span>
+<span class="sd">    * pts2 : list</span>
+<span class="sd">        List of (x, y) coordinates of the points.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * results : lists of lists = [connect1, connect2]</span>
+<span class="sd">        2 lists with the connected points</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">connect1</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">append1</span> <span class="o">=</span> <span class="n">connect1</span><span class="o">.</span><span class="n">append</span>
+    <span class="n">connect2</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">append2</span> <span class="o">=</span> <span class="n">connect2</span><span class="o">.</span><span class="n">append</span>
+    <span class="k">for</span> <span class="n">p1</span> <span class="ow">in</span> <span class="n">pts1</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">p2</span> <span class="ow">in</span> <span class="n">pts2</span><span class="p">:</span>
+            <span class="n">append1</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
+            <span class="n">append2</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">connect1</span><span class="p">,</span> <span class="n">connect2</span><span class="p">]</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

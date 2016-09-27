@@ -1,0 +1,654 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Gridding (fatiando.gridder) &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../index.html" />
+    <link rel="up" title="The fatiando package" href="fatiando.html" />
+    <link rel="next" title="Visualization (fatiando.vis)" href="vis.html" />
+    <link rel="prev" title="Meshing (fatiando.mesher)" href="mesher.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../install.html">Installing</a></li>
+                <li><a href="../docs.html">Documentation</a></li>
+                <li><a href="../cookbook.html">Cookbook</a></li>
+                <li><a href="../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="module-fatiando.gridder">
+<span id="gridding-fatiando-gridder"></span><span id="fatiando-gridder"></span><h1>Gridding (<code class="docutils literal"><span class="pre">fatiando.gridder</span></code>)<a class="headerlink" href="#module-fatiando.gridder" title="Permalink to this headline">¶</a></h1>
+<p>Create and operate on grids and profiles.</p>
+<p><strong>Grid generation</strong></p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.gridder.regular" title="fatiando.gridder.regular"><code class="xref py py-func docutils literal"><span class="pre">regular</span></code></a></li>
+<li><a class="reference internal" href="#fatiando.gridder.scatter" title="fatiando.gridder.scatter"><code class="xref py py-func docutils literal"><span class="pre">scatter</span></code></a></li>
+</ul>
+<p><strong>Grid operations</strong></p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.gridder.cut" title="fatiando.gridder.cut"><code class="xref py py-func docutils literal"><span class="pre">cut</span></code></a></li>
+<li><a class="reference internal" href="#fatiando.gridder.profile" title="fatiando.gridder.profile"><code class="xref py py-func docutils literal"><span class="pre">profile</span></code></a></li>
+</ul>
+<p><strong>Interpolation</strong></p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.gridder.interp" title="fatiando.gridder.interp"><code class="xref py py-func docutils literal"><span class="pre">interp</span></code></a></li>
+<li><a class="reference internal" href="#fatiando.gridder.interp_at" title="fatiando.gridder.interp_at"><code class="xref py py-func docutils literal"><span class="pre">interp_at</span></code></a></li>
+<li><a class="reference internal" href="#fatiando.gridder.extrapolate_nans" title="fatiando.gridder.extrapolate_nans"><code class="xref py py-func docutils literal"><span class="pre">extrapolate_nans</span></code></a></li>
+</ul>
+<p><strong>Input/Output</strong></p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.gridder.load_surfer" title="fatiando.gridder.load_surfer"><code class="xref py py-func docutils literal"><span class="pre">load_surfer</span></code></a>: Read a Surfer grid file and return
+three 1d numpy arrays and the grid shape</li>
+</ul>
+<p><strong>Misc</strong></p>
+<ul class="simple">
+<li><a class="reference internal" href="#fatiando.gridder.spacing" title="fatiando.gridder.spacing"><code class="xref py py-func docutils literal"><span class="pre">spacing</span></code></a></li>
+</ul>
+<hr class="docutils" />
+<dl class="function">
+<dt id="fatiando.gridder.cut">
+<code class="descclassname">fatiando.gridder.</code><code class="descname">cut</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>scalars</em>, <em>area</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gridder.html#cut"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gridder.cut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a subsection of a grid.</p>
+<p>The returned subsection is not a copy! In technical terms, returns a slice
+of the numpy arrays. So changes made to the subsection reflect on the
+original grid. Use numpy.copy to make copies of the subsections and avoid
+this.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, y</dt>
+<dd><p class="first last">Arrays with the x and y coordinates of the data points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>scalars</dt>
+<dd><p class="first last">List of arrays with the scalar values assigned to the grid points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>area</dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">(x1,</span> <span class="pre">x2,</span> <span class="pre">y1,</span> <span class="pre">y2)</span></code>: Borders of the subsection</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">[subx,</span> <span class="pre">suby,</span> <span class="pre">subscalars]</span></code></dt>
+<dd><p class="first last">Arrays with x and y coordinates and scalar values of the subsection.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gridder.extrapolate_nans">
+<code class="descclassname">fatiando.gridder.</code><code class="descname">extrapolate_nans</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>v</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gridder.html#extrapolate_nans"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gridder.extrapolate_nans" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#8221;
+Extrapolate the NaNs or masked values in a grid INPLACE using nearest
+value.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Replaces the NaN or masked values of the original array!</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, y <span class="classifier-delimiter">:</span> <span class="classifier">1D arrays</span></dt>
+<dd><p class="first last">Arrays with the x and y coordinates of the data points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>v <span class="classifier-delimiter">:</span> <span class="classifier">1D array</span></dt>
+<dd><p class="first last">Array with the scalar value assigned to the data points.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>v <span class="classifier-delimiter">:</span> <span class="classifier">1D array</span></dt>
+<dd><p class="first last">The array with NaNs or masked values extrapolated.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gridder.interp">
+<code class="descclassname">fatiando.gridder.</code><code class="descname">interp</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>v</em>, <em>shape</em>, <em>area=None</em>, <em>algorithm='cubic'</em>, <em>extrapolate=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gridder.html#interp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gridder.interp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpolate data onto a regular grid.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, y <span class="classifier-delimiter">:</span> <span class="classifier">1D arrays</span></dt>
+<dd><p class="first last">Arrays with the x and y coordinates of the data points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>v <span class="classifier-delimiter">:</span> <span class="classifier">1D array</span></dt>
+<dd><p class="first last">Array with the scalar value assigned to the data points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>shape <span class="classifier-delimiter">:</span> <span class="classifier">tuple = (nx, ny)</span></dt>
+<dd><p class="first last">Shape of the interpolated regular grid, ie (nx, ny).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>area <span class="classifier-delimiter">:</span> <span class="classifier">tuple = (x1, x2, y1, y2)</span></dt>
+<dd><p class="first last">The are where the data will be interpolated. If None, then will get the
+area from <em>x</em> and <em>y</em>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>algorithm <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">Interpolation algorithm. Either <code class="docutils literal"><span class="pre">'cubic'</span></code>, <code class="docutils literal"><span class="pre">'nearest'</span></code>,
+<code class="docutils literal"><span class="pre">'linear'</span></code> (see scipy.interpolate.griddata).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>extrapolate <span class="classifier-delimiter">:</span> <span class="classifier">True or False</span></dt>
+<dd><p class="first last">If True, will extrapolate values outside of the convex hull of the data
+points.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">v]</span></code></dt>
+<dd><p class="first last">Three 1D arrays with the interpolated x, y, and v</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gridder.interp_at">
+<code class="descclassname">fatiando.gridder.</code><code class="descname">interp_at</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>v</em>, <em>xp</em>, <em>yp</em>, <em>algorithm='cubic'</em>, <em>extrapolate=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gridder.html#interp_at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gridder.interp_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpolate data onto the specified points.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, y <span class="classifier-delimiter">:</span> <span class="classifier">1D arrays</span></dt>
+<dd><p class="first last">Arrays with the x and y coordinates of the data points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>v <span class="classifier-delimiter">:</span> <span class="classifier">1D array</span></dt>
+<dd><p class="first last">Array with the scalar value assigned to the data points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>xp, yp <span class="classifier-delimiter">:</span> <span class="classifier">1D arrays</span></dt>
+<dd><p class="first last">Points where the data values will be interpolated</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>algorithm <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">Interpolation algorithm. Either <code class="docutils literal"><span class="pre">'cubic'</span></code>, <code class="docutils literal"><span class="pre">'nearest'</span></code>,
+<code class="docutils literal"><span class="pre">'linear'</span></code> (see scipy.interpolate.griddata)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>extrapolate <span class="classifier-delimiter">:</span> <span class="classifier">True or False</span></dt>
+<dd><p class="first last">If True, will extrapolate values outside of the convex hull of the data
+points.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>v <span class="classifier-delimiter">:</span> <span class="classifier">1D array</span></dt>
+<dd><p class="first last">1D array with the interpolated v values.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gridder.load_surfer">
+<code class="descclassname">fatiando.gridder.</code><code class="descname">load_surfer</code><span class="sig-paren">(</span><em>fname</em>, <em>fmt='ascii'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gridder.html#load_surfer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gridder.load_surfer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a Surfer grid file and return three 1d numpy arrays and the grid shape</p>
+<p>Surfer is a contouring, gridding and surface mapping software
+from GoldenSoftware. The names and logos for Surfer and Golden
+Software are registered trademarks of Golden Software, Inc.</p>
+<p><a class="reference external" href="http://www.goldensoftware.com/products/surfer">http://www.goldensoftware.com/products/surfer</a></p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>fname <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">Name of the Surfer grid file</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>fmt <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">File type, can be &#8216;ascii&#8217; or &#8216;binary&#8217;</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">Value of the North-South coordinate of each grid point.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>y <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">Value of the East-West coordinate of each grid point.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">1d-array</span></dt>
+<dd><p class="first last">Values of the field in each grid point. Field can be for example
+topography, gravity anomaly etc</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>shape <span class="classifier-delimiter">:</span> <span class="classifier">tuple = (nx, ny)</span></dt>
+<dd><p class="first last">The number of points in the x and y grid dimensions, respectively</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gridder.profile">
+<code class="descclassname">fatiando.gridder.</code><code class="descname">profile</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>v</em>, <em>point1</em>, <em>point2</em>, <em>size</em>, <em>extrapolate=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gridder.html#profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gridder.profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract a data profile between 2 points.</p>
+<p>Uses interpolation to calculate the data values at the profile points.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>x, y <span class="classifier-delimiter">:</span> <span class="classifier">1D arrays</span></dt>
+<dd><p class="first last">Arrays with the x and y coordinates of the data points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>v <span class="classifier-delimiter">:</span> <span class="classifier">1D array</span></dt>
+<dd><p class="first last">Array with the scalar value assigned to the data points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>point1, point2 <span class="classifier-delimiter">:</span> <span class="classifier">lists = [x, y]</span></dt>
+<dd><p class="first last">Lists the x, y coordinates of the 2 points between which the profile
+will be extracted.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>size <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of points along the profile.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>extrapolate <span class="classifier-delimiter">:</span> <span class="classifier">True or False</span></dt>
+<dd><p class="first last">If True, will extrapolate values outside of the convex hull of the data
+points.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>[xp, yp, distances, vp] <span class="classifier-delimiter">:</span> <span class="classifier">1d arrays</span></dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">xp</span></code> and <code class="docutils literal"><span class="pre">yp</span></code> are the x, y coordinates of the points along the
+profile.
+<code class="docutils literal"><span class="pre">distances</span></code> are the distances of the profile points to <code class="docutils literal"><span class="pre">point1</span></code>
+<code class="docutils literal"><span class="pre">vp</span></code> are the data points along the profile.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gridder.regular">
+<code class="descclassname">fatiando.gridder.</code><code class="descname">regular</code><span class="sig-paren">(</span><em>area</em>, <em>shape</em>, <em>z=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gridder.html#regular"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gridder.regular" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a regular grid.</p>
+<p>The x directions is North-South and y East-West. Imagine the grid as a
+matrix with x varying in the lines and y in columns.</p>
+<p>Returned arrays will be flattened to 1D with <code class="docutils literal"><span class="pre">numpy.ravel</span></code>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">As of version 0.4, the <code class="docutils literal"><span class="pre">shape</span></code> argument was corrected to be
+<code class="docutils literal"><span class="pre">shape</span> <span class="pre">=</span> <span class="pre">(nx,</span> <span class="pre">ny)</span></code> instead of <code class="docutils literal"><span class="pre">shape</span> <span class="pre">=</span> <span class="pre">(ny,</span> <span class="pre">nx)</span></code>.</p>
+</div>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>area</dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">(x1,</span> <span class="pre">x2,</span> <span class="pre">y1,</span> <span class="pre">y2)</span></code>: Borders of the grid</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>shape</dt>
+<dd><p class="first last">Shape of the regular grid, ie <code class="docutils literal"><span class="pre">(nx,</span> <span class="pre">ny)</span></code>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>z</dt>
+<dd><p class="first last">Optional. z coordinate of the grid points. If given, will return an
+array with the value <em>z</em>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">[x,</span> <span class="pre">y]</span></code></dt>
+<dd><p class="first last">Numpy arrays with the x and y coordinates of the grid points</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">z]</span></code></dt>
+<dd><p class="first last">If <em>z</em> given. Numpy arrays with the x, y, and z coordinates of the grid
+points</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">regular</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">array([  0. ,   0. ,   0. ,   2.5,   2.5,   2.5,   5. ,   5. ,   5. ,</span>
+<span class="go">         7.5,   7.5,   7.5,  10. ,  10. ,  10. ])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="go">array([[  0. ,   0. ,   0. ],</span>
+<span class="go">       [  2.5,   2.5,   2.5],</span>
+<span class="go">       [  5. ,   5. ,   5. ],</span>
+<span class="go">       [  7.5,   7.5,   7.5],</span>
+<span class="go">       [ 10. ,  10. ,  10. ]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="go">array([[ 0. ,  2.5,  5. ],</span>
+<span class="go">       [ 0. ,  2.5,  5. ],</span>
+<span class="go">       [ 0. ,  2.5,  5. ],</span>
+<span class="go">       [ 0. ,  2.5,  5. ],</span>
+<span class="go">       [ 0. ,  2.5,  5. ]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">regular</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="go">array([[ 0.,  0.,  0.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="go">array([[ 0. ,  2.5,  5. ]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">regular</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">z</span><span class="o">=-</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="go">array([[-10., -10., -10.],</span>
+<span class="go">       [-10., -10., -10.],</span>
+<span class="go">       [-10., -10., -10.],</span>
+<span class="go">       [-10., -10., -10.],</span>
+<span class="go">       [-10., -10., -10.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gridder.scatter">
+<code class="descclassname">fatiando.gridder.</code><code class="descname">scatter</code><span class="sig-paren">(</span><em>area</em>, <em>n</em>, <em>z=None</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gridder.html#scatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gridder.scatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an irregular grid with a random scattering of points.</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>area</dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">(x1,</span> <span class="pre">x2,</span> <span class="pre">y1,</span> <span class="pre">y2)</span></code>: Borders of the grid</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>n</dt>
+<dd><p class="first last">Number of points</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>z</dt>
+<dd><p class="first last">Optional. z coordinate of the points. If given, will return an
+array with the value <em>z</em>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>seed <span class="classifier-delimiter">:</span> <span class="classifier">None or int</span></dt>
+<dd><p class="first last">Seed used to generate the pseudo-random numbers. If <cite>None</cite>, will use a
+different seed every time. Use the same seed to generate the same
+random points.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">[x,</span> <span class="pre">y]</span></code></dt>
+<dd><p class="first last">Numpy arrays with the x and y coordinates of the points</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">z]</span></code></dt>
+<dd><p class="first last">If <em>z</em> given. Arrays with the x, y, and z coordinates of the points</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">scatter</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">4</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">array([ 5.48813504,  7.15189366,  6.02763376,  5.44883183])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span>
+<span class="go">array([ 0.8473096 ,  1.29178823,  0.87517442,  1.783546  ])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="fatiando.gridder.spacing">
+<code class="descclassname">fatiando.gridder.</code><code class="descname">spacing</code><span class="sig-paren">(</span><em>area</em>, <em>shape</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatiando/gridder.html#spacing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatiando.gridder.spacing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the spacing between grid nodes</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>area</dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">(x1,</span> <span class="pre">x2,</span> <span class="pre">y1,</span> <span class="pre">y2)</span></code>: Borders of the grid</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>shape</dt>
+<dd><p class="first last">Shape of the regular grid, ie <code class="docutils literal"><span class="pre">(nx,</span> <span class="pre">ny)</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">[dx,</span> <span class="pre">dy]</span></code></dt>
+<dd><p class="first last">Spacing the y and x directions</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">spacing</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">11</span><span class="p">))</span>
+<span class="go">[1.0, 2.0]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spacing</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">21</span><span class="p">))</span>
+<span class="go">[1.0, 1.0]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spacing</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">21</span><span class="p">))</span>
+<span class="go">[2.5, 1.0]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spacing</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="mi">21</span><span class="p">))</span>
+<span class="go">[0.5, 1.0]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="../_sources/api/gridder.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

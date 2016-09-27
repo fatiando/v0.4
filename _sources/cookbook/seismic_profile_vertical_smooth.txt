@@ -1,0 +1,10 @@
+.. _cookbook_seismic_profile_vertical_smooth:
+
+Seismic: Invert vertical seismic profile (VSP) traveltimes using smoothness regularization and unknown layer thicknesses
+=========================================================================================================================
+
+
+**Download** source code: :download:`seismic_profile_vertical_smooth.py<../_static/cookbook/seismic_profile_vertical_smooth.py>`
+
+.. literalinclude:: ../_static/cookbook/seismic_profile_vertical_smooth.py
+    :language: python

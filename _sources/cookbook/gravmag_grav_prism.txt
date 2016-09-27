@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_grav_prism:
+
+GravMag: Forward modeling of the gravitational potential and its derivatives using 3D model
+============================================================================================
+
+
+**Download** source code: :download:`gravmag_grav_prism.py<../_static/cookbook/gravmag_grav_prism.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_grav_prism.py
+    :language: python

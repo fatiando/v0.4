@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_grav_polyprism:
+
+GravMag: Forward gravity modeling using a stack of 3D polygonal model
+======================================================================
+
+
+**Download** source code: :download:`gravmag_grav_polyprism.py<../_static/cookbook/gravmag_grav_polyprism.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_grav_polyprism.py
+    :language: python

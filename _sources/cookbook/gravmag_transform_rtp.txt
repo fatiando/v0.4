@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_transform_rtp:
+
+GravMag: Reduction to the pole of a total field anomaly using FFT
+==================================================================
+
+
+**Download** source code: :download:`gravmag_transform_rtp.py<../_static/cookbook/gravmag_transform_rtp.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_transform_rtp.py
+    :language: python

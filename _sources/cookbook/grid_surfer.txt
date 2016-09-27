@@ -1,0 +1,10 @@
+.. _cookbook_grid_surfer:
+
+Gridding: Load a Surfer ASCII grid file
+========================================
+
+
+**Download** source code: :download:`grid_surfer.py<../_static/cookbook/grid_surfer.py>`
+
+.. literalinclude:: ../_static/cookbook/grid_surfer.py
+    :language: python

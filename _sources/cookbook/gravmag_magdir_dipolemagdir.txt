@@ -1,0 +1,10 @@
+.. _cookbook_gravmag_magdir_dipolemagdir:
+
+GravMag: Use the DipoleMagDir class to estimate the magnetization direction of dipoles with known centers
+==========================================================================================================
+
+
+**Download** source code: :download:`gravmag_magdir_dipolemagdir.py<../_static/cookbook/gravmag_magdir_dipolemagdir.py>`
+
+.. literalinclude:: ../_static/cookbook/gravmag_magdir_dipolemagdir.py
+    :language: python

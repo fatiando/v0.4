@@ -1,0 +1,394 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fatiando.seismic.conv &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><img src="../../../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../install.html">Installing</a></li>
+                <li><a href="../../../docs.html">Documentation</a></li>
+                <li><a href="../../../cookbook.html">Cookbook</a></li>
+                <li><a href="../../../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for fatiando.seismic.conv</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Zero-offset convolutional seismic modeling</span>
+
+<span class="sd">Give a depth model and obtain a seismic zero-offset convolutional gather. You</span>
+<span class="sd">can give the wavelet, if you already have, or use one of the existing, from</span>
+<span class="sd">which we advise ricker wavelet (rickerwave function).</span>
+
+<span class="sd">* :func:`~fatiando.seismic.conv.convolutional_model`: given the reflectivity</span>
+<span class="sd">  series and wavelet, it returns the convolutional seismic gather.</span>
+<span class="sd">* :func:`~fatiando.seismic.conv.reflectivity`: calculates the reflectivity</span>
+<span class="sd">  series from the velocity model (and density model if present).</span>
+<span class="sd">* :func:`~fatiando.seismic.conv.depth_2_time`: convert depth property model to</span>
+<span class="sd">  the model in time.</span>
+<span class="sd">* :func:`~fatiando.seismic.conv.rickerwave`: calculates a ricker wavelet.</span>
+
+<span class="sd">Examples</span>
+<span class="sd">--------</span>
+<span class="sd">.. plot::</span>
+<span class="sd">    :include-source:</span>
+
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">    &gt;&gt;&gt; from fatiando.seismic import conv</span>
+<span class="sd">    &gt;&gt;&gt; from fatiando.vis import mpl</span>
+<span class="sd">    &gt;&gt;&gt; # Choose some velocity depth model</span>
+<span class="sd">    &gt;&gt;&gt; n_samples, n_traces = [600, 20]</span>
+<span class="sd">    &gt;&gt;&gt; rock_grid = 1500.*np.ones((n_samples, n_traces))</span>
+<span class="sd">    &gt;&gt;&gt; rock_grid[300:, :] = 2500.</span>
+<span class="sd">    &gt;&gt;&gt; # Convert from depth to time</span>
+<span class="sd">    &gt;&gt;&gt; vel_l = conv.depth_2_time(rock_grid, rock_grid, dt=2.e-3, dz=1.)</span>
+<span class="sd">    &gt;&gt;&gt; # Considering rho constant</span>
+<span class="sd">    &gt;&gt;&gt; rho_l = np.ones(np.shape(vel_l))</span>
+<span class="sd">    &gt;&gt;&gt; # Calculate the reflectivity for all the model</span>
+<span class="sd">    &gt;&gt;&gt; rc = conv.reflectivity(vel_l, rho_l)</span>
+<span class="sd">    &gt;&gt;&gt; # Convolve the reflectivity with a ricker wavelet</span>
+<span class="sd">    &gt;&gt;&gt; synt = conv.convolutional_model(rc, 30., conv.rickerwave, dt=2.e-3)</span>
+<span class="sd">    &gt;&gt;&gt; # Plot the result</span>
+<span class="sd">    &gt;&gt;&gt; fig = plt.figure(figsize=(6,5))</span>
+<span class="sd">    &gt;&gt;&gt; _ = mpl.seismic_wiggle(synt, dt=2.e-3)</span>
+<span class="sd">    &gt;&gt;&gt; _ = mpl.seismic_image(synt, dt=2.e-3,</span>
+<span class="sd">    ...                            cmap=mpl.pyplot.cm.jet, aspect=&#39;auto&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; _ = plt.ylabel(&#39;time (seconds)&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; _ = plt.title(&quot;Convolutional seismogram&quot;, fontsize=13,</span>
+<span class="sd">    ...               family=&#39;sans-serif&#39;)</span>
+
+<span class="sd">References</span>
+<span class="sd">----------</span>
+
+<span class="sd">Yilmaz, Oz,</span>
+<span class="sd">Ch.2 Deconvolution. In: YILMAZ, Oz. Seismic Data Analysis: Processing,</span>
+<span class="sd">Inversion, and Interpretation of Seismic Data. Tulsa: Seg, 2001. Cap. 2.</span>
+<span class="sd">p. 159-270. Available at: &lt;http://dx.doi.org/10.1190/1.9781560801580.ch2&gt;</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">interpolate</span>  <span class="c"># linear interpolation of velocity/density</span>
+
+
+<div class="viewcode-block" id="convolutional_model"><a class="viewcode-back" href="../../../api/seismic.conv.html#fatiando.seismic.conv.convolutional_model">[docs]</a><span class="k">def</span> <span class="nf">convolutional_model</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">wavelet</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate convolutional seismogram for a geological model</span>
+
+<span class="sd">    Calculate the synthetic convolutional seismogram of a geological model, Vp</span>
+<span class="sd">    is mandatory while density is optional. The given model in a matrix form is</span>
+<span class="sd">    considered a mesh of square cells.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        Since the relative difference between the model is the important, being</span>
+<span class="sd">        consistent with the units chosen for the parameters is the only</span>
+<span class="sd">        requirement, whatever the units.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * rc : 2D-array</span>
+<span class="sd">        Reflectivity values in the time domain.</span>
+<span class="sd">    * f : float</span>
+<span class="sd">        Dominant frequency of the ricker wavelet.</span>
+<span class="sd">    * wavelet : float</span>
+<span class="sd">        The function to consider as source in the seismic modelling.</span>
+<span class="sd">    * dt: float</span>
+<span class="sd">        Sample time of the ricker wavelet and of the resulting seismogram, in</span>
+<span class="sd">        general a value of 2.e-3 is used.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * synth_l : 2D-array</span>
+<span class="sd">        Resulting seismogram.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">wavelet</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+    <span class="c"># convolution</span>
+    <span class="n">synth_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">rc</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">rc</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">rc</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>
+            <span class="n">synth_l</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">rc</span><span class="p">[:,</span> <span class="n">j</span><span class="p">],</span> <span class="n">w</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;same&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+            <span class="n">synth_l</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">rc</span><span class="p">[:,</span> <span class="n">j</span><span class="p">],</span> <span class="n">w</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;full&#39;</span><span class="p">)[</span><span class="n">aux</span><span class="p">:</span><span class="o">-</span><span class="n">aux</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">synth_l</span>
+
+</div>
+<div class="viewcode-block" id="reflectivity"><a class="viewcode-back" href="../../../api/seismic.conv.html#fatiando.seismic.conv.reflectivity">[docs]</a><span class="k">def</span> <span class="nf">reflectivity</span><span class="p">(</span><span class="n">model_t</span><span class="p">,</span> <span class="n">rho</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate reflectivity series in the time domain, so it is necessary to use</span>
+<span class="sd">    the function depth_2_time first if the model is in depth domain. Note this</span>
+<span class="sd">    this function can also be used to one dimensional array.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * model_t : 2D-array</span>
+<span class="sd">        Velocity values in time domain.</span>
+<span class="sd">    * rho : 2D-array (optional)</span>
+<span class="sd">        Density values for all the model, in time domain.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * rc : 2D-array</span>
+<span class="sd">        Calculated reflectivity series for all the model given.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">err_message</span> <span class="o">=</span> <span class="s">&quot;Velocity and density matrix must have the same dimension.&quot;</span>
+    <span class="k">assert</span> <span class="n">model_t</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">rho</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">err_message</span>
+    <span class="n">rc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">model_t</span><span class="p">))</span>
+    <span class="n">rc</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">((</span><span class="n">model_t</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">*</span><span class="n">rho</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">-</span><span class="n">model_t</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">rho</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span>
+                 <span class="p">(</span><span class="n">model_t</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">*</span><span class="n">rho</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">+</span><span class="n">model_t</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">rho</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">rc</span>
+
+</div>
+<div class="viewcode-block" id="depth_2_time"><a class="viewcode-back" href="../../../api/seismic.conv.html#fatiando.seismic.conv.depth_2_time">[docs]</a><span class="k">def</span> <span class="nf">depth_2_time</span><span class="p">(</span><span class="n">vel</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">dz</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert depth property model to time model.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * vel : 2D-array</span>
+<span class="sd">        Velocity values in the depth domain.</span>
+<span class="sd">    * model : 2D-array</span>
+<span class="sd">        Model values in the depth domain.</span>
+<span class="sd">    * dt: float</span>
+<span class="sd">        Sample time of the ricker wavelet and of the resulting seismogram, in</span>
+<span class="sd">        general a value of 2.e-3 is used.</span>
+<span class="sd">    * dz : float</span>
+<span class="sd">        Length of square grid cells.</span>
+<span class="sd">    * rho : 2D-array (optional)</span>
+<span class="sd">        Density values for all the model, in depth domain.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * model_t : 2D-array</span>
+<span class="sd">        Property model in time domain.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">err_message</span> <span class="o">=</span> <span class="s">&quot;Velocity and model matrix must have the same dimension.&quot;</span>
+    <span class="k">assert</span> <span class="n">vel</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">model</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">err_message</span>
+    <span class="c"># downsampled time rate to make a better interpolation</span>
+    <span class="n">n_samples</span><span class="p">,</span> <span class="n">n_traces</span> <span class="o">=</span> <span class="p">[</span><span class="n">vel</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vel</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">dt_dwn</span> <span class="o">=</span> <span class="n">dt</span><span class="o">/</span><span class="mf">10.</span>
+    <span class="k">if</span> <span class="n">dt_dwn</span> <span class="o">&gt;</span> <span class="n">dz</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">vel</span><span class="p">):</span>
+        <span class="n">dt_dwn</span> <span class="o">=</span> <span class="p">(</span><span class="n">dz</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">vel</span><span class="p">))</span><span class="o">/</span><span class="mf">10.</span>
+    <span class="n">TWT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_traces</span><span class="p">))</span>
+    <span class="n">TWT</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">dz</span><span class="o">/</span><span class="n">vel</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">):</span>
+        <span class="n">TWT</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">TWT</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">dz</span><span class="o">/</span><span class="n">vel</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">TMAX</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">TWT</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
+    <span class="n">TMIN</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">TWT</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
+    <span class="n">TWT_rs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">TMAX</span><span class="o">/</span><span class="n">dt_dwn</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">TWT_rs</span><span class="p">)):</span>
+        <span class="n">TWT_rs</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">TWT_rs</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">dt_dwn</span>
+    <span class="n">resmpl</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dt</span><span class="o">/</span><span class="n">dt_dwn</span><span class="p">)</span>
+    <span class="n">model_t</span> <span class="o">=</span> <span class="n">_resampling</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">TMAX</span><span class="p">,</span> <span class="n">TWT</span><span class="p">,</span> <span class="n">TWT_rs</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">dt_dwn</span><span class="p">,</span> <span class="n">n_traces</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model_t</span>
+
+</div>
+<span class="k">def</span> <span class="nf">_resampling</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">TMAX</span><span class="p">,</span> <span class="n">TWT</span><span class="p">,</span> <span class="n">TWT_rs</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">dt_dwn</span><span class="p">,</span> <span class="n">n_traces</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Resamples the input data to adjust it after time conversion with the chosen</span>
+<span class="sd">    time sample rate, dt.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * vel_l : 2D-array</span>
+<span class="sd">        Resampled input data.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">vel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">TMAX</span><span class="o">/</span><span class="n">dt_dwn</span><span class="p">),</span> <span class="n">n_traces</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_traces</span><span class="p">):</span>
+        <span class="n">kk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">TWT</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">/</span><span class="n">dt_dwn</span><span class="p">)</span>
+        <span class="n">lim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">TWT</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">/</span><span class="n">dt_dwn</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+    <span class="c"># necessary do before resampling to have values in all points of time model</span>
+        <span class="n">tck</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="n">TWT</span><span class="p">[:,</span> <span class="n">j</span><span class="p">],</span> <span class="n">model</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
+        <span class="n">vel</span><span class="p">[</span><span class="n">kk</span><span class="p">:</span><span class="n">lim</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">tck</span><span class="p">(</span><span class="n">TWT_rs</span><span class="p">[</span><span class="n">kk</span><span class="p">:</span><span class="n">lim</span><span class="p">])</span>
+    <span class="c"># the model is extended in time because of depth time conversion</span>
+        <span class="n">vel</span><span class="p">[</span><span class="n">lim</span><span class="p">:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">vel</span><span class="p">[</span><span class="n">lim</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+    <span class="c"># because of time conversion, the values between 0 e kk need to be filed</span>
+        <span class="n">vel</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">kk</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+    <span class="c"># resampling from dt_dwn to dt</span>
+    <span class="n">vel_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">TMAX</span><span class="o">/</span><span class="n">dt</span><span class="p">),</span> <span class="n">n_traces</span><span class="p">))</span>
+    <span class="n">resmpl</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dt</span><span class="o">/</span><span class="n">dt_dwn</span><span class="p">)</span>
+    <span class="n">vel_l</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">vel</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_traces</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">TMAX</span><span class="o">/</span><span class="n">dt</span><span class="p">))):</span>
+            <span class="n">vel_l</span><span class="p">[</span><span class="n">jj</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">vel</span><span class="p">[</span><span class="n">resmpl</span><span class="o">*</span><span class="n">jj</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">vel_l</span>
+
+
+<div class="viewcode-block" id="rickerwave"><a class="viewcode-back" href="../../../api/seismic.conv.html#fatiando.seismic.conv.rickerwave">[docs]</a><span class="k">def</span> <span class="nf">rickerwave</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Given a frequency and time sampling rate, outputs ricker function. The</span>
+<span class="sd">    length of the function varies according to f and dt, in order for the</span>
+<span class="sd">    ricker function starts and ends as zero. It is also considered that the</span>
+<span class="sd">    functions is causal, what means it starts at time zero. To satisfy sampling</span>
+<span class="sd">    and stability:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        f &lt;&lt; \frac{1}{2 dt}.</span>
+
+<span class="sd">    Here, we consider this as:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        f &lt; 0.2 \frac{1}{2 dt}.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * f : float</span>
+<span class="sd">        dominant frequency value in Hz</span>
+<span class="sd">    * dt : float</span>
+<span class="sd">        time sampling rate in seconds (usually it is in the order of ms)</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * ricker : float</span>
+<span class="sd">        Ricker function for the given parameters.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">f</span> <span class="o">&lt;</span> <span class="mf">0.2</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="n">dt</span><span class="p">)),</span> <span class="s">&quot;Frequency too high for the dt chosen.&quot;</span>
+    <span class="n">nw</span> <span class="o">=</span> <span class="mf">2.2</span><span class="o">/</span><span class="n">f</span><span class="o">/</span><span class="n">dt</span>
+    <span class="n">nw</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">nw</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+    <span class="n">nc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">nw</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ricker</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nw</span><span class="p">)</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nw</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="p">(</span><span class="n">nc</span><span class="o">-</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">alpha</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">ricker</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">beta</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">beta</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ricker</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

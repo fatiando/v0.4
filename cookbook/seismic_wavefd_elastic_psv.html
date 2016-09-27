@@ -1,0 +1,233 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Seismic: 2D finite difference simulation of elastic P and SV wave propagation &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Cookbook" href="../cookbook.html" />
+    <link rel="next" title="Seismic: 2D finite difference simulation of elastic SH wave propagation" href="seismic_wavefd_elastic_sh.html" />
+    <link rel="prev" title="Seismic: 2D straight-ray tomography using smoothness regularization" href="seismic_srtomo_smooth.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><img src="../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../install.html">Installing</a></li>
+                <li><a href="../docs.html">Documentation</a></li>
+                <li><a href="../cookbook.html">Cookbook</a></li>
+                <li><a href="../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="seismic-2d-finite-difference-simulation-of-elastic-p-and-sv-wave-propagation">
+<span id="cookbook-seismic-wavefd-elastic-psv"></span><h1>Seismic: 2D finite difference simulation of elastic P and SV wave propagation<a class="headerlink" href="#seismic-2d-finite-difference-simulation-of-elastic-p-and-sv-wave-propagation" title="Permalink to this headline">¶</a></h1>
+<p><strong>Download</strong> source code: <a class="reference download internal" href="../_downloads/seismic_wavefd_elastic_psv.py"><code class="xref download docutils literal"><span class="pre">seismic_wavefd_elastic_psv.py</span></code></a></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Seismic: 2D finite difference simulation of elastic P and SV wave propagation</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">animation</span>
+<span class="kn">from</span> <span class="nn">fatiando</span> <span class="kn">import</span> <span class="n">gridder</span>
+<span class="kn">from</span> <span class="nn">fatiando.seismic</span> <span class="kn">import</span> <span class="n">wavefd</span>
+<span class="kn">from</span> <span class="nn">fatiando.vis</span> <span class="kn">import</span> <span class="n">mpl</span>
+
+<span class="c"># Set the parameters of the finite difference grid</span>
+<span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="n">area</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">60000</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">60000</span><span class="p">]</span>
+<span class="c"># Make a density and S wave velocity model</span>
+<span class="n">density</span> <span class="o">=</span> <span class="mi">2400</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">pvel</span> <span class="o">=</span> <span class="mi">6600</span>
+<span class="n">svel</span> <span class="o">=</span> <span class="mi">3700</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">wavefd</span><span class="o">.</span><span class="n">lame_mu</span><span class="p">(</span><span class="n">svel</span><span class="p">,</span> <span class="n">density</span><span class="p">)</span>
+<span class="n">lamb</span> <span class="o">=</span> <span class="n">wavefd</span><span class="o">.</span><span class="n">lame_lamb</span><span class="p">(</span><span class="n">pvel</span><span class="p">,</span> <span class="n">svel</span><span class="p">,</span> <span class="n">density</span><span class="p">)</span>
+
+<span class="c"># Make a wave source from a mexican hat wavelet that vibrates in the x and z</span>
+<span class="c"># directions equaly</span>
+<span class="n">sources</span> <span class="o">=</span> <span class="p">[[</span><span class="n">wavefd</span><span class="o">.</span><span class="n">MexHatSource</span><span class="p">(</span><span class="mi">30000</span><span class="p">,</span> <span class="mi">40000</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">)],</span>
+           <span class="p">[</span><span class="n">wavefd</span><span class="o">.</span><span class="n">MexHatSource</span><span class="p">(</span><span class="mi">30000</span><span class="p">,</span> <span class="mi">40000</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">)]]</span>
+
+<span class="c"># Get the iterator for the simulation</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="n">wavefd</span><span class="o">.</span><span class="n">maxdt</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">pvel</span><span class="p">)</span>
+<span class="n">duration</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">maxit</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">duration</span> <span class="o">/</span> <span class="n">dt</span><span class="p">)</span>
+<span class="n">stations</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">55000</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>  <span class="c"># x, z coordinate of the seismometer</span>
+<span class="n">snapshot</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">/</span> <span class="n">dt</span><span class="p">)</span>  <span class="c"># Plot a snapshot of the simulation every 0.5 seconds</span>
+<span class="n">simulation</span> <span class="o">=</span> <span class="n">wavefd</span><span class="o">.</span><span class="n">elastic_psv</span><span class="p">(</span><span class="n">lamb</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">maxit</span><span class="p">,</span> <span class="n">sources</span><span class="p">,</span>
+                                <span class="n">stations</span><span class="p">,</span> <span class="n">snapshot</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">taper</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+                                <span class="n">xz2ps</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c"># This part makes an animation using matplotlibs animation API</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;x component&#39;</span><span class="p">)</span>
+<span class="n">xseismogram</span><span class="p">,</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="s">&#39;-k&#39;</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">),</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;z component&#39;</span><span class="p">)</span>
+<span class="n">zseismogram</span><span class="p">,</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="s">&#39;-k&#39;</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">),</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c"># Start with everything zero and grab the plot so that it can be updated later</span>
+<span class="n">wavefield</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">),</span> <span class="n">extent</span><span class="o">=</span><span class="n">area</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span>
+                       <span class="n">vmax</span><span class="o">=</span><span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">gray_r</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">points</span><span class="p">(</span><span class="n">stations</span><span class="p">,</span> <span class="s">&#39;^k&#39;</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">area</span><span class="p">[</span><span class="mi">2</span><span class="p">:][::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;x (km)&#39;</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;z (km)&#39;</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">m2km</span><span class="p">()</span>
+<span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">maxit</span> <span class="o">*</span> <span class="n">dt</span><span class="p">,</span> <span class="n">maxit</span><span class="p">)</span>
+<span class="c"># This function updates the plot every few timesteps</span>
+
+
+<span class="k">def</span> <span class="nf">animate</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simulation will yield panels corresponding to P and S waves because</span>
+<span class="sd">    xz2ps=True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">xcomp</span><span class="p">,</span> <span class="n">zcomp</span> <span class="o">=</span> <span class="n">simulation</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;time: </span><span class="si">%0.1f</span><span class="s"> s&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="n">t</span><span class="p">]))</span>
+    <span class="n">wavefield</span><span class="o">.</span><span class="n">set_array</span><span class="p">((</span><span class="n">p</span> <span class="o">+</span> <span class="n">s</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">xseismogram</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">times</span><span class="p">[:</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">xcomp</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">zseismogram</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">times</span><span class="p">[:</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">zcomp</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">wavefield</span><span class="p">,</span> <span class="n">xseismogram</span><span class="p">,</span> <span class="n">zseismogram</span>
+
+
+<span class="n">anim</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">FuncAnimation</span><span class="p">(</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">animate</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="n">maxit</span> <span class="o">/</span> <span class="n">snapshot</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c"># anim.save(&#39;psv_wave.mp4&#39;, fps=20, dpi=200, bitrate=4000)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+<div id="sourcelink">
+  <a href="../_sources/cookbook/seismic_wavefd_elastic_psv.txt"
+     rel="nofollow">Source</a>
+</div>
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,597 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fatiando.gravmag.transform &mdash; fatiando 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/font-awesome/css/font-awesome.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '429a4e7de0857f3152fc8af6024d675dd9cf69cb',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="top" title="fatiando 0.4 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+    
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Google Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38125837-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+  </head>
+  <body role="document">
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><img src="../../../_static/fatiando-logo.png">
+          fatiando</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../install.html">Installing</a></li>
+                <li><a href="../../../docs.html">Documentation</a></li>
+                <li><a href="../../../cookbook.html">Cookbook</a></li>
+                <li><a href="../../../develop.html">Developer Guide</a></li>
+                <li><a href="https://github.com/fatiando/fatiando"><i class="fa fa-github-square fa-lg" title="Source code on Github"></i></a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for fatiando.gravmag.transform</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Potential field transformations, like upward continuation and derivatives.</span>
+
+<span class="sd">.. note:: Most, if not all, functions here required gridded data.</span>
+
+<span class="sd">**Transformations**</span>
+
+<span class="sd">* :func:`~fatiando.gravmag.transform.upcontinue`: Upward continuation of</span>
+<span class="sd">  gridded potential field data on a level surface.</span>
+<span class="sd">* :func:`~fatiando.gravmag.transform.reduce_to_pole`: Reduce the total field</span>
+<span class="sd">  magnetic anomaly to the pole.</span>
+<span class="sd">* :func:`~fatiando.gravmag.transform.tga`: Calculate the amplitude of the</span>
+<span class="sd">  total gradient (also called the analytic signal)</span>
+
+<span class="sd">**Derivatives**</span>
+
+<span class="sd">* :func:`~fatiando.gravmag.transform.derivx`: Calculate the n-th order</span>
+<span class="sd">  derivative of a potential field in the x-direction (North-South)</span>
+<span class="sd">* :func:`~fatiando.gravmag.transform.derivy`: Calculate the n-th order</span>
+<span class="sd">  derivative of a potential field in the y-direction (East-West)</span>
+<span class="sd">* :func:`~fatiando.gravmag.transform.derivz`: Calculate the n-th order</span>
+<span class="sd">  derivative of a potential field in the z-direction</span>
+
+<span class="sd">----</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">utils</span>
+
+
+<div class="viewcode-block" id="reduce_to_pole"><a class="viewcode-back" href="../../../api/gravmag.transform.html#fatiando.gravmag.transform.reduce_to_pole">[docs]</a><span class="k">def</span> <span class="nf">reduce_to_pole</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="n">sinc</span><span class="p">,</span> <span class="n">sdec</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Reduce total field magnetic anomaly data to the pole.</span>
+
+<span class="sd">    The reduction to the pole if a phase transformation that can be applied to</span>
+<span class="sd">    total field magnetic anomaly data. It &quot;simulates&quot; how the data would be if</span>
+<span class="sd">    **both** the Geomagnetic field and the magnetization of the source were</span>
+<span class="sd">    vertical (:math:`90^\circ` inclination) (Blakely, 1996).</span>
+
+<span class="sd">    This functions performs the reduction in the frequency domain (using the</span>
+<span class="sd">    FFT). The transform filter is (in the frequency domain):</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        RTP(k_x, k_y) = \frac{|k|}{</span>
+<span class="sd">            a_1 k_x^2 + a_2 k_y^2 + a_3 k_x k_y +</span>
+<span class="sd">            i|k|(b_1 k_x + b_2 k_y)}</span>
+
+<span class="sd">    in which :math:`k_x` and :math:`k_y` are the wave-numbers in the x and y</span>
+<span class="sd">    directions and</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        |k| = \sqrt{k_x^2 + k_y^2} \\</span>
+<span class="sd">        a_1 = m_z f_z - m_x f_x \\</span>
+<span class="sd">        a_2 = m_z f_z - m_y f_y \\</span>
+<span class="sd">        a_3 = -m_y f_x - m_x f_y \\</span>
+<span class="sd">        b_1 = m_x f_z + m_z f_x \\</span>
+<span class="sd">        b_2 = m_y f_z + m_z f_y</span>
+
+<span class="sd">    :math:`\mathbf{m} = (m_x, m_y, m_z)` is the unit-vector of the total</span>
+<span class="sd">    magnetization of the source and</span>
+<span class="sd">    :math:`\mathbf{f} = (f_x, f_y, f_z)` is the unit-vector of the Geomagnetic</span>
+<span class="sd">    field.</span>
+
+<span class="sd">    .. note:: Requires gridded data.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        The magnetization direction of the anomaly source is crucial to the</span>
+<span class="sd">        reduction-to-the-pole.</span>
+<span class="sd">        **Wrong values of *sinc* and *sdec* will lead to a wrong reduction.**</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * x, y : 1d-arrays</span>
+<span class="sd">        The x, y, z coordinates of each data point.</span>
+<span class="sd">    * data : 1d-array</span>
+<span class="sd">        The total field anomaly data at each point.</span>
+<span class="sd">    * shape : tuple = (nx, ny)</span>
+<span class="sd">        The shape of the data grid</span>
+<span class="sd">    * inc, dec : floats</span>
+<span class="sd">        The inclination and declination of the inducing Geomagnetic field</span>
+<span class="sd">    * sinc, sdec : floats</span>
+<span class="sd">        The inclination and declination of the total magnetization of the</span>
+<span class="sd">        anomaly source. The total magnetization is the vector sum of the</span>
+<span class="sd">        induced and remanent magnetization. If there is only induced</span>
+<span class="sd">        magnetization, use the *inc* and *dec* of the Geomagnetic field.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * rtp : 1d-array</span>
+<span class="sd">        The data reduced to the pole.</span>
+
+<span class="sd">    References:</span>
+
+<span class="sd">    Blakely, R. J. (1996), Potential Theory in Gravity and Magnetic</span>
+<span class="sd">    Applications, Cambridge University Press.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">fz</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">ang2vec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">sinc</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">sdec</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">mx</span><span class="p">,</span> <span class="n">my</span><span class="p">,</span> <span class="n">mz</span> <span class="o">=</span> <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">fz</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">mx</span><span class="p">,</span> <span class="n">my</span><span class="p">,</span> <span class="n">mz</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">ang2vec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">sinc</span><span class="p">,</span> <span class="n">sdec</span><span class="p">)</span>
+    <span class="n">kx</span><span class="p">,</span> <span class="n">ky</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">_fftfreqs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">shape</span><span class="p">)]</span>
+    <span class="n">kz_sqr</span> <span class="o">=</span> <span class="n">kx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ky</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">a1</span> <span class="o">=</span> <span class="n">mz</span><span class="o">*</span><span class="n">fz</span> <span class="o">-</span> <span class="n">mx</span><span class="o">*</span><span class="n">fx</span>
+    <span class="n">a2</span> <span class="o">=</span> <span class="n">mz</span><span class="o">*</span><span class="n">fz</span> <span class="o">-</span> <span class="n">my</span><span class="o">*</span><span class="n">fy</span>
+    <span class="n">a3</span> <span class="o">=</span> <span class="o">-</span><span class="n">my</span><span class="o">*</span><span class="n">fx</span> <span class="o">-</span> <span class="n">mx</span><span class="o">*</span><span class="n">fy</span>
+    <span class="n">b1</span> <span class="o">=</span> <span class="n">mx</span><span class="o">*</span><span class="n">fz</span> <span class="o">+</span> <span class="n">mz</span><span class="o">*</span><span class="n">fx</span>
+    <span class="n">b2</span> <span class="o">=</span> <span class="n">my</span><span class="o">*</span><span class="n">fz</span> <span class="o">+</span> <span class="n">mz</span><span class="o">*</span><span class="n">fy</span>
+    <span class="c"># The division gives a RuntimeWarning because of the zero frequency term.</span>
+    <span class="c"># This suppresses the warning.</span>
+    <span class="k">with</span> <span class="n">numpy</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s">&#39;ignore&#39;</span><span class="p">):</span>
+        <span class="n">rtp</span> <span class="o">=</span> <span class="p">(</span><span class="n">kz_sqr</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">a1</span><span class="o">*</span><span class="n">kx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">a2</span><span class="o">*</span><span class="n">ky</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">a3</span><span class="o">*</span><span class="n">kx</span><span class="o">*</span><span class="n">ky</span> <span class="o">+</span>
+                        <span class="mi">1j</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">kz_sqr</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">b1</span><span class="o">*</span><span class="n">kx</span> <span class="o">+</span> <span class="n">b2</span><span class="o">*</span><span class="n">ky</span><span class="p">))</span>
+    <span class="n">rtp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">ft_pole</span> <span class="o">=</span> <span class="n">rtp</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft2</span><span class="p">(</span><span class="n">ft_pole</span><span class="p">))</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="upcontinue"><a class="viewcode-back" href="../../../api/gravmag.transform.html#fatiando.gravmag.transform.upcontinue">[docs]</a><span class="k">def</span> <span class="nf">upcontinue</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Upward continuation of potential field data.</span>
+
+<span class="sd">    Calculates the continuation through the Fast Fourier Transform in the</span>
+<span class="sd">    wavenumber domain (Blakely, 1996):</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        F\{h_{up}\} = F\{h\} e^{-\Delta z |k|}</span>
+
+<span class="sd">    and then transformed back to the space domain. :math:`h_{up}` is the upward</span>
+<span class="sd">    continue data, :math:`\Delta z` is the height increase, :math:`F` denotes</span>
+<span class="sd">    the Fourier Transform,  and :math:`|k|` is the wavenumber modulus.</span>
+
+<span class="sd">    .. note:: Requires gridded data.</span>
+
+<span class="sd">    .. note:: x, y, z and height should be in meters.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * x, y : 1D-arrays</span>
+<span class="sd">        The x and y coordinates of the grid points</span>
+<span class="sd">    * data : 1D-array</span>
+<span class="sd">        The potential field at the grid points</span>
+<span class="sd">    * shape : tuple = (nx, ny)</span>
+<span class="sd">        The shape of the grid</span>
+<span class="sd">    * height : float</span>
+<span class="sd">        The height increase (delta z) in meters.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * cont : array</span>
+<span class="sd">        The upward continued data</span>
+
+<span class="sd">    References:</span>
+
+<span class="sd">    Blakely, R. J. (1996), Potential Theory in Gravity and Magnetic</span>
+<span class="sd">    Applications, Cambridge University Press.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> \
+        <span class="s">&quot;x and y arrays must have same shape&quot;</span>
+    <span class="k">assert</span> <span class="n">height</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> \
+        <span class="s">&quot;Continuation height increase &#39;height&#39; should be positive&quot;</span>
+    <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">shape</span>
+    <span class="c"># Pad the array with the edge values to avoid instability</span>
+    <span class="n">padded</span><span class="p">,</span> <span class="n">padx</span><span class="p">,</span> <span class="n">pady</span> <span class="o">=</span> <span class="n">_pad_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+    <span class="n">kx</span><span class="p">,</span> <span class="n">ky</span> <span class="o">=</span> <span class="n">_fftfreqs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">padded</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">kz</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">kx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ky</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">upcont_ft</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">padded</span><span class="p">)</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">height</span><span class="o">*</span><span class="n">kz</span><span class="p">)</span>
+    <span class="n">cont</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft2</span><span class="p">(</span><span class="n">upcont_ft</span><span class="p">))</span>
+    <span class="c"># Remove padding</span>
+    <span class="n">cont</span> <span class="o">=</span> <span class="n">cont</span><span class="p">[</span><span class="n">padx</span><span class="p">:</span> <span class="n">padx</span> <span class="o">+</span> <span class="n">nx</span><span class="p">,</span> <span class="n">pady</span><span class="p">:</span> <span class="n">pady</span> <span class="o">+</span> <span class="n">ny</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">cont</span>
+
+</div>
+<span class="k">def</span> <span class="nf">_upcontinue_space</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Upward continuation using the space-domain formula.</span>
+
+<span class="sd">    DEPRECATED. Use the better implementation using FFT. Kept here for</span>
+<span class="sd">    historical reasons.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">shape</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="p">(</span><span class="n">ny</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">area</span> <span class="o">=</span> <span class="n">dx</span><span class="o">*</span><span class="n">dy</span>
+    <span class="n">deltaz_sqr</span> <span class="o">=</span> <span class="p">(</span><span class="n">height</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">cont</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">cont</span> <span class="o">+=</span> <span class="n">g</span><span class="o">*</span><span class="n">area</span><span class="o">*</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">j</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">deltaz_sqr</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">cont</span> <span class="o">*=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">height</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cont</span>
+
+
+<div class="viewcode-block" id="tga"><a class="viewcode-back" href="../../../api/gravmag.transform.html#fatiando.gravmag.transform.tga">[docs]</a><span class="k">def</span> <span class="nf">tga</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#39;fd&#39;</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the total gradient amplitude (TGA).</span>
+
+<span class="sd">    This the same as the `3D analytic signal` of Roest et al. (1992), but we</span>
+<span class="sd">    prefer the newer, more descriptive nomenclature suggested by Reid (2012).</span>
+
+<span class="sd">    The TGA is defined as the amplitude of the gradient vector of a potential</span>
+<span class="sd">    field :math:`T` (e.g. the magnetic total field anomaly):</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        TGA = \sqrt{</span>
+<span class="sd">            \left(\frac{\partial T}{\partial x}\right)^2 +</span>
+<span class="sd">            \left(\frac{\partial T}{\partial y}\right)^2 +</span>
+<span class="sd">            \left(\frac{\partial T}{\partial z}\right)^2 }</span>
+
+<span class="sd">    .. note:: Requires gridded data.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        If the data is not in SI units, the derivatives will be in</span>
+<span class="sd">        strange units and so will the total gradient amplitude! I strongly</span>
+<span class="sd">        recommend converting the data to SI **before** calculating the</span>
+<span class="sd">        TGA is you need the gradient in Eotvos (use one of the unit conversion</span>
+<span class="sd">        functions of :mod:`fatiando.utils`).</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * x, y : 1D-arrays</span>
+<span class="sd">        The x and y coordinates of the grid points</span>
+<span class="sd">    * data : 1D-array</span>
+<span class="sd">        The potential field at the grid points</span>
+<span class="sd">    * shape : tuple = (nx, ny)</span>
+<span class="sd">        The shape of the grid</span>
+<span class="sd">    * method : string</span>
+<span class="sd">        The method used to calculate the horizontal derivatives. Options are:</span>
+<span class="sd">        ``&#39;fd&#39;`` for finite-difference (more stable) or ``&#39;fft&#39;`` for the Fast</span>
+<span class="sd">        Fourier Transform. The z derivative is always calculated by FFT.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * tga : 1D-array</span>
+<span class="sd">        The amplitude of the total gradient</span>
+
+<span class="sd">    References:</span>
+
+<span class="sd">    Reid, A. (2012), Forgotten truths, myths and sacred cows of Potential</span>
+<span class="sd">    Fields Geophysics - II, in SEG Technical Program Expanded Abstracts 2012,</span>
+<span class="sd">    pp. 1-3, Society of Exploration Geophysicists.</span>
+
+<span class="sd">    Roest, W., J. Verhoef, and M. Pilkington (1992), Magnetic interpretation</span>
+<span class="sd">    using the 3-D analytic signal, GEOPHYSICS, 57(1), 116-125,</span>
+<span class="sd">    doi:10.1190/1.1443174.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">derivx</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="n">derivy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+    <span class="n">dz</span> <span class="o">=</span> <span class="n">derivz</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dz</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+</div>
+<div class="viewcode-block" id="derivx"><a class="viewcode-back" href="../../../api/gravmag.transform.html#fatiando.gravmag.transform.derivx">[docs]</a><span class="k">def</span> <span class="nf">derivx</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#39;fd&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the derivative of a potential field in the x direction.</span>
+
+<span class="sd">    .. note:: Requires gridded data.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        If the data is not in SI units, the derivative will be in</span>
+<span class="sd">        strange units! I strongly recommend converting the data to SI</span>
+<span class="sd">        **before** calculating the derivative (use one of the unit conversion</span>
+<span class="sd">        functions of :mod:`fatiando.utils`). This way the derivative will be in</span>
+<span class="sd">        SI units and can be easily converted to what unit you want.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * x, y : 1D-arrays</span>
+<span class="sd">        The x and y coordinates of the grid points</span>
+<span class="sd">    * data : 1D-array</span>
+<span class="sd">        The potential field at the grid points</span>
+<span class="sd">    * shape : tuple = (nx, ny)</span>
+<span class="sd">        The shape of the grid</span>
+<span class="sd">    * order : int</span>
+<span class="sd">        The order of the derivative</span>
+<span class="sd">    * method : string</span>
+<span class="sd">        The method used to calculate the derivatives. Options are:</span>
+<span class="sd">        ``&#39;fd&#39;`` for central finite-differences (more stable) or ``&#39;fft&#39;``</span>
+<span class="sd">        for the Fast Fourier Transform.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * deriv : 1D-array</span>
+<span class="sd">        The derivative</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">shape</span>
+    <span class="k">assert</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;fft&#39;</span><span class="p">,</span> <span class="s">&#39;fd&#39;</span><span class="p">],</span> \
+        <span class="s">&#39;Invalid method &quot;{}&quot;.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;fft&#39;</span><span class="p">:</span>
+        <span class="c"># Pad the array with the edge values to avoid instability</span>
+        <span class="n">padded</span><span class="p">,</span> <span class="n">padx</span><span class="p">,</span> <span class="n">pady</span> <span class="o">=</span> <span class="n">_pad_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+        <span class="n">kx</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_fftfreqs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">padded</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">deriv_ft</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">padded</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">kx</span><span class="o">*</span><span class="mi">1j</span><span class="p">)</span><span class="o">**</span><span class="n">order</span>
+        <span class="n">deriv_pad</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft2</span><span class="p">(</span><span class="n">deriv_ft</span><span class="p">))</span>
+        <span class="c"># Remove padding from derivative</span>
+        <span class="n">deriv</span> <span class="o">=</span> <span class="n">deriv_pad</span><span class="p">[</span><span class="n">padx</span><span class="p">:</span> <span class="n">padx</span> <span class="o">+</span> <span class="n">nx</span><span class="p">,</span> <span class="n">pady</span><span class="p">:</span> <span class="n">pady</span> <span class="o">+</span> <span class="n">ny</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;fd&#39;</span><span class="p">:</span>
+        <span class="n">datamat</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">deriv</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">datamat</span><span class="p">)</span>
+        <span class="n">deriv</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">datamat</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">datamat</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="p">:])</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">dx</span><span class="p">)</span>
+        <span class="n">deriv</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">deriv</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">deriv</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">deriv</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="k">if</span> <span class="n">order</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">deriv</span> <span class="o">=</span> <span class="n">derivx</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">deriv</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#39;fd&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">deriv</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="derivy"><a class="viewcode-back" href="../../../api/gravmag.transform.html#fatiando.gravmag.transform.derivy">[docs]</a><span class="k">def</span> <span class="nf">derivy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#39;fd&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the derivative of a potential field in the y direction.</span>
+
+<span class="sd">    .. note:: Requires gridded data.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        If the data is not in SI units, the derivative will be in</span>
+<span class="sd">        strange units! I strongly recommend converting the data to SI</span>
+<span class="sd">        **before** calculating the derivative (use one of the unit conversion</span>
+<span class="sd">        functions of :mod:`fatiando.utils`). This way the derivative will be in</span>
+<span class="sd">        SI units and can be easily converted to what unit you want.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * x, y : 1D-arrays</span>
+<span class="sd">        The x and y coordinates of the grid points</span>
+<span class="sd">    * data : 1D-array</span>
+<span class="sd">        The potential field at the grid points</span>
+<span class="sd">    * shape : tuple = (nx, ny)</span>
+<span class="sd">        The shape of the grid</span>
+<span class="sd">    * order : int</span>
+<span class="sd">        The order of the derivative</span>
+<span class="sd">    * method : string</span>
+<span class="sd">        The method used to calculate the derivatives. Options are:</span>
+<span class="sd">        ``&#39;fd&#39;`` for central finite-differences (more stable) or ``&#39;fft&#39;``</span>
+<span class="sd">        for the Fast Fourier Transform.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * deriv : 1D-array</span>
+<span class="sd">        The derivative</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">shape</span>
+    <span class="k">assert</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;fft&#39;</span><span class="p">,</span> <span class="s">&#39;fd&#39;</span><span class="p">],</span> \
+        <span class="s">&#39;Invalid method &quot;{}&quot;.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;fft&#39;</span><span class="p">:</span>
+        <span class="c"># Pad the array with the edge values to avoid instability</span>
+        <span class="n">padded</span><span class="p">,</span> <span class="n">padx</span><span class="p">,</span> <span class="n">pady</span> <span class="o">=</span> <span class="n">_pad_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">ky</span> <span class="o">=</span> <span class="n">_fftfreqs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">padded</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">deriv_ft</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">padded</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">ky</span><span class="o">*</span><span class="mi">1j</span><span class="p">)</span><span class="o">**</span><span class="n">order</span>
+        <span class="n">deriv_pad</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft2</span><span class="p">(</span><span class="n">deriv_ft</span><span class="p">))</span>
+        <span class="c"># Remove padding from derivative</span>
+        <span class="n">deriv</span> <span class="o">=</span> <span class="n">deriv_pad</span><span class="p">[</span><span class="n">padx</span><span class="p">:</span> <span class="n">padx</span> <span class="o">+</span> <span class="n">nx</span><span class="p">,</span> <span class="n">pady</span><span class="p">:</span> <span class="n">pady</span> <span class="o">+</span> <span class="n">ny</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;fd&#39;</span><span class="p">:</span>
+        <span class="n">datamat</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="p">(</span><span class="n">ny</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">deriv</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">datamat</span><span class="p">)</span>
+        <span class="n">deriv</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">datamat</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:]</span> <span class="o">-</span> <span class="n">datamat</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">dy</span><span class="p">)</span>
+        <span class="n">deriv</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">deriv</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">deriv</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">deriv</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">order</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">deriv</span> <span class="o">=</span> <span class="n">derivy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">deriv</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#39;fd&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">deriv</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="derivz"><a class="viewcode-back" href="../../../api/gravmag.transform.html#fatiando.gravmag.transform.derivz">[docs]</a><span class="k">def</span> <span class="nf">derivz</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#39;fft&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the derivative of a potential field in the z direction.</span>
+
+<span class="sd">    .. note:: Requires gridded data.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        If the data is not in SI units, the derivative will be in</span>
+<span class="sd">        strange units! I strongly recommend converting the data to SI</span>
+<span class="sd">        **before** calculating the derivative (use one of the unit conversion</span>
+<span class="sd">        functions of :mod:`fatiando.utils`). This way the derivative will be in</span>
+<span class="sd">        SI units and can be easily converted to what unit you want.</span>
+
+<span class="sd">    Parameters:</span>
+
+<span class="sd">    * x, y : 1D-arrays</span>
+<span class="sd">        The x and y coordinates of the grid points</span>
+<span class="sd">    * data : 1D-array</span>
+<span class="sd">        The potential field at the grid points</span>
+<span class="sd">    * shape : tuple = (nx, ny)</span>
+<span class="sd">        The shape of the grid</span>
+<span class="sd">    * order : int</span>
+<span class="sd">        The order of the derivative</span>
+<span class="sd">    * method : string</span>
+<span class="sd">        The method used to calculate the derivatives. Options are:</span>
+<span class="sd">        ``&#39;fft&#39;`` for the Fast Fourier Transform.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    * deriv : 1D-array</span>
+<span class="sd">        The derivative</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;fft&#39;</span><span class="p">,</span> \
+        <span class="s">&quot;Invalid method &#39;{}&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+    <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">shape</span>
+    <span class="c"># Pad the array with the edge values to avoid instability</span>
+    <span class="n">padded</span><span class="p">,</span> <span class="n">padx</span><span class="p">,</span> <span class="n">pady</span> <span class="o">=</span> <span class="n">_pad_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+    <span class="n">kx</span><span class="p">,</span> <span class="n">ky</span> <span class="o">=</span> <span class="n">_fftfreqs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">padded</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">deriv_ft</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">padded</span><span class="p">)</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">kx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ky</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="n">order</span>
+    <span class="n">deriv</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft2</span><span class="p">(</span><span class="n">deriv_ft</span><span class="p">))</span>
+    <span class="c"># Remove padding from derivative</span>
+    <span class="k">return</span> <span class="n">deriv</span><span class="p">[</span><span class="n">padx</span><span class="p">:</span> <span class="n">padx</span> <span class="o">+</span> <span class="n">nx</span><span class="p">,</span> <span class="n">pady</span><span class="p">:</span> <span class="n">pady</span> <span class="o">+</span> <span class="n">ny</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+</div>
+<span class="k">def</span> <span class="nf">_pad_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">_nextpow2</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">shape</span><span class="p">))</span>
+    <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">shape</span>
+    <span class="n">padx</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">nx</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span>
+    <span class="n">pady</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">ny</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span>
+    <span class="n">padded</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">),</span> <span class="p">((</span><span class="n">padx</span><span class="p">,</span> <span class="n">padx</span><span class="p">),</span> <span class="p">(</span><span class="n">pady</span><span class="p">,</span> <span class="n">pady</span><span class="p">)),</span>
+                       <span class="n">mode</span><span class="o">=</span><span class="s">&#39;edge&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">padded</span><span class="p">,</span> <span class="n">padx</span><span class="p">,</span> <span class="n">pady</span>
+
+
+<span class="k">def</span> <span class="nf">_nextpow2</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">buf</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_fftfreqs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">padshape</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get two 2D-arrays with the wave numbers in the x and y directions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">shape</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">fx</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="n">padshape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dx</span><span class="p">)</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="p">(</span><span class="n">ny</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">fy</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="n">padshape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">dy</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">fy</span><span class="p">,</span> <span class="n">fx</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right">
+            <a href="#">Back to top</a>
+            
+                <br/>
+                
+            
+        </p>
+
+        <p class="text-center">
+            &copy; Copyright 2010-2016, Leonardo Uieda.
+            Created using <a
+                href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        </p>
+    </div>
+</footer>
+  </body>
+</html>
